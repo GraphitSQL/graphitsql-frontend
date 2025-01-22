@@ -3,7 +3,7 @@ import {
   Routes,
   Route,
   Navigate,
-} from 'react-router-dom';
+} from 'react-router';
 import { HomePage } from './pages/home-page';
 import { Routing } from './common/routes';
 
@@ -18,4 +18,4 @@ function App() {
   );
 }
 
-export default App;
+export default App

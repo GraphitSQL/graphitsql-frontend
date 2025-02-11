@@ -1,9 +1,6 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router';
-import { HomePage } from './pages/home-page';
-import { Routing } from './common/routes';
-import { SignInPage } from './pages/sign-in-page';
+import { RouterProvider } from 'react-router';
+import { routers } from './common/routes';
 import { GlobalStyle } from './styles/global.styles';
-import { SignUpPage } from './pages/sign-up-page';
 import { Toaster } from './common/components/ui/toaster';
 
 function App() {
@@ -11,14 +8,7 @@ function App() {
     <>
       <GlobalStyle />
       <Toaster />
-      <Router>
-        <Routes>
-          <Route path="/" element={<Navigate to={Routing.home.route()} />} />
-          <Route path={Routing.home.route()} element={<HomePage />} />
-          <Route path={Routing.signIn.route()} element={<SignInPage />} />
-          <Route path={Routing.signUp.route()} element={<SignUpPage />} />
-        </Routes>
-      </Router>
+      <RouterProvider router={routers} />
     </>
   );
 }

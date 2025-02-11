@@ -47,7 +47,7 @@ export const FormContainer = styled.div`
   flex: 2;
   @media (max-width: 768px) {
     width: 100%;
-    padding: 10% 0 10% 10%;
+    padding: 10%;
   }
 `;
 

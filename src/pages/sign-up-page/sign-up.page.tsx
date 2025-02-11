@@ -33,12 +33,13 @@ export const SignUpPage: React.FC = () => {
           step={step}
           count={2}
           width={'90%'}
-          margin={'20px auto'}
+          margin={'15px auto'}
+          size={'sm'}
         >
           <StepsList>
             <StepsItem
               index={0}
-              title="Fill out the form"
+              title="Fill the form"
               disableTrigger={true}
             />
             <StepsItem index={1} title="Verify email" disableTrigger={true} />

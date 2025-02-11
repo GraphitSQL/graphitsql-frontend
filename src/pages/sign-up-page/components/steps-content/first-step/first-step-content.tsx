@@ -5,7 +5,7 @@ import {
   Field,
   PasswordInput,
 } from '../../../../../common/components';
-import { Heading, Input, Link, Text } from '@chakra-ui/react';
+import { Box, Heading, Input, Link, Text } from '@chakra-ui/react';
 import { SubmitButton } from '../../sign-up-page.styled';
 import { Routing } from '../../../../../common/routes';
 import { MOCK_SIGN_UP_CODE } from '../../../../../tmp/mocks/mock-sign-up-token.mock';
@@ -38,9 +38,11 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
 
   return (
     <>
-      <Heading size={'3xl'}>Adventures starts here!</Heading>
-      <Text fontSize={'xs'}>Make your work easy and fun</Text>
       <SignUpForm name="sign-up-form-basic-form" onSubmit={onSubmit}>
+        <Box marginBottom={'20px'}>
+          <Heading size={'3xl'}>Adventures starts here!</Heading>
+          <Text fontSize={'xs'}>Make your work easy and fun</Text>
+        </Box>
         <Field
           label="Username"
           invalid={!!errors.username}

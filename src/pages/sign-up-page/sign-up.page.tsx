@@ -6,10 +6,8 @@ import {
   StepsRoot,
 } from '../../common/components/ui/steps';
 import { Container, FormContainer, ImageContainer } from './components';
-import { FirstStepContent } from './components/steps-content';
+import { BaseInfoStepContent,ResultStep,VerificationStep } from './components/steps-content';
 import { useState } from 'react';
-import { VerificationStep } from './components/steps-content/second-step/second-step-content';
-import { ResultStep } from './components/steps-content/third-step/third-step-content';
 
 export const SignUpPage: React.FC = () => {
   const [step, setStep] = useState<number>(0);
@@ -47,10 +45,10 @@ export const SignUpPage: React.FC = () => {
             <StepsItem index={2} title="Finish" disableTrigger={true} />
           </StepsList>
           <StepsContent index={0}>
-            <FirstStepContent handleChangeStep={handleChangeStep} />
+            <BaseInfoStepContent handleChangeStep={handleChangeStep} />
           </StepsContent>
           <StepsContent index={1}>
-            <VerificationStep handleChangeStep={handleChangeStep} />
+            <VerificationStep handleChangeStep={handleChangeStep} step={step}/>
           </StepsContent>
           <StepsContent index={2}>
             <ResultStep />

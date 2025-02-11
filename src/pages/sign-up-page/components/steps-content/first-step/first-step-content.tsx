@@ -14,7 +14,7 @@ type FirstStepContentProps = {
   handleChangeStep: (step: number) => void;
 };
 
-export const FirstStepContent: React.FC<FirstStepContentProps> = ({
+export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
   handleChangeStep,
 }) => {
   const {
@@ -48,6 +48,7 @@ export const FirstStepContent: React.FC<FirstStepContentProps> = ({
         >
           <Input
             placeholder="Enter your username"
+            autoComplete='off'
             {...register('username', {
               required: 'Username is required',
               maxLength: {

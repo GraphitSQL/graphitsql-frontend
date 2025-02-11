@@ -8,9 +8,11 @@ import { COLORS } from '../../../../../common/constants';
 
 type VerificationProps = {
   handleChangeStep: (step: number) => void;
+  step: number
 };
 export const VerificationStep: React.FC<VerificationProps> = ({
   handleChangeStep,
+  step
 }) => {
   const {
     register,
@@ -46,11 +48,11 @@ export const VerificationStep: React.FC<VerificationProps> = ({
   };
 
   useEffect(() => {
-    if (timer > 0) {
+    if (step === 1 && timer > 0) {
       const qwe = setInterval(() => setTimer(timer - 1), 1000);
       return () => clearInterval(qwe);
     }
-  }, [timer]);
+  }, [timer, step]);
 
   return (
     <>

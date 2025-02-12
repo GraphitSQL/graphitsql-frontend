@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import { DialogRoot, DialogTrigger } from '../../common/components/ui/dialog';
 import { CreateDatabaseModel } from '../../common/components/modals';
+import { toaster } from '../../common/components/ui/toaster';
 
 export const HomePage: React.FC = () => {
   const [databases, setDatabases] = useState<
@@ -50,6 +51,31 @@ export const HomePage: React.FC = () => {
         }, 3000);
       });
       setDatabases(updatedDatabases);
+    }
+  };
+
+  const handleDeleteDatabase = async (databaseId: number) => {
+    try {
+      if (databases) {
+        const updatedDatabases = await new Promise<
+          Array<Record<string, string | number>>
+        >((resolve) => {
+          setTimeout(() => {
+            resolve([...databases.filter((el) => el.id !== databaseId)]);
+          }, 0);
+        });
+        setDatabases(updatedDatabases);
+        toaster.create({
+          title: 'Database successfully deleted',
+          type: 'info',
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      toaster.create({
+        title: 'Unable to delete database',
+        type: 'error',
+      });
     }
   };
 
@@ -106,7 +132,14 @@ export const HomePage: React.FC = () => {
           </DialogRoot>
         </HStack>
       </HStack>
-      {databases ? <DatabaseTable items={databases} /> : <Loader />}
+      {databases ? (
+        <DatabaseTable
+          items={databases}
+          handleDeleteDatabase={handleDeleteDatabase}
+        />
+      ) : (
+        <Loader />
+      )}
     </>
   );
 };

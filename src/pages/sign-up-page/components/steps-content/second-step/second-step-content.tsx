@@ -8,11 +8,11 @@ import { COLORS } from '../../../../../common/constants';
 
 type VerificationProps = {
   handleChangeStep: (step: number) => void;
-  step: number
+  step: number;
 };
 export const VerificationStep: React.FC<VerificationProps> = ({
   handleChangeStep,
-  step
+  step,
 }) => {
   const {
     register,

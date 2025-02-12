@@ -13,12 +13,25 @@ import {
 } from './databases-table.styled';
 import { Icons } from '../../../../common/assets/icons';
 import { COLORS } from '../../../../common/constants';
+import {
+  MenuContent,
+  MenuItem,
+  MenuRoot,
+  MenuTrigger,
+} from '../../../../common/components/ui/menu';
+import { useNavigate } from 'react-router-dom';
+import { Routing } from '../../../../common/routes';
 
 type DatabaseTableProps = {
   items: Array<Record<string, string | number>>;
+  handleDeleteDatabase: (id: number) => void;
 };
 
-export const DatabaseTable: React.FC<DatabaseTableProps> = ({ items }) => {
+export const DatabaseTable: React.FC<DatabaseTableProps> = ({
+  items,
+  handleDeleteDatabase,
+}) => {
+  const navigate = useNavigate();
   return (
     <>
       {items.length ? (
@@ -69,9 +82,31 @@ export const DatabaseTable: React.FC<DatabaseTableProps> = ({ items }) => {
                     </Badge>
                   </Table.Cell>
                   <Table.Cell textAlign="end">
-                    <Button variant={'ghost'}>
-                      <Icons.Dots color={COLORS.teal[400]} />
-                    </Button>
+                    <MenuRoot variant="solid">
+                      <MenuTrigger asChild>
+                        <Button variant={'ghost'}>
+                          <Icons.Dots color={COLORS.teal[400]} />
+                        </Button>
+                      </MenuTrigger>
+                      <MenuContent width={200} bg={COLORS.navy[900]}>
+                        <MenuItem
+                          value="edit"
+                          onClick={() =>
+                            navigate(Routing.projects.route(item.id))
+                          }
+                        >
+                          Edit
+                        </MenuItem>
+                        <MenuItem
+                          value="delete"
+                          color="fg.error"
+                          _hover={{ bg: 'bg.error', color: 'fg.error' }}
+                          onClick={() => handleDeleteDatabase(Number(item.id))}
+                        >
+                          Delete
+                        </MenuItem>
+                      </MenuContent>
+                    </MenuRoot>
                   </Table.Cell>
                 </Table.Row>
               ))}

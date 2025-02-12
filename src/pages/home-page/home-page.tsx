@@ -28,7 +28,7 @@ export const HomePage: React.FC = () => {
             />
           </InputGroup>
           <Button variant="surface" borderRadius={30}>
-            New diagramm
+            New diagram
           </Button>
         </HStack>
       </HStack>

@@ -78,3 +78,11 @@ export const MOCK_ITEMS = [
     status: 'public',
   },
 ];
+
+export const MOCK_ITEM = {
+  id: Math.floor(Math.random() * 1000000),
+  databaseName: Math.random().toString(36).substring(2, 15),
+  createdAt: new Date('2025-01-01').toISOString(),
+  updatedAt: new Date('2025-02-01').toISOString(),
+  status: 'public',
+};

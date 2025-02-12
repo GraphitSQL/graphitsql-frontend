@@ -21,7 +21,11 @@ export const HomePage: React.FC = () => {
             flex="3"
             endElement={<Icons.Search color={COLORS.teal[400]} />}
           >
-            <Input placeholder="Search" borderRadius={30} />
+            <Input
+              placeholder="Search"
+              borderRadius={30}
+              bg={COLORS.navy[900]}
+            />
           </InputGroup>
           <Button variant="surface" borderRadius={30}>
             New diagramm

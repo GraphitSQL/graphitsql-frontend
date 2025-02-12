@@ -77,6 +77,7 @@ export const CreateDatabaseModel: React.FC<CreateDatabaseModelProps> = ({
             label="Database Visibility Type"
             invalid={!!errors.status}
             errorText={errors.status?.message}
+            helperText="Note, once set - it cannot be changed"
           >
             <SelectRoot
               collection={databaseTypes}

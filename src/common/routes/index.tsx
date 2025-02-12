@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { HomePage } from '../../pages/home-page';
 import { SignInPage } from '../../pages/sign-in-page';
 import { SignUpPage } from '../../pages/sign-up-page';
-import AuthLayout from '../components/layouts/auth.layout';
+import { AuthLayout } from '../components/layouts';
 
 export const Routing: Record<string, { route: () => string; isAuth: boolean }> =
   {

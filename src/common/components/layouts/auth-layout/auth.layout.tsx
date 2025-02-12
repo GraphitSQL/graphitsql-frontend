@@ -1,9 +1,9 @@
 import { Box, Avatar, HStack, Image, Text, Button } from '@chakra-ui/react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { COLORS } from '../../constants';
-import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../ui/menu';
-import { Icons } from '../../assets/icons';
-import { Routing } from '../../routes';
+import { COLORS } from '../../../constants';
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../../ui/menu';
+import { Icons } from '../../../assets/icons';
+import { Routing } from '../../../routes';
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -12,18 +12,25 @@ const UserProfile = () => {
       display="flex"
       alignItems="center"
       justifyContent="space-between"
-      backgroundColor={COLORS.teal[1000]}
-      padding="7px 20px"
-      borderRadius={30}
-      gap={'20px'}
+      gap={'10px'}
     >
       <HStack>
         <Avatar.Root colorPalette={'yellow'}>
           <Avatar.Fallback name="John Doe" />
         </Avatar.Root>
 
-        <Text marginLeft="3" color="white">
-          John Doe
+        <Text
+          marginLeft="3"
+          color="white"
+          title=" jfewjbfjhbhj bjdhebjvhfdjbej jjdb 345cdbcjhbdhjsbc"
+          style={{
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            maxWidth: '10vw',
+          }}
+        >
+          jfewjbfjhbhj bjdhebjvhfdjbej jjdb 345cdbcjhbdhjsbc
         </Text>
       </HStack>
 
@@ -55,7 +62,7 @@ const UserProfile = () => {
   );
 };
 
-const AuthLayout = () => {
+export const AuthLayout = () => {
   return (
     <>
       <HStack
@@ -88,5 +95,3 @@ const AuthLayout = () => {
     </>
   );
 };
-
-export default AuthLayout;

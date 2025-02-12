@@ -82,7 +82,9 @@ const AuthLayout = () => {
         </HStack>
         <UserProfile />
       </HStack>
-      <Outlet />
+      <Box padding={'1.5%'}>
+        <Outlet />
+      </Box>
     </>
   );
 };

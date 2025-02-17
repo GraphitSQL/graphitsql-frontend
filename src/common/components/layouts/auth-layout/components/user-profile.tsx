@@ -30,7 +30,12 @@ export const UserProfile = () => {
           </Button>
         </MenuTrigger>
         <MenuContent width={200}>
-          <MenuItem value="profile">Profile</MenuItem>
+          <MenuItem
+            value="profile"
+            onClick={() => navigate(Routing.profile.route())}
+          >
+            Profile
+          </MenuItem>
           <MenuItem
             value="terms"
             onClick={() => window.open('src/common/assets/terms/terms.pdf')}

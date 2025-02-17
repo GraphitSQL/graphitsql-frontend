@@ -1,9 +1,12 @@
 import { Box, HStack, Image, Text } from '@chakra-ui/react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { COLORS } from '../../../constants';
 import { UserProfile } from './components/user-profile';
+import { Routing } from '../../../routes';
 
 export const AuthLayout = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <HStack
@@ -15,7 +18,12 @@ export const AuthLayout = () => {
         padding={'15px 20px'}
         borderBottom={`1px solid ${COLORS.gray[800]}`}
       >
-        <HStack alignItems={'center'} gap={2}>
+        <HStack
+          cursor="pointer"
+          alignItems={'center'}
+          gap={2}
+          onClick={() => navigate(Routing.home.route())}
+        >
           <Image srcSet="src/common/assets/LOGO.svg" width={50} />
           <Text fontSize={'xl'} fontWeight={'bold'}>
             Graphit

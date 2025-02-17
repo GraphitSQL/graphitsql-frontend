@@ -3,6 +3,7 @@ import { HomePage } from '../../pages/home-page';
 import { SignInPage } from '../../pages/sign-in-page';
 import { SignUpPage } from '../../pages/sign-up-page';
 import { AuthLayout } from '../components/layouts';
+import { PofilePage } from '../../pages/profile-page';
 
 export const Routing = {
   home: {
@@ -18,8 +19,12 @@ export const Routing = {
     isAuth: false,
   },
   projects: {
-    route: (id: string | number) => `/sign-up/${id}`,
-    isAuth: false,
+    route: (id: string | number) => `/projects/${id}`,
+    isAuth: true,
+  },
+  profile: {
+    route: () => '/profile',
+    isAuth: true,
   },
 };
 
@@ -39,6 +44,10 @@ export const routers = createBrowserRouter([
       {
         path: Routing.home.route(),
         element: <HomePage />,
+      },
+      {
+        path: Routing.profile.route(),
+        element: <PofilePage />,
       },
       {
         path: '',

@@ -53,7 +53,7 @@ export const AccountSettings: React.FC = () => {
         resolve({
           username: 'John Fafafa',
           about: 'I am cooool',
-          avatarColor: '#31E0BD',
+          avatarColor: 'rgba(176, 62, 138, 1)',
           email: 'qwe@qwe.com',
         });
       }, 1000);
@@ -132,7 +132,10 @@ export const AccountSettings: React.FC = () => {
                         format="rgba"
                         minW={'100%'}
                         defaultValue={parseColor(userData.avatarColor)}
-                        onValueChange={(e) => field.onChange(e.valueAsString)}
+                        onValueChange={(e) => {
+                          field.onChange(e.valueAsString);
+                          field.onBlur();
+                        }}
                       >
                         <ColorPickerControl>
                           <ColorPickerInput />

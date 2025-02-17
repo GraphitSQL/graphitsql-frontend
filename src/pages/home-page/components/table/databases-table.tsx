@@ -2,6 +2,7 @@ import {
   Badge,
   Button,
   EmptyState,
+  Link,
   Table,
   Text,
   VStack,
@@ -53,7 +54,13 @@ export const DatabaseTable: React.FC<DatabaseTableProps> = ({
               {items.map((item) => (
                 <Table.Row key={item.id}>
                   <Table.Cell maxWidth={'3vw'} overflow={'scroll'}>
-                    {item.databaseName}
+                    <Link
+                      variant="plain"
+                      color={'white'}
+                      href={Routing.projects.route(item.id)}
+                    >
+                      {item.databaseName}
+                    </Link>
                   </Table.Cell>
                   <Table.Cell>
                     {new Date(item.createdAt).toLocaleDateString()}

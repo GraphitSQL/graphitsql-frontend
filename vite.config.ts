@@ -8,4 +8,10 @@ export default defineConfig({
   build: {
     commonjsOptions: { transformMixedEsModules: true },
   },
+  publicDir: 'public',
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
 });

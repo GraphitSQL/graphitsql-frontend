@@ -18,7 +18,7 @@ export const UserProfile = () => {
         <Avatar.Root colorPalette={'yellow'}>
           <Avatar.Fallback name="John Doe" />
         </Avatar.Root>
-        <UserName title=" jfewjbfjhbhj bjdhebjvhfdjbej jjdb 345cdbcjhbdhjsbc">
+        <UserName title="jfewjbfjhbhj bjdhebjvhfdjbej jjdb 345cdbcjhbdhjsbc">
           jfewjbfjhbhj bjdhebjvhfdjbej jjdb 345cdbcjhbdhjsbc
         </UserName>
       </HStack>

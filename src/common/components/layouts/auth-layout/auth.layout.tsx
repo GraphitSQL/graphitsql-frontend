@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { COLORS } from '../../../constants';
 import { UserProfile } from './components/user-profile';
 import { Routing } from '../../../routes';
-
+import logoPath from '../../../assets/LOGO.svg';
 export const AuthLayout = () => {
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ export const AuthLayout = () => {
           gap={2}
           onClick={() => navigate(Routing.home.route())}
         >
-          <Image srcSet="src/common/assets/LOGO.svg" width={50} />
+          <Image srcSet={logoPath} width={50} />
           <Text fontSize={'xl'} fontWeight={'bold'}>
             Graphit
             <span
@@ -38,7 +38,7 @@ export const AuthLayout = () => {
         </HStack>
         <UserProfile />
       </HStack>
-      <Box padding={'1.5%'}>
+      <Box padding={'1.5% 1.5% 0 1.5%'}>
         <Outlet />
       </Box>
     </>

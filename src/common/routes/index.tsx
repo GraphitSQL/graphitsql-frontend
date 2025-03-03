@@ -4,6 +4,7 @@ import { SignInPage } from '../../pages/sign-in-page';
 import { SignUpPage } from '../../pages/sign-up-page';
 import { AuthLayout } from '../components/layouts';
 import { PofilePage } from '../../pages/profile-page';
+import { ProjectPage } from '../../pages/project-page';
 
 export const Routing = {
   home: {
@@ -28,31 +29,40 @@ export const Routing = {
   },
 };
 
-export const routers = createBrowserRouter([
+export const routers = createBrowserRouter(
+  [
+    {
+      path: Routing.signIn.route(),
+      element: <SignInPage />,
+    },
+    {
+      path: Routing.signUp.route(),
+      element: <SignUpPage />,
+    },
+    {
+      path: '/',
+      element: <AuthLayout />,
+      children: [
+        {
+          path: Routing.home.route(),
+          element: <HomePage />,
+        },
+        {
+          path: Routing.profile.route(),
+          element: <PofilePage />,
+        },
+        {
+          path: Routing.projects.route(':id'),
+          element: <ProjectPage />,
+        },
+        {
+          path: '',
+          element: <Navigate to="/home" replace />,
+        },
+      ],
+    },
+  ],
   {
-    path: Routing.signIn.route(),
-    element: <SignInPage />,
-  },
-  {
-    path: Routing.signUp.route(),
-    element: <SignUpPage />,
-  },
-  {
-    path: '/',
-    element: <AuthLayout />,
-    children: [
-      {
-        path: Routing.home.route(),
-        element: <HomePage />,
-      },
-      {
-        path: Routing.profile.route(),
-        element: <PofilePage />,
-      },
-      {
-        path: '',
-        element: <Navigate to="/home" replace />,
-      },
-    ],
-  },
-]);
+    basename: '/',
+  }
+);

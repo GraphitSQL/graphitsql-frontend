@@ -5,3 +5,4 @@ export * from './field';
 export * from './password-input';
 export * from './select';
 export * from './color-picker';
+export * from './accordion';

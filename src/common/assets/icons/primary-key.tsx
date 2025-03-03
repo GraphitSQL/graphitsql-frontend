@@ -1,9 +1,9 @@
 import { BaseIconProps } from './icons.types';
 
-export const Dots = ({
+export const PrimaryKey = ({
   color = '#D0D5DD',
-  iconHeight = 24,
   iconWidth = 24,
+  iconHeight = 24,
 }: BaseIconProps) => (
   <svg
     width={iconWidth}
@@ -12,23 +12,30 @@ export const Dots = ({
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g clipPath="url(#clip0_26_6965)">
+    <g clipPath="url(#clip0_26_5261)">
       <path
-        d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z"
+        d="M8 19C10.2091 19 12 17.2091 12 15C12 12.7909 10.2091 11 8 11C5.79086 11 4 12.7909 4 15C4 17.2091 5.79086 19 8 19Z"
         stroke={color}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z"
+        d="M10.8496 12.15L18.9996 4"
         stroke={color}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z"
+        d="M18 5L20 7"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15 8L17 10"
         stroke={color}
         strokeWidth="2"
         strokeLinecap="round"
@@ -36,8 +43,8 @@ export const Dots = ({
       />
     </g>
     <defs>
-      <clipPath id="clip0_26_6965">
-        <rect width="24" height="24" fill="white" />
+      <clipPath id="clip0_26_5261">
+        <rect width="24" height="24" fill={color} />
       </clipPath>
     </defs>
   </svg>

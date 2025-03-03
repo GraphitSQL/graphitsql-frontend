@@ -9,5 +9,9 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Open Sans', sans-serif;
     margin: 0;
     padding: 0;
-  };
+  }
+  
+  [data-message*="React Flow Pro"] {
+    display: none;
+  }
 `;

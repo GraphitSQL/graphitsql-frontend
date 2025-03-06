@@ -6,7 +6,7 @@ import { AuthLayout } from '../components/layouts';
 import { PofilePage } from '../../pages/profile-page';
 import { ProjectPage } from '../../pages/project-page';
 
-export const Routing = {
+export const Routing: Record<string,{route: (arg?: any) => string, isAuth: boolean }> = {
   home: {
     route: () => '/home',
     isAuth: true,

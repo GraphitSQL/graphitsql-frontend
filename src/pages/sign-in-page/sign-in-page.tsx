@@ -12,6 +12,10 @@ import { Heading, Input, Text, Link } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { Field, PasswordInput } from '../../common/components/ui';
 import { Routing } from '../../common/routes';
+import { logIn } from '@/api/auth';
+import { LoginRequest } from '@/api/auth/contracts';
+import { toaster } from '@/common/components/ui/toaster';
+import { LocalStorageItem } from '@/common/constants';
 
 export const SignInPage: React.FC = () => {
   const signInBackground = useLottie({
@@ -26,12 +30,21 @@ export const SignInPage: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ email: string; password: string }>();
+  } = useForm<LoginRequest>();
   const navigate = useNavigate();
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-    navigate(Routing.home.route());
+  const onSubmit = handleSubmit(async (data: LoginRequest) => {
+    try {
+      const { accessToken, refreshToken } = await logIn(data);
+      window.localStorage.setItem(LocalStorageItem.ACCESS_TOKEN, accessToken)
+      window.localStorage.setItem(LocalStorageItem.REFRESH_TOKEN, refreshToken)
+      navigate(Routing.home.route());
+    } catch (error: any) {
+      toaster.error({
+        title: error?.message || 'Unexpected error',
+      });
+    }
+
   });
 
   return (

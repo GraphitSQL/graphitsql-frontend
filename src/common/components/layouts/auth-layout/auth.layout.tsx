@@ -1,11 +1,32 @@
 import { Box, HStack, Image, Text } from '@chakra-ui/react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { COLORS } from '../../../constants';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { COLORS, LocalStorageItem } from '../../../constants';
 import { UserProfile } from './components/user-profile';
 import { Routing } from '../../../routes';
 import logoPath from '../../../assets/LOGO.svg';
+import { useEffect, useMemo } from 'react';
+import { toaster } from '../../ui/toaster';
+
 export const AuthLayout = () => {
   const navigate = useNavigate();
+  const {pathname} = useLocation()
+
+  const isAuth = useMemo(() => {
+    const basePath = pathname.split('/')[1]
+    return (
+      pathname && Routing[basePath].isAuth &&
+      !!localStorage.getItem(LocalStorageItem.ACCESS_TOKEN)
+    );
+  }, [pathname]);
+  
+  useEffect(() => {
+    if (!isAuth) {
+      toaster.error({
+        title: 'Unauthorized'
+      })
+      navigate(Routing.signIn.route())
+    }
+  }, [isAuth, navigate]);
 
   return (
     <>

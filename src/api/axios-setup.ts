@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { LocalStorageItem } from '../common/constants';
+import { refreshAccessToken } from './auth';
 
 const BASE_URL = import.meta.env.VITE_APP_BASE_API_URL;
 
@@ -19,18 +20,25 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-axiosInstance.interceptors.response.use((response) => {
-  return response
-}, async function (error) {
-  const originalRequest = error.config;
-  if (error.response.status === 401 && !originalRequest._retry) {
-    originalRequest._retry = true;
-    // const { access } = await refreshAccessToken();
-    const access = 'qwe'
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + access;
-    return axiosInstance(originalRequest);
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async function (error) {
+    const originalRequest = error.config;
+    if (originalRequest._retry) {
+      window.localStorage.removeItem(LocalStorageItem.ACCESS_TOKEN);
+      window.localStorage.removeItem(LocalStorageItem.REFRESH_TOKEN);
+      window.location.replace('/sign-in');
+      return Promise.reject('Access denied');
+    }
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      await refreshAccessToken(BASE_URL);
+      return axiosInstance.request(originalRequest);
+    }
+    return Promise.reject(error?.response?.data || error);
   }
-  return Promise.reject(error?.response?.data || error);
-});
+);
 
 export default axiosInstance;

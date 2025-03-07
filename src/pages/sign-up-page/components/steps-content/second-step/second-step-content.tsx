@@ -1,10 +1,12 @@
 import { useForm } from 'react-hook-form';
 import { VerificationForm, VerifyButton } from './second-step.styled';
-import { Button, Heading, Input, Text } from '@chakra-ui/react';
+import { Button, Heading, Input, Loader, Text } from '@chakra-ui/react';
 import { Field } from '../../../../../common/components';
 import { useEffect, useState } from 'react';
 import { toaster } from '../../../../../common/components/ui/toaster';
-import { COLORS } from '../../../../../common/constants';
+import { COLORS, LocalStorageItem } from '../../../../../common/constants';
+import { resendVerificationCodeRequest, verifyEmailAddress } from '@/api/auth';
+import { RegisterRequest } from '@/api/auth/contracts';
 
 type VerificationProps = {
   handleChangeStep: (step: number) => void;
@@ -17,40 +19,41 @@ export const VerificationStep: React.FC<VerificationProps> = ({
   const {
     register,
     handleSubmit,
-    getValues,
-    formState: { errors },
-  } = useForm<{ verificationCode: string }>();
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterRequest>();
 
-  const [isValidating, setIsValidating] = useState<boolean>(false);
   const [timer, setTimer] = useState(30);
 
-  const onSubmit = handleSubmit((data) => {
-    console.log('data', data);
-    setIsValidating(true);
-    const signUpToken = localStorage.getItem('signUpToken');
-    const isVerified = signUpToken === getValues('verificationCode');
-
-    if (isVerified) {
+  const onSubmit = handleSubmit(async (data: RegisterRequest) => {
+    try {
+      const {accessToken, refreshToken} = await verifyEmailAddress(data)
+      window.localStorage.setItem(LocalStorageItem.ACCESS_TOKEN, accessToken)
+      window.localStorage.setItem(LocalStorageItem.REFRESH_TOKEN, refreshToken)
       handleChangeStep(2);
-    } else {
-      setIsValidating(false);
-      toaster.create({
-        title: 'Verification failed',
-        description: 'Make sure you enter a valid code',
-        type: 'error',
-      });
+    } catch (e: any) {
+      toaster.error({
+        title: e.message || 'Something went wrong'
+      })
     }
   });
 
-  const resendVerificationCode = () => {
-    console.log('qweqweqewee resend');
-    setTimer(30);
+  const resendVerificationCode = async () => {
+    try {
+      setTimer(30);
+      const newToken = await resendVerificationCodeRequest()
+      window.localStorage.setItem(LocalStorageItem.TOKEN_FOR_REGISTRATION, newToken)
+    } catch (e: any) {
+      console.error(e)
+      toaster.error({
+        title: e.message || 'Unable to resend verification code'
+      })
+    }
   };
 
   useEffect(() => {
     if (step === 1 && timer > 0) {
-      const qwe = setInterval(() => setTimer(timer - 1), 1000);
-      return () => clearInterval(qwe);
+      const resendCodeTimer = setInterval(() => setTimer(timer - 1), 1000);
+      return () => clearInterval(resendCodeTimer);
     }
   }, [timer, step]);
 
@@ -64,26 +67,26 @@ export const VerificationStep: React.FC<VerificationProps> = ({
         </Text>
         <Field
           label="Verification Code"
-          invalid={!!errors.verificationCode}
-          errorText={errors.verificationCode?.message}
+          invalid={!!errors.code}
+          errorText={errors.code?.message}
         >
           <Input
             placeholder="Enter the verification code"
-            {...register('verificationCode', {
+            {...register('code', {
               required: 'Verification code is required',
             })}
           />
         </Field>
 
-        <VerifyButton type="submit" disabled={isValidating}>
-          Verify
+        <VerifyButton type="submit" disabled={isSubmitting}>
+          {!isSubmitting ? 'Verify' : <Loader />}
         </VerifyButton>
 
         <Button
           onClick={() => {
             resendVerificationCode();
           }}
-          disabled={timer !== 0}
+          disabled={timer !== 0 || isSubmitting}
           variant={'plain'}
         >
           Resend verify code {timer > 0 ? `in ${timer}` : ''}

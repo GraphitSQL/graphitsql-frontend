@@ -4,9 +4,32 @@ import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../../../ui/menu';
 import { Icons } from '../../../../assets/icons';
 import { Routing } from '../../../../routes';
 import { UserName } from './user-profile.styled';
+import { TUser } from '@/common/types/types';
+import { LocalStorageItem } from '@/common/constants';
+import { logoutRequest } from '@/api/auth';
+import { toaster } from '@/common/components/ui/toaster';
 
-export const UserProfile = () => {
+type TUserProfileProps = {
+  currentUser: TUser;
+};
+
+export const UserProfile: React.FC<TUserProfileProps> = ({ currentUser }) => {
   const navigate = useNavigate();
+  const onLogout = async () => {
+    try {
+      await logoutRequest();
+      localStorage.removeItem(LocalStorageItem.ACCESS_TOKEN);
+      localStorage.removeItem(LocalStorageItem.REFRESH_TOKEN);
+      navigate(Routing.signIn.route());
+    } catch (e: unknown) {
+      console.error(e);
+      toaster.error({
+        title: 'Unable to logout',
+        description: 'Try again later',
+      });
+    }
+  };
+
   return (
     <Box
       display="flex"
@@ -15,11 +38,11 @@ export const UserProfile = () => {
       gap={'10px'}
     >
       <HStack>
-        <Avatar.Root colorPalette={'yellow'}>
-          <Avatar.Fallback name="John Doe" />
+        <Avatar.Root colorPalette={currentUser.avatarColor}>
+          <Avatar.Fallback name={currentUser.displayName} />
         </Avatar.Root>
-        <UserName title="jfewjbfjhbhj bjdhebjvhfdjbej jjdb 345cdbcjhbdhjsbc">
-          jfewjbfjhbhj bjdhebjvhfdjbej jjdb 345cdbcjhbdhjsbc
+        <UserName title={currentUser.displayName}>
+          {currentUser.displayName}
         </UserName>
       </HStack>
 
@@ -46,7 +69,7 @@ export const UserProfile = () => {
             value="logout"
             color="fg.error"
             _hover={{ bg: 'bg.error', color: 'fg.error' }}
-            onClick={() => navigate(Routing.signIn.route())}
+            onClick={onLogout}
           >
             Log out
           </MenuItem>

@@ -5,10 +5,13 @@ import {
   Field,
   PasswordInput,
 } from '../../../../../common/components';
-import { Box, Heading, Input, Link, Text } from '@chakra-ui/react';
+import { Box, Heading, Input, Link, Loader, Text } from '@chakra-ui/react';
 import { SubmitButton } from '../../sign-up-page.styled';
 import { Routing } from '../../../../../common/routes';
-import { MOCK_SIGN_UP_CODE } from '../../../../../tmp/mocks/mock-sign-up-token.mock';
+import { GetTokenForRegistrationRequest } from '@/api/auth/contracts';
+import { randomColor } from '@chakra-ui/theme-tools';
+import { getTokenForRegistration } from '@/api/auth';
+import { LocalStorageItem } from '@/common/constants';
 
 type FirstStepContentProps = {
   handleChangeStep: (step: number) => void;
@@ -21,7 +24,7 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
     register,
     handleSubmit,
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<{
     email: string;
     password: string;
@@ -30,9 +33,15 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
     acceptTerms: boolean;
   }>();
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-    localStorage.setItem('signUpToken', MOCK_SIGN_UP_CODE);
+  const onSubmit = handleSubmit(async (data) => {
+    const payload: GetTokenForRegistrationRequest = {
+      email: data.email,
+      password: data.password,
+      userName: data.username,
+      avatarColor: randomColor({colors: ['yellow', 'red', 'green', 'blue', 'teal']})
+    }
+    const registrationToken = await getTokenForRegistration(payload)
+    localStorage.setItem(LocalStorageItem.TOKEN_FOR_REGISTRATION, registrationToken);
     handleChangeStep(1);
   });
 
@@ -128,7 +137,7 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
           </Link>
         </Checkbox>
 
-        <SubmitButton type="submit">Submit</SubmitButton>
+        <SubmitButton type="submit" disabled={isSubmitting}>{!isSubmitting ? "Submit" : <Loader />}</SubmitButton>
       </SignUpForm>
       <Text textAlign={'center'}>
         Already have an account?{' '}

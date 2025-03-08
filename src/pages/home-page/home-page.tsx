@@ -1,4 +1,4 @@
-import { Box, Heading, HStack, Text, Button, Input, Loader } from '@chakra-ui/react';
+import { Heading, HStack, Text, Button, Input, Loader } from '@chakra-ui/react';
 import { COLORS } from '../../common/constants';
 import { DatabaseTable } from './components/table/databases-table';
 import { InputGroup } from '../../common/components/ui/input-group';
@@ -9,6 +9,7 @@ import React from 'react';
 import { DialogRoot, DialogTrigger } from '../../common/components/ui/dialog';
 import { CreateDatabaseModel } from '../../common/components/modals';
 import { toaster } from '../../common/components/ui/toaster';
+import { StyledTitleContainer } from './components/home-page.styled';
 
 export const HomePage: React.FC = () => {
   const [databases, setDatabases] = useState<Array<Record<string, string | number>> | undefined>(undefined);
@@ -74,10 +75,10 @@ export const HomePage: React.FC = () => {
   return (
     <>
       <HStack justifyContent={'space-between'} alignItems={'center'} marginBottom={'30px'}>
-        <Box>
+        <StyledTitleContainer>
           <Heading size={'3xl'}>Список баз даных</Heading>
           {databases && <Text color={COLORS.gray[600]}>Всего баз: {databases.length}</Text>}
-        </Box>
+        </StyledTitleContainer>
         <HStack>
           <InputGroup flex="3" endElement={<Icons.Search color={COLORS.teal[400]} />}>
             <Input placeholder="Поиск..." borderRadius={30} bg={COLORS.navy[900]} disabled={!databases?.length} />

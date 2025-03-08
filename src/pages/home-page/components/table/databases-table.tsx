@@ -1,5 +1,5 @@
 import { Badge, Button, EmptyState, Link, Table, Text, VStack } from '@chakra-ui/react';
-import { StyledIndicator, StyledTableBody, StyledTableHeader } from './databases-table.styled';
+import { StyledIndicator, StyledTableBody, StyledTableHeader, StyledScrollArea } from './databases-table.styled';
 import { Icons } from '../../../../common/assets/icons';
 import { COLORS } from '../../../../common/constants';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../../../../common/components/ui/menu';
@@ -16,14 +16,14 @@ export const DatabaseTable: React.FC<DatabaseTableProps> = ({ items, handleDelet
   return (
     <>
       {items.length ? (
-        <Table.ScrollArea borderWidth="1px" rounded="md" height={'70vh'}>
+        <StyledScrollArea borderWidth="1px" rounded="md" height={'70vh'}>
           <Table.Root size="lg" stickyHeader striped={true}>
             <StyledTableHeader>
               <Table.Row bg="bg.subtle">
                 <Table.ColumnHeader>Название</Table.ColumnHeader>
-                <Table.ColumnHeader>Дата создания</Table.ColumnHeader>
-                <Table.ColumnHeader>Дата обновления</Table.ColumnHeader>
-                <Table.ColumnHeader>Статус</Table.ColumnHeader>
+                <Table.ColumnHeader className="extended-proect-table-data">Дата создания</Table.ColumnHeader>
+                <Table.ColumnHeader className="extended-proect-table-data">Дата обновления</Table.ColumnHeader>
+                <Table.ColumnHeader className="extended-proect-table-data">Статус</Table.ColumnHeader>
                 <Table.ColumnHeader textAlign="end">Настройки</Table.ColumnHeader>
               </Table.Row>
             </StyledTableHeader>
@@ -36,9 +36,13 @@ export const DatabaseTable: React.FC<DatabaseTableProps> = ({ items, handleDelet
                       {item.databaseName}
                     </Link>
                   </Table.Cell>
-                  <Table.Cell>{new Date(item.createdAt).toLocaleDateString()}</Table.Cell>
-                  <Table.Cell>{new Date(item.updatedAt).toLocaleDateString()}</Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className="extended-proect-table-data">
+                    {new Date(item.createdAt).toLocaleDateString()}
+                  </Table.Cell>
+                  <Table.Cell className="extended-proect-table-data">
+                    {new Date(item.updatedAt).toLocaleDateString()}
+                  </Table.Cell>
+                  <Table.Cell className="extended-proect-table-data">
                     <Badge
                       colorPalette={item.status === 'private' ? 'orange' : 'green'}
                       size={'lg'}
@@ -80,7 +84,7 @@ export const DatabaseTable: React.FC<DatabaseTableProps> = ({ items, handleDelet
               ))}
             </StyledTableBody>
           </Table.Root>
-        </Table.ScrollArea>
+        </StyledScrollArea>
       ) : (
         <EmptyState.Root>
           <EmptyState.Content height={'50vh'}>

@@ -1,11 +1,6 @@
 import { Icons } from '@/common/assets/icons';
 import { AccordionItemTrigger } from '@/common/components';
-import {
-  MenuContent,
-  MenuItem,
-  MenuRoot,
-  MenuTrigger,
-} from '@/common/components/ui/menu';
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/common/components/ui/menu';
 import { COLORS } from '@/common/constants';
 import { Box, Button, HStack, Text } from '@chakra-ui/react';
 import { LuChevronsUpDown } from 'react-icons/lu';
@@ -15,10 +10,7 @@ type TableSectionHeaderProps = {
   clearWorkSpace: () => void;
 };
 
-export const TableSectionHeader: React.FC<TableSectionHeaderProps> = ({
-  addTableNode,
-  clearWorkSpace,
-}) => {
+export const TableSectionHeader: React.FC<TableSectionHeaderProps> = ({ addTableNode, clearWorkSpace }) => {
   return (
     <HStack
       boxShadow="sm"
@@ -31,12 +23,12 @@ export const TableSectionHeader: React.FC<TableSectionHeaderProps> = ({
       <AccordionItemTrigger>
         <HStack cursor={'pointer'}>
           <LuChevronsUpDown color={COLORS.teal[400]} />
-          <Text>Tables</Text>
+          <Text>Таблицы</Text>
         </HStack>
       </AccordionItemTrigger>
       <HStack gap={1}>
         <Button onClick={addTableNode} size={'xs'}>
-          Add table
+          Добавить
         </Button>
         <MenuRoot variant={'solid'}>
           <MenuTrigger asChild>
@@ -48,7 +40,7 @@ export const TableSectionHeader: React.FC<TableSectionHeaderProps> = ({
           </MenuTrigger>
           <MenuContent width={200}>
             <MenuItem value="profile" onClick={clearWorkSpace}>
-              Clear workspace
+              Удалить все
             </MenuItem>
           </MenuContent>
         </MenuRoot>

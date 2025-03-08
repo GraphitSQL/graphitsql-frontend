@@ -1,11 +1,6 @@
 import { Icons } from '@/common/assets/icons';
 import { AccordionItemTrigger } from '@/common/components';
-import {
-  MenuContent,
-  MenuItem,
-  MenuRoot,
-  MenuTrigger,
-} from '@/common/components/ui/menu';
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/common/components/ui/menu';
 import { COLORS } from '@/common/constants';
 import { Box, Button, HStack, Text } from '@chakra-ui/react';
 import { LuChevronsUpDown } from 'react-icons/lu';
@@ -14,9 +9,7 @@ type NoteSectionHeaderProps = {
   handleDeleteNotes: () => void;
 };
 
-export const NoteSectionHeader: React.FC<NoteSectionHeaderProps> = ({
-  handleDeleteNotes,
-}) => {
+export const NoteSectionHeader: React.FC<NoteSectionHeaderProps> = ({ handleDeleteNotes }) => {
   return (
     <HStack
       boxShadow="sm"
@@ -29,7 +22,7 @@ export const NoteSectionHeader: React.FC<NoteSectionHeaderProps> = ({
       <AccordionItemTrigger>
         <HStack cursor={'pointer'}>
           <LuChevronsUpDown color={COLORS.teal[400]} />
-          <Text>Notes</Text>
+          <Text>Заметки</Text>
         </HStack>
       </AccordionItemTrigger>
       <HStack gap={1}>
@@ -43,7 +36,7 @@ export const NoteSectionHeader: React.FC<NoteSectionHeaderProps> = ({
           </MenuTrigger>
           <MenuContent width={200}>
             <MenuItem value="delete-notes" onClick={handleDeleteNotes}>
-              Delete all notes
+              Удалить все
             </MenuItem>
           </MenuContent>
         </MenuRoot>

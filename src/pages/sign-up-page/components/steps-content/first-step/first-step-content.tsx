@@ -32,7 +32,7 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({ handleCha
       email: data.email,
       password: data.password,
       userName: data.username,
-      avatarColor: randomColor({ colors: ['green', 'blue', 'teal'] }),
+      avatarColor: randomColor({ colors: ['#0F6B6B', '#8A5B0A', '#5D2BC2'] }),
     };
     const registrationToken = await getTokenForRegistration(payload);
     localStorage.setItem(LocalStorageItem.TOKEN_FOR_REGISTRATION, registrationToken);
@@ -43,18 +43,18 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({ handleCha
     <>
       <SignUpForm name="sign-up-form-basic-form" onSubmit={onSubmit}>
         <Box marginBottom={'20px'}>
-          <Heading size={'3xl'}>Adventures starts here!</Heading>
-          <Text fontSize={'xs'}>Make your work easy and fun</Text>
+          <Heading size={'3xl'}>Приключения начинаются здесь!</Heading>
+          <Text fontSize={'xs'}>Сделайте свою работу легкой и увлекательной</Text>
         </Box>
-        <Field label="Username" invalid={!!errors.username} errorText={errors.username?.message}>
+        <Field label="Имя пользователя" invalid={!!errors.username} errorText={errors.username?.message}>
           <Input
-            placeholder="Enter your username"
+            placeholder="Введите имя пользователя"
             autoComplete="off"
             {...register('username', {
-              required: 'Username is required',
+              required: 'Это поле обязательно',
               maxLength: {
-                value: 30,
-                message: 'Max length for username is 30 symbols',
+                value: 250,
+                message: 'Макимальная длина поля - 250 символов',
               },
             })}
           />
@@ -62,65 +62,69 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({ handleCha
 
         <Field label="Email" invalid={!!errors.email} errorText={errors.email?.message}>
           <Input
-            placeholder="Enter your email"
+            placeholder="Введите адрес электронной почты"
             {...register('email', {
-              required: 'Email is required',
+              required: 'Это поле обязательно',
               pattern: {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: 'Invalid email format',
+                message: 'Неверный формат',
               },
             })}
           />
         </Field>
 
-        <Field label="Password" invalid={!!errors.password} errorText={errors.password?.message}>
+        <Field label="Пароль" invalid={!!errors.password} errorText={errors.password?.message}>
           <PasswordInput
-            placeholder="Enter your password"
+            placeholder="Введите пароль"
             {...register('password', {
-              required: 'Password is required',
+              required: 'Это поле обязательно',
               minLength: {
                 value: 8,
-                message: 'Password must be at least 8 characters long',
+                message: 'Минимальная длина пароля - 8 символов',
               },
               pattern: {
                 value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[#?!@$%^&*-]).{8,}$/,
                 message:
-                  'Password must include at least one uppercase letter, one lowercase letter, one number and one special character',
+                  'Пароль должен содержать как минимум одну заглавную букву, одну строчную букву, одну цифру и один специальный символ.',
               },
             })}
           />
         </Field>
 
-        <Field label="Confirm Password" invalid={!!errors.confirmPassword} errorText={errors.confirmPassword?.message}>
+        <Field
+          label="Подтверждение пароля"
+          invalid={!!errors.confirmPassword}
+          errorText={errors.confirmPassword?.message}
+        >
           <PasswordInput
-            placeholder="Confirm your password"
+            placeholder="Подтвердите пароль"
             {...register('confirmPassword', {
-              required: 'Please confirm your password',
-              validate: (value) => value === getValues('password') || 'Passwords do not match',
+              required: 'Пожалуйста, подтвердите пароль',
+              validate: (value) => value === getValues('password') || 'Пароли не совпадают',
             })}
           />
         </Field>
 
         <Checkbox
           {...register('acceptTerms', {
-            required: 'You must accept the terms',
+            required: 'Вы должны принять условия Пользовательского Соглашения',
           })}
           errorText={errors.acceptTerms?.message}
         >
-          I accept the{' '}
+          Я принимаю условия{' '}
           <Link href={'src/common/assets/terms/terms.pdf'} target="_blank">
-            terms and conditions
+            Пользовательского Соглашения
           </Link>
         </Checkbox>
 
         <SubmitButton type="submit" disabled={isSubmitting}>
-          {!isSubmitting ? 'Submit' : <Loader />}
+          {!isSubmitting ? 'Подтвердить' : <Loader />}
         </SubmitButton>
       </SignUpForm>
       <Text textAlign={'center'}>
-        Already have an account?{' '}
+        Уже есть аккаунт?{' '}
         <Link variant="underline" href={Routing.signIn.route()}>
-          Sign in
+          Войти
         </Link>
       </Text>
     </>

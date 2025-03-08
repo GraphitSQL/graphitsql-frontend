@@ -41,10 +41,7 @@ export const ProjectPage = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
-  const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
-  );
+  const onConnect = useCallback((params: Connection) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange<PreResolutionNode>[]) => {
@@ -58,10 +55,7 @@ export const ProjectPage = () => {
     setNodes((nodes) => [...nodes, ...newNodes]);
   };
 
-  const updateNodeById = (
-    id: string,
-    data: Partial<TTableNodeData> | Partial<TTableRowNodeData>
-  ) => {
+  const updateNodeById = (id: string, data: Partial<TTableNodeData> | Partial<TTableRowNodeData>) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     setNodes((prevItems) =>
@@ -83,8 +77,8 @@ export const ProjectPage = () => {
     setNodes([]);
     setEdges([]);
     toaster.success({
-      title: 'Done',
-      description: 'All data successfuly deleted',
+      title: 'Готово',
+      description: 'Данные удалены',
     });
     setHasUnsavedChanges(true);
   };
@@ -117,11 +111,11 @@ export const ProjectPage = () => {
       if (flow) {
         setNodes(flow.nodes || []);
         setEdges(flow.edges || []);
-        setIsLoading(false);
       }
     };
 
     restoreFlow();
+    setIsLoading(false);
   }, [setNodes]);
 
   useEffect(() => {
@@ -158,15 +152,11 @@ export const ProjectPage = () => {
               fitView
               fitViewOptions={{ padding: 2 }}
             >
-              <Controls
-                style={{ color: COLORS.teal[600] }}
-                orientation="horizontal"
-                position="bottom-right"
-              />
+              <Controls style={{ color: COLORS.teal[600] }} orientation="horizontal" position="bottom-right" />
               <Background variant={BackgroundVariant.Cross} gap={12} size={1} />
               <Panel position="top-right">
                 <Button onClick={onSave} disabled={!hasUnsavedChanges}>
-                  Save
+                  Сохранить
                 </Button>
               </Panel>
             </ReactFlow>

@@ -22,3 +22,11 @@ export const StyledIndicator = styled(EmptyState.Indicator)`
     height: 6em;
   }
 `;
+
+export const StyledScrollArea = styled(Table.ScrollArea)`
+  @media (max-width: 768px) {
+    .extended-proect-table-data {
+      display: none;
+    }
+  }
+`;

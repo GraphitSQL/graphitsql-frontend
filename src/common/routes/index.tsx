@@ -4,9 +4,10 @@ import { SignInPage } from '../../pages/sign-in-page';
 import { SignUpPage } from '../../pages/sign-up-page';
 import { AuthLayout } from '../components/layouts';
 import { PofilePage } from '../../pages/profile-page';
-import { ProjectPage } from '../../pages/project-page';
+// import { ProjectPage } from '../../pages/project-page';
+import { ProjectPageWrapper } from '@/pages/project-page/wrapper';
 
-export const Routing: Record<string,{route: (arg?: any) => string, isAuth: boolean }> = {
+export const Routing: Record<string, { route: (arg?: any) => string; isAuth: boolean }> = {
   home: {
     route: () => '/home',
     isAuth: true,
@@ -53,7 +54,7 @@ export const routers = createBrowserRouter(
         },
         {
           path: Routing.projects.route(':id'),
-          element: <ProjectPage />,
+          element: <ProjectPageWrapper />,
         },
         {
           path: '',

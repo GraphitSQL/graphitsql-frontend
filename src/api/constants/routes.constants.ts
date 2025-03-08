@@ -7,8 +7,11 @@ export const API_ROUTES = {
     resendVerificationCode: () => '/auth/resend-verification-code',
     logout: () => '/auth/logout',
     refreshTokens: () => '/auth/refresh',
+    changePassword: () => '/auth/change-password',
   },
   users: {
     me: () => '/users/me',
+    updateCurrentUser: () => '/users/update',
+    deleteAccount: () => '/users/delete-account',
   },
 };

@@ -1,10 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { SignUpForm } from './first-step.styled';
-import {
-  Checkbox,
-  Field,
-  PasswordInput,
-} from '../../../../../common/components';
+import { Checkbox, Field, PasswordInput } from '../../../../../common/components';
 import { Box, Heading, Input, Link, Loader, Text } from '@chakra-ui/react';
 import { SubmitButton } from '../../sign-up-page.styled';
 import { Routing } from '../../../../../common/routes';
@@ -17,9 +13,7 @@ type FirstStepContentProps = {
   handleChangeStep: (step: number) => void;
 };
 
-export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
-  handleChangeStep,
-}) => {
+export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({ handleChangeStep }) => {
   const {
     register,
     handleSubmit,
@@ -38,9 +32,9 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
       email: data.email,
       password: data.password,
       userName: data.username,
-      avatarColor: randomColor({colors: ['yellow', 'red', 'green', 'blue', 'teal']})
-    }
-    const registrationToken = await getTokenForRegistration(payload)
+      avatarColor: randomColor({ colors: ['green', 'blue', 'teal'] }),
+    };
+    const registrationToken = await getTokenForRegistration(payload);
     localStorage.setItem(LocalStorageItem.TOKEN_FOR_REGISTRATION, registrationToken);
     handleChangeStep(1);
   });
@@ -52,14 +46,10 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
           <Heading size={'3xl'}>Adventures starts here!</Heading>
           <Text fontSize={'xs'}>Make your work easy and fun</Text>
         </Box>
-        <Field
-          label="Username"
-          invalid={!!errors.username}
-          errorText={errors.username?.message}
-        >
+        <Field label="Username" invalid={!!errors.username} errorText={errors.username?.message}>
           <Input
             placeholder="Enter your username"
-            autoComplete='off'
+            autoComplete="off"
             {...register('username', {
               required: 'Username is required',
               maxLength: {
@@ -70,11 +60,7 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
           />
         </Field>
 
-        <Field
-          label="Email"
-          invalid={!!errors.email}
-          errorText={errors.email?.message}
-        >
+        <Field label="Email" invalid={!!errors.email} errorText={errors.email?.message}>
           <Input
             placeholder="Enter your email"
             {...register('email', {
@@ -87,11 +73,7 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
           />
         </Field>
 
-        <Field
-          label="Password"
-          invalid={!!errors.password}
-          errorText={errors.password?.message}
-        >
+        <Field label="Password" invalid={!!errors.password} errorText={errors.password?.message}>
           <PasswordInput
             placeholder="Enter your password"
             {...register('password', {
@@ -101,8 +83,7 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
                 message: 'Password must be at least 8 characters long',
               },
               pattern: {
-                value:
-                  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[#?!@$%^&*-]).{8,}$/,
+                value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[#?!@$%^&*-]).{8,}$/,
                 message:
                   'Password must include at least one uppercase letter, one lowercase letter, one number and one special character',
               },
@@ -110,17 +91,12 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
           />
         </Field>
 
-        <Field
-          label="Confirm Password"
-          invalid={!!errors.confirmPassword}
-          errorText={errors.confirmPassword?.message}
-        >
+        <Field label="Confirm Password" invalid={!!errors.confirmPassword} errorText={errors.confirmPassword?.message}>
           <PasswordInput
             placeholder="Confirm your password"
             {...register('confirmPassword', {
               required: 'Please confirm your password',
-              validate: (value) =>
-                value === getValues('password') || 'Passwords do not match',
+              validate: (value) => value === getValues('password') || 'Passwords do not match',
             })}
           />
         </Field>
@@ -137,7 +113,9 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
           </Link>
         </Checkbox>
 
-        <SubmitButton type="submit" disabled={isSubmitting}>{!isSubmitting ? "Submit" : <Loader />}</SubmitButton>
+        <SubmitButton type="submit" disabled={isSubmitting}>
+          {!isSubmitting ? 'Submit' : <Loader />}
+        </SubmitButton>
       </SignUpForm>
       <Text textAlign={'center'}>
         Already have an account?{' '}

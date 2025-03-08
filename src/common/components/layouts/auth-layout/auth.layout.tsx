@@ -7,7 +7,7 @@ import logoPath from '../../../assets/LOGO.svg';
 import { useEffect, useMemo, useState } from 'react';
 import { toaster } from '../../ui/toaster';
 import { getMe } from '@/api/users';
-import { TUser } from '@/common/types/types';
+import { OutletContextProps, TUser } from '@/common/types/types';
 import { refreshAccessToken } from '@/api/auth';
 
 export const AuthLayout = () => {
@@ -21,17 +21,18 @@ export const AuthLayout = () => {
       navigate(Routing.home.route());
       return;
     }
-    return (
-      pathname &&
-      Routing[basePath].isAuth &&
-      !!localStorage.getItem(LocalStorageItem.ACCESS_TOKEN)
-    );
+    return pathname && Routing[basePath].isAuth && !!localStorage.getItem(LocalStorageItem.ACCESS_TOKEN);
   }, [pathname, refreshAccessToken]);
 
   const fetchUser = async () => {
     if (isAuth) {
-      const user = await getMe();
-      setCurrentUser(user);
+      try {
+        const user = await getMe();
+        setCurrentUser(user);
+      } catch {
+        localStorage.clear();
+        navigate(Routing.home.route());
+      }
     }
   };
 
@@ -57,12 +58,7 @@ export const AuthLayout = () => {
         padding={'15px 20px'}
         borderBottom={`1px solid ${COLORS.gray[800]}`}
       >
-        <HStack
-          cursor="pointer"
-          alignItems={'center'}
-          gap={2}
-          onClick={() => navigate(Routing.home.route())}
-        >
+        <HStack cursor="pointer" alignItems={'center'} gap={2} onClick={() => navigate(Routing.home.route())}>
           <Image srcSet={logoPath} width={50} />
           <Text fontSize={'xl'} fontWeight={'bold'}>
             Graphit
@@ -78,7 +74,7 @@ export const AuthLayout = () => {
         {!!currentUser && <UserProfile currentUser={currentUser} />}
       </HStack>
       <Box padding={'1.5% 1.5% 0 1.5%'}>
-        <Outlet />
+        <Outlet context={{ currentUser, fetchUser } satisfies OutletContextProps} />
       </Box>
     </>
   );

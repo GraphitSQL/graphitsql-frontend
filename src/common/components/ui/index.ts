@@ -6,3 +6,4 @@ export * from './password-input';
 export * from './select';
 export * from './color-picker';
 export * from './accordion';
+export * from './user-avatar';

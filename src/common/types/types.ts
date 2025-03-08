@@ -5,3 +5,8 @@ export type TUser = {
   avatarColor: string;
   displayName: string;
 };
+
+export type OutletContextProps = {
+  currentUser: TUser | null;
+  fetchUser: () => Promise<void>;
+};

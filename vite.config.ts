@@ -1,13 +1,14 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
-export default defineConfig(({mode})=> {
+export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
   return {
-    plugins: [react(), tsconfigPaths()],
+    plugins: [react(), tsconfigPaths(), tailwindcss()],
     build: {
       commonjsOptions: { transformMixedEsModules: true },
     },
@@ -24,5 +25,5 @@ export default defineConfig(({mode})=> {
         '@': '/src',
       },
     },
-  }
+  };
 });

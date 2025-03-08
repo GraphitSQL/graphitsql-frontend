@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from '@/common/components/ui/dialog';
 import { Button, Text } from '@chakra-ui/react';
+import { ReactFlowProvider } from '@xyflow/react';
 
 export class ProjectPageWrapper extends React.Component {
   renderContent = () => {
@@ -37,7 +38,11 @@ export class ProjectPageWrapper extends React.Component {
         </>
       );
     }
-    return <ProjectPage />;
+    return (
+      <ReactFlowProvider>
+        <ProjectPage />
+      </ReactFlowProvider>
+    );
   };
   render() {
     return this.renderContent();

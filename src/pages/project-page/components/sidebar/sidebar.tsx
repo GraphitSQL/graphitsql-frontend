@@ -1,31 +1,27 @@
 import { useState } from 'react';
 import { Sidebar, ToggleButton } from './sidebar.styled';
 import { randomColor } from '@chakra-ui/theme-tools';
-import { PreResolutionNode, TTableNode, TTableRowNode } from '../../types';
+import { PreResolutionNode } from '../../types';
 import { SidebarTables, TableSectionHeader } from './components/tables';
-import {
-  AccordionItem,
-  AccordionItemContent,
-  AccordionRoot,
-} from '@/common/components';
+import { AccordionItem, AccordionItemContent, AccordionRoot } from '@/common/components';
 import { SidebarNoteSection } from './components/notes';
 
 type SidebarPanelProps = {
-  handleAddNode: (arg: PreResolutionNode[]) => void;
-  updateNodeById: (
-    id: string,
-    data: Partial<PreResolutionNode['data']>
-  ) => void;
+  handleAddNode: (arg: any[]) => any;
+  updateNodeData: (id: string, data: any) => any;
   nodes: PreResolutionNode[];
-  clearWorkSpace: () => void;
+  clearWorkSpace: () => any;
   removeNode: (arg: string) => void;
+  getNode: any;
 };
+
 export const SidebarPanel: React.FC<SidebarPanelProps> = ({
   handleAddNode,
   nodes,
-  updateNodeById,
+  updateNodeData,
   clearWorkSpace,
-  removeNode,
+  // removeNode,
+  getNode,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -34,46 +30,64 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
   };
 
   const addTableNode = () => {
-    const newNode: PreResolutionNode = {
+    // const newNode: PreResolutionNode = {
+    //   id: `${Date.now()}`,
+    //   type: 'table',
+    //   data: {
+    //     label: `table - ${nodes.length + 1}`,
+    //     childrenCount: 0,
+    //     color: randomColor(),
+    //   },
+    //   zIndex: nodes.length + 1,
+    // position: {
+    //   x: (Math.random() - 0.5) * 150,
+    //   y: (Math.random() - 0.5) * 150,
+    // },
+    // };
+    const newNode = {
       id: `${Date.now()}`,
-      type: 'table',
-      data: {
-        label: `table - ${nodes.length + 1}`,
-        childrenCount: 0,
-        color: randomColor(),
-      },
-      zIndex: nodes.length + 1,
       position: {
         x: (Math.random() - 0.5) * 150,
         y: (Math.random() - 0.5) * 150,
       },
+      type: 'databaseSchema',
+      data: {
+        label: `table - ${nodes.length + 1}`,
+        color: randomColor(),
+        schema: [{ id: `${Date.now()}`, title: 'id', type: 'uuid', isNull: false, isPK: true }],
+      },
     };
     handleAddNode([newNode]);
   };
-  const addTableField = (parent: TTableNode) => {
-    const field: TTableRowNode = {
-      id: `${Date.now()}`,
-      type: 'custom',
-      data: {
-        label: '',
-        dataType: '',
-        isNull: true,
-        isPK: false,
-      },
-      position: { x: 0, y: (parent.data.childrenCount + 1) * 50 },
-      extent: 'parent',
-      draggable: false,
-      parentId: parent.id,
-      focusable: false,
-      deletable: false,
-    };
-    updateNodeById(parent.id, { childrenCount: parent.data.childrenCount + 1 });
-    handleAddNode([field]);
+
+  const addTableField = (parentId: string) => {
+    const tableNode = getNode(parentId);
+    console.log('tableNode', tableNode, parentId);
+    const tableSchema = [
+      ...tableNode.data.schema,
+      { id: `${Date.now()}`, title: 'id', type: 'uuid', isNull: false, isPK: true },
+    ];
+    updateNodeData(parentId, { schema: tableSchema });
   };
-  const deleteTableField = (parent: TTableNode, fieldId: string) => {
-    removeNode(fieldId);
-    updateNodeById(parent.id, { childrenCount: parent.data.childrenCount - 1 });
+
+  const updateTableScheme = (parentId: string, fieldId: string, data: any) => {
+    console.log('paentId', parentId, fieldId, data);
+    const tableNode = getNode(parentId);
+
+    console.info('tableNode', tableNode);
+    const tableSchema = [...tableNode.data.schema].map((el) => {
+      if (el.id === fieldId) {
+        return { ...el, ...data };
+      }
+
+      return el;
+    });
+    updateNodeData(parentId, { schema: tableSchema });
   };
+
+  // const deleteTableField = (parent: TTableNode, fieldId: string) => {
+  //   removeNode(fieldId);
+  // };
 
   return (
     <Sidebar isOpen={isOpen}>
@@ -82,17 +96,17 @@ export const SidebarPanel: React.FC<SidebarPanelProps> = ({
       </ToggleButton>
       <AccordionRoot collapsible defaultValue={['tables', 'notes']}>
         <AccordionItem key={'tables-item'} value={'tables'}>
-          <TableSectionHeader
-            addTableNode={addTableNode}
-            clearWorkSpace={clearWorkSpace}
-          />
+          <TableSectionHeader addTableNode={addTableNode} clearWorkSpace={clearWorkSpace} />
 
           <AccordionItemContent maxHeight={'65vh'} overflow={'auto'}>
             <SidebarTables
               nodes={nodes}
               addTableField={addTableField}
-              updateNodeById={updateNodeById}
-              deleteTableField={deleteTableField}
+              updateNodeById={updateNodeData}
+              updateTableScheme={updateTableScheme}
+              // deleteTableField={() => {
+              //   console.log('deleted');
+              // }}
             />
           </AccordionItemContent>
         </AccordionItem>

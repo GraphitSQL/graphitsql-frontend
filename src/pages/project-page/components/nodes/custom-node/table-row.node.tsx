@@ -13,9 +13,7 @@ export type TableRowNodeProps = Node<
   'label' | 'dataType' | 'isNull' | 'isPK'
 >;
 
-export const TableRowNode: React.FC<NodeProps<TableRowNodeProps>> = ({
-  data,
-}) => {
+export const TableRowNode: React.FC<NodeProps<TableRowNodeProps>> = ({ data }) => {
   return (
     <HStack
       alignItems={'center'}
@@ -32,21 +30,9 @@ export const TableRowNode: React.FC<NodeProps<TableRowNodeProps>> = ({
         id="left"
         style={{ background: COLORS.teal[600], width: 9, height: 9 }}
       />
-      <HStack
-        fontFamily={'monospace'}
-        gap={7}
-        justifyContent={'space-between'}
-        alignItems={'center'}
-        width={'100%'}
-      >
+      <HStack fontFamily={'monospace'} gap={7} justifyContent={'space-between'} alignItems={'center'} width={'100%'}>
         <HStack>
-          {data.isPK && (
-            <Icons.PrimaryKey
-              color={COLORS.teal[600]}
-              iconWidth={12}
-              iconHeight={12}
-            />
-          )}
+          {data.isPK && <Icons.PrimaryKey color={COLORS.teal[600]} iconWidth={12} iconHeight={12} />}
           <Text>{data.label}</Text>
         </HStack>
         <Text color={'orange'}>

@@ -6,8 +6,8 @@ export const PofilePage: React.FC = () => {
     <>
       <Tabs.Root lazyMount defaultValue="tab-1">
         <Tabs.List>
-          <Tabs.Trigger value="tab-1">Account settings</Tabs.Trigger>
-          <Tabs.Trigger value="tab-2">Login & Security</Tabs.Trigger>
+          <Tabs.Trigger value="tab-1">Настройки аккаунта</Tabs.Trigger>
+          <Tabs.Trigger value="tab-2">Безопасность</Tabs.Trigger>
         </Tabs.List>
         <Tabs.Content value="tab-1">
           <AccountSettings />

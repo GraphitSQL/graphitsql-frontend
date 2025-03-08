@@ -1,4 +1,4 @@
-import { Box, Avatar, HStack, Button } from '@chakra-ui/react';
+import { Box, HStack, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../../../ui/menu';
 import { Icons } from '../../../../assets/icons';
@@ -8,6 +8,7 @@ import { TUser } from '@/common/types/types';
 import { LocalStorageItem } from '@/common/constants';
 import { logoutRequest } from '@/api/auth';
 import { toaster } from '@/common/components/ui/toaster';
+import { UserAvatar } from '@/common/components/ui';
 
 type TUserProfileProps = {
   currentUser: TUser;
@@ -31,19 +32,10 @@ export const UserProfile: React.FC<TUserProfileProps> = ({ currentUser }) => {
   };
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="space-between"
-      gap={'10px'}
-    >
+    <Box display="flex" alignItems="center" justifyContent="space-between" gap={'10px'}>
       <HStack>
-        <Avatar.Root colorPalette={currentUser.avatarColor}>
-          <Avatar.Fallback name={currentUser.displayName} />
-        </Avatar.Root>
-        <UserName title={currentUser.displayName}>
-          {currentUser.displayName}
-        </UserName>
+        <UserAvatar bgColor={currentUser.avatarColor} fallback={currentUser.displayName} />
+        <UserName title={currentUser.displayName}>{currentUser.displayName}</UserName>
       </HStack>
 
       <MenuRoot variant={'solid'}>
@@ -53,25 +45,14 @@ export const UserProfile: React.FC<TUserProfileProps> = ({ currentUser }) => {
           </Button>
         </MenuTrigger>
         <MenuContent width={200}>
-          <MenuItem
-            value="profile"
-            onClick={() => navigate(Routing.profile.route())}
-          >
-            Profile
+          <MenuItem value="profile" onClick={() => navigate(Routing.profile.route())}>
+            Мой профиль
           </MenuItem>
-          <MenuItem
-            value="terms"
-            onClick={() => window.open('src/common/assets/terms/terms.pdf')}
-          >
-            Terms & Conditions
+          <MenuItem value="terms" onClick={() => window.open('src/common/assets/terms/terms.pdf')}>
+            Условия пользования
           </MenuItem>
-          <MenuItem
-            value="logout"
-            color="fg.error"
-            _hover={{ bg: 'bg.error', color: 'fg.error' }}
-            onClick={onLogout}
-          >
-            Log out
+          <MenuItem value="logout" color="fg.error" _hover={{ bg: 'bg.error', color: 'fg.error' }} onClick={onLogout}>
+            Выйти из аккаунта
           </MenuItem>
         </MenuContent>
       </MenuRoot>

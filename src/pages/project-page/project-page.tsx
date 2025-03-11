@@ -56,8 +56,7 @@ export const ProjectPage = () => {
   };
 
   const updateNodeById = (id: string, data: Partial<TTableNodeData> | Partial<TTableRowNodeData>) => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
+    //@ts-expect-error fix later
     setNodes((prevItems) =>
       prevItems.map((item) =>
         item.id === id

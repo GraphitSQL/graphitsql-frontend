@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { SignUpForm } from './first-step.styled';
 import { Checkbox, Field, PasswordInput } from '../../../../../common/components';
@@ -112,8 +112,7 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({ handleCha
           })}
           errorText={errors.acceptTerms?.message}
         >
-          Я принимаю условия{' '}
-          {/* @ts-ignore */}
+          Я принимаю условия {/* @ts-expect-error chakra typings */}
           <Link as={RouterLink} to={Routing.terms.route()} target="_blank">
             Пользовательского Соглашения
           </Link>
@@ -124,9 +123,8 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({ handleCha
         </SubmitButton>
       </SignUpForm>
       <Text textAlign={'center'}>
-        Уже есть аккаунт?{' '}
-        {/* @ts-ignore */}
-        <Link variant="underline" as={RouterLink} to={Routing.terms.route()}>
+        Уже есть аккаунт? {/* @ts-expect-error chakra typings */}
+        <Link variant="underline" as={RouterLink} to={Routing.signIn.route()}>
           Войти
         </Link>
       </Text>

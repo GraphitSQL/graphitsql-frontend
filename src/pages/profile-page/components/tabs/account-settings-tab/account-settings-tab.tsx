@@ -42,7 +42,7 @@ export const AccountSettings: React.FC = () => {
       const { id, ...payload } = data;
       await updateProfileRequest(payload);
       await fetchUser();
-      reset();
+      reset(undefined, { keepValues: true });
       toaster.success({
         title: 'Изменения сохранены',
       });

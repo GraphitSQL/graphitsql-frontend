@@ -25,7 +25,6 @@ jobs:
       - name: Create tarball
         run: |
           tar -czvf dist.tar.gz -C dist .
-          ls -a
 
       - name: Upload tarball to VPS
         uses: appleboy/scp-action@v0.1.7
@@ -45,6 +44,3 @@ jobs:
           script: |
             cd ~/deploy
             . graphitsql-frontend-staging.sh
-            # cd /path/to/your/app
-            # tar -xzvf dist.tar.gz
-            # rm dist.tar.gz

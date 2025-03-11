@@ -1,3 +1,4 @@
+import { Link as RouterLink } from 'react-router-dom'
 import { useForm } from 'react-hook-form';
 import { SignUpForm } from './first-step.styled';
 import {
@@ -38,7 +39,7 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
       email: data.email,
       password: data.password,
       userName: data.username,
-      avatarColor: randomColor({colors: ['yellow', 'red', 'green', 'blue', 'teal']})
+      avatarColor: randomColor({ colors: ['yellow', 'red', 'green', 'blue', 'teal'] })
     }
     const registrationToken = await getTokenForRegistration(payload)
     localStorage.setItem(LocalStorageItem.TOKEN_FOR_REGISTRATION, registrationToken);
@@ -132,7 +133,8 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
           errorText={errors.acceptTerms?.message}
         >
           I accept the{' '}
-          <Link href={'src/common/assets/terms/terms.pdf'} target="_blank">
+          {/* @ts-ignore */}
+          <Link as={RouterLink} to={Routing.terms.route()} target="_blank">
             terms and conditions
           </Link>
         </Checkbox>
@@ -141,7 +143,8 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({
       </SignUpForm>
       <Text textAlign={'center'}>
         Already have an account?{' '}
-        <Link variant="underline" href={Routing.signIn.route()}>
+        {/* @ts-ignore */}
+        <Link as={RouterLink} variant="underline" to={Routing.signIn.route()}>
           Sign in
         </Link>
       </Text>

@@ -2,8 +2,8 @@ import {
   Badge,
   Button,
   EmptyState,
-  Link,
   Table,
+  Link,
   Text,
   VStack,
 } from '@chakra-ui/react';
@@ -20,7 +20,7 @@ import {
   MenuRoot,
   MenuTrigger,
 } from '../../../../common/components/ui/menu';
-import { useNavigate } from 'react-router-dom';
+import { Link as RounterLink, useNavigate } from 'react-router-dom';
 import { Routing } from '../../../../common/routes';
 
 type DatabaseTableProps = {
@@ -54,11 +54,8 @@ export const DatabaseTable: React.FC<DatabaseTableProps> = ({
               {items.map((item) => (
                 <Table.Row key={item.id}>
                   <Table.Cell maxWidth={'3vw'} overflow={'scroll'}>
-                    <Link
-                      variant="plain"
-                      color={'white'}
-                      href={Routing.projects.route(item.id)}
-                    >
+                    {/* @ts-ignore */}
+                    <Link as={RounterLink} variant="plain" color={'white'} to={Routing.projects.route(item.id)}>
                       {item.databaseName}
                     </Link>
                   </Table.Cell>

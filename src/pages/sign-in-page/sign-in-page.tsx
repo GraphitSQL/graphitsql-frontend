@@ -6,7 +6,7 @@ import {
   SubmitButton,
 } from './components';
 import { useLottie } from 'lottie-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { LOTTIES } from '../../common/assets/lotties';
 import { Heading, Input, Text, Link } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
@@ -87,7 +87,8 @@ export const SignInPage: React.FC = () => {
         </SignInForm>
         <Text>
           Do not have an account?{' '}
-          <Link variant="underline" href={Routing.signUp.route()}>
+          {/* @ts-ignore */}
+          <Link as={RouterLink} variant="plain" color={'white'} to={Routing.signUp.route()}>
             Register now
           </Link>
         </Text>

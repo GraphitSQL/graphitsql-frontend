@@ -2,7 +2,7 @@ import { Box, Avatar, HStack, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../../../ui/menu';
 import { Icons } from '../../../../assets/icons';
-import { Routing } from '../../../../routes';
+import { Routing, windowOpen } from '../../../../routes';
 import { UserName } from './user-profile.styled';
 import { TUser } from '@/common/types/types';
 import { LocalStorageItem } from '@/common/constants';
@@ -61,7 +61,7 @@ export const UserProfile: React.FC<TUserProfileProps> = ({ currentUser }) => {
           </MenuItem>
           <MenuItem
             value="terms"
-            onClick={() => window.open('src/common/assets/terms/terms.pdf')}
+            onClick={() => windowOpen(Routing.terms.route(), '_blank')}
           >
             Terms & Conditions
           </MenuItem>

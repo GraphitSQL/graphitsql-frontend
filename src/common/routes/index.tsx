@@ -6,7 +6,9 @@ import { AuthLayout } from '../components/layouts';
 import { PofilePage } from '../../pages/profile-page';
 import { ProjectPage } from '../../pages/project-page';
 
-export const Routing: Record<string,{route: (arg?: any) => string, isAuth: boolean }> = {
+const APP_BASE_URL = import.meta.env.VITE_APP_BASENAME;
+
+export const Routing: Record<string, { route: (arg?: any) => string, isAuth: boolean }> = {
   home: {
     route: () => '/home',
     isAuth: true,
@@ -26,6 +28,10 @@ export const Routing: Record<string,{route: (arg?: any) => string, isAuth: boole
   profile: {
     route: () => '/profile',
     isAuth: true,
+  },
+  terms: {
+    route: () => '/terms/terms.pdf',
+    isAuth: false,
   },
 };
 
@@ -63,6 +69,10 @@ export const routers = createBrowserRouter(
     },
   ],
   {
-    basename: '/',
+    basename: APP_BASE_URL ?? '/',
   }
 );
+
+export const windowOpen = (routerPath: string, target?: string, features?: string) => {
+  window.open(`${window.location.origin}/${APP_BASE_URL}${routerPath}`, target, features)
+}

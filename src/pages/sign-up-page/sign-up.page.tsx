@@ -1,12 +1,13 @@
-import { Heading, HStack, Image, Text } from '@chakra-ui/react';
+import { Heading, HStack, Text, Image } from '@chakra-ui/react';
 import {
   StepsContent,
   StepsItem,
   StepsList,
   StepsRoot,
 } from '../../common/components/ui/steps';
+import logoPath from '../../common/assets/LOGO.svg';
 import { Container, FormContainer, ImageContainer } from './components';
-import { BaseInfoStepContent,ResultStep,VerificationStep } from './components/steps-content';
+import { BaseInfoStepContent, ResultStep, VerificationStep } from './components/steps-content';
 import { useState } from 'react';
 
 export const SignUpPage: React.FC = () => {
@@ -19,7 +20,7 @@ export const SignUpPage: React.FC = () => {
     <Container>
       <ImageContainer>
         <HStack alignItems={'center'} gap={2}>
-          <Image srcSet="src/common/assets/LOGO.svg" width={65} />
+          <Image srcSet={logoPath} width={65} />
           <Text fontSize={'xl'}>GraphitSQL</Text>
         </HStack>
         <Heading size={'4xl'}> Let's build something amazing today!</Heading>
@@ -49,7 +50,7 @@ export const SignUpPage: React.FC = () => {
             <BaseInfoStepContent handleChangeStep={handleChangeStep} />
           </StepsContent>
           <StepsContent index={1}>
-            <VerificationStep handleChangeStep={handleChangeStep} step={step}/>
+            <VerificationStep handleChangeStep={handleChangeStep} step={step} />
           </StepsContent>
           <StepsContent index={2}>
             <ResultStep />

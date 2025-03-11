@@ -6,7 +6,7 @@ const DatabaseOff = ({ color = '#D0D5DD' }: BaseIconProps) => (
     height="468"
     viewBox="0 0 468 468"
     fill="none"
-    xmlns="http://www.w3.org/2000/svg"
+    xmlns="https://www.w3.org/2000/svg"
   >
     <g clipPath="url(#clip0_166_9250)">
       <path

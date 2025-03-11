@@ -6,7 +6,7 @@ export const Dot = ({ color = '#D0D5DD' }: BaseIconProps) => (
     height="7"
     viewBox="0 0 7 7"
     fill="none"
-    xmlns="http://www.w3.org/2000/svg"
+    xmlns="https://www.w3.org/2000/svg"
   >
     <circle cx="3.5" cy="3.5" r="3.5" fill={color} />
   </svg>

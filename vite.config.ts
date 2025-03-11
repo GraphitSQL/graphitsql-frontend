@@ -6,7 +6,12 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig(({mode})=> {
   const env = loadEnv(mode, process.cwd());
 
+  const allowedHostList: string[] = JSON.parse(env.VITE_APP_ALLOWED_HOSTS ?? "[]");
+
+  const allowedHosts = allowedHostList?.length ? allowedHostList : undefined;
+
   return {
+    base: env.VITE_APP_BASENAME ?? '/',
     plugins: [react(), tsconfigPaths()],
     build: {
       commonjsOptions: { transformMixedEsModules: true },
@@ -17,6 +22,19 @@ export default defineConfig(({mode})=> {
         origin: true,
         preflightContinue: true,
       },
+      host: true,
+      strictPort: true,
+      allowedHosts
+    },
+    preview: {
+      port: Number(env.VITE_APP_PORT) || 4173,
+      cors: {
+        origin: true,
+        preflightContinue: true,
+      },
+      host: true,
+      strictPort: true,
+      allowedHosts
     },
     publicDir: 'public',
     resolve: {

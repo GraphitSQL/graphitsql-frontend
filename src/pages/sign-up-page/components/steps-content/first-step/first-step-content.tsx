@@ -126,7 +126,7 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({ handleCha
       <Text textAlign={'center'}>
         Уже есть аккаунт?{' '}
         {/* @ts-ignore */}
-        <Link variant="underline" as={RouterLink} to={Routing.terms.route()}>
+        <Link variant="underline" as={RouterLink} to={Routing.signIn.route()}>
           Войти
         </Link>
       </Text>

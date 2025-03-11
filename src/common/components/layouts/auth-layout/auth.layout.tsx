@@ -16,12 +16,12 @@ export const AuthLayout = () => {
   const [currentUser, setCurrentUser] = useState<TUser | null>(null);
 
   const isAuth = useMemo(() => {
-    const basePath = pathname.split('/')[1];
-    if (!Routing[basePath]) {
-      navigate(Routing.home.route());
-      return;
-    }
-    return pathname && Routing[basePath].isAuth && !!localStorage.getItem(LocalStorageItem.ACCESS_TOKEN);
+    // const basePath = pathname.split('/')[1];
+    // if (!Routing[basePath]) {
+    //   navigate(Routing.home.route());
+    //   return;
+    // }
+    return pathname && !!localStorage.getItem(LocalStorageItem.ACCESS_TOKEN);
   }, [pathname, refreshAccessToken]);
 
   const fetchUser = async () => {
@@ -73,7 +73,7 @@ export const AuthLayout = () => {
         </HStack>
         {!!currentUser && <UserProfile currentUser={currentUser} />}
       </HStack>
-      <Box padding={'1.5% 1.5% 0 1.5%'}>
+      <Box padding={'1.5% 1.5% 0.5% 1.5%'} flexGrow={1} display="flex" flexDirection="column" height="90vh">
         <Outlet context={{ currentUser, fetchUser } satisfies OutletContextProps} />
       </Box>
     </>

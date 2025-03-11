@@ -71,8 +71,7 @@ export const SignInPage: React.FC = () => {
           <SubmitButton type="submit">Войти</SubmitButton>
         </SignInForm>
         <Text>
-          Еще нет аккаунта?{' '}
-          {/* @ts-ignore */}
+          Еще нет аккаунта? {/* @ts-expect-error chakra typings */}
           <Link as={RouterLink} variant="underline" to={Routing.signUp.route()}>
             Зарегистрироваться
           </Link>

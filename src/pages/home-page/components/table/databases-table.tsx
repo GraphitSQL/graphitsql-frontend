@@ -16,7 +16,7 @@ export const DatabaseTable: React.FC<DatabaseTableProps> = ({ items, handleDelet
   return (
     <>
       {items.length ? (
-        <StyledScrollArea borderWidth="1px" rounded="md" height={'70vh'}>
+        <StyledScrollArea borderWidth="1px" rounded="md" height={'min-content'}>
           <Table.Root size="lg" stickyHeader striped={true}>
             <StyledTableHeader>
               <Table.Row bg="bg.subtle">
@@ -31,8 +31,8 @@ export const DatabaseTable: React.FC<DatabaseTableProps> = ({ items, handleDelet
             <StyledTableBody>
               {items.map((item) => (
                 <Table.Row key={item.id}>
-                  <Table.Cell maxWidth={'3vw'} overflow={'scroll'}>
-                    {/* @ts-ignore */}
+                  <Table.Cell maxWidth={'3vw'} overflow={'auto'}>
+                    {/* @ts-expect-error chakra typing */}
                     <Link as={RouterLink} variant="plain" color={'white'} to={Routing.projects.route(item.id)}>
                       {item.databaseName}
                     </Link>

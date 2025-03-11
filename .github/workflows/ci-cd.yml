@@ -18,6 +18,9 @@ jobs:
           node-version: 20  # Use the Node.js version your app requires
 
       - name: Install dependencies and build
+        env:
+          VITE_APP_BASENAME: ${{ secrets.VITE_APP_BASENAME }}
+          VITE_APP_BASE_API_URL: ${{ secrets.VITE_APP_BASE_API_URL }}
         run: |
           npm install
           npm run build

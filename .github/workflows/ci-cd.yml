@@ -33,7 +33,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: "dist.tar.gz"
-          target: ${{ secrets.TARGET_PATH }}
+          target: /var/www/gelo-web/graphitsql
           rm: true
 
       - name: Unpack tarball on VPS

@@ -2,8 +2,7 @@ name: Build and Deploy to VPS
 
 on:
   push:
-    branches:
-      - [staging]  # Trigger on push to the main branch
+    branches: [ staging ] # Trigger on push to the main branch
 
 jobs:
   build-and-deploy:

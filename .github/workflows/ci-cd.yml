@@ -25,6 +25,7 @@ jobs:
       - name: Create tarball
         run: |
           tar -czvf dist.tar.gz -C dist .
+          ls -a
 
       - name: Upload tarball to VPS
         uses: appleboy/scp-action@v0.1.7

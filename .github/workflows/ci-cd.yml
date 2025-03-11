@@ -33,7 +33,8 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: "dist.tar.gz"
-          target: ~/deploy
+          target: ${{ secrets.TARGET_PATH }}
+          rm: true
 
       - name: Unpack tarball on VPS
         uses: appleboy/ssh-action@v1.2.0

@@ -74,7 +74,7 @@ export const SignInPage: React.FC = () => {
           Еще нет аккаунта?{' '}
           {/* @ts-ignore */}
           <Link as={RouterLink} variant="underline" to={Routing.signUp.route()}>
-            Зарегестрироваться
+            Зарегистрироваться
           </Link>
         </Text>
       </FormContainer>

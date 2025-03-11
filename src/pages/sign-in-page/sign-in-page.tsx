@@ -1,10 +1,4 @@
-import {
-  Container,
-  FormContainer,
-  ImageContainer,
-  SignInForm,
-  SubmitButton,
-} from './components';
+import { Container, FormContainer, ImageContainer, SignInForm, SubmitButton } from './components';
 import { useLottie } from 'lottie-react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { LOTTIES } from '../../common/assets/lotties';
@@ -36,60 +30,50 @@ export const SignInPage: React.FC = () => {
   const onSubmit = handleSubmit(async (data: LoginRequest) => {
     try {
       const { accessToken, refreshToken } = await logIn(data);
-      window.localStorage.setItem(LocalStorageItem.ACCESS_TOKEN, accessToken)
-      window.localStorage.setItem(LocalStorageItem.REFRESH_TOKEN, refreshToken)
+      window.localStorage.setItem(LocalStorageItem.ACCESS_TOKEN, accessToken);
+      window.localStorage.setItem(LocalStorageItem.REFRESH_TOKEN, refreshToken);
       navigate(Routing.home.route());
     } catch (error: any) {
       toaster.error({
         title: error?.message || 'Unexpected error',
       });
     }
-
   });
 
   return (
     <Container>
       <ImageContainer>{signInBackground}</ImageContainer>
       <FormContainer>
-        <Heading size={'3xl'}>Welcome to GraphitSQL</Heading>
+        <Heading size={'3xl'}>Добро пожаловать в GraphitSQL</Heading>
         <SignInForm name="sign-in-form" onSubmit={onSubmit}>
-          <Field
-            label="Email"
-            invalid={!!errors.email}
-            errorText={errors.email?.message}
-          >
+          <Field label="Email" invalid={!!errors.email} errorText={errors.email?.message}>
             <Input
-              placeholder="Enter your email"
+              placeholder="Введите адрес электронной почты"
               {...register('email', {
-                required: 'Email is required',
+                required: 'Поле обязательно',
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: 'Invalid email format',
+                  message: 'Неверный вормат',
                 },
               })}
             />
           </Field>
 
-          <Field
-            label="Password"
-            invalid={!!errors.password}
-            errorText={errors.password?.message}
-          >
+          <Field label="Пароль" invalid={!!errors.password} errorText={errors.password?.message}>
             <PasswordInput
-              placeholder="Enter your password"
+              placeholder="Введите пароль"
               {...register('password', {
-                required: 'Password is required',
+                required: 'Поле обязательно',
               })}
             />
           </Field>
 
-          <SubmitButton type="submit">Submit</SubmitButton>
+          <SubmitButton type="submit">Войти</SubmitButton>
         </SignInForm>
         <Text>
-          Do not have an account?{' '}
-          {/* @ts-ignore */}
-          <Link as={RouterLink} variant="plain" color={'white'} to={Routing.signUp.route()}>
-            Register now
+          Еще нет аккаунта?{' '}
+          <Link as={RouterLink} variant="underline" to={Routing.signUp.route()}>
+            Зарегестрироваться
           </Link>
         </Text>
       </FormContainer>

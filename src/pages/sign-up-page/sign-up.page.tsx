@@ -1,10 +1,5 @@
-import { Heading, HStack, Text, Image } from '@chakra-ui/react';
-import {
-  StepsContent,
-  StepsItem,
-  StepsList,
-  StepsRoot,
-} from '../../common/components/ui/steps';
+import { Heading, HStack, Image, Text } from '@chakra-ui/react';
+import { StepsContent, StepsItem, StepsList, StepsRoot } from '../../common/components/ui/steps';
 import logoPath from '../../common/assets/LOGO.svg';
 import { Container, FormContainer, ImageContainer } from './components';
 import { BaseInfoStepContent, ResultStep, VerificationStep } from './components/steps-content';
@@ -19,12 +14,11 @@ export const SignUpPage: React.FC = () => {
   return (
     <Container>
       <ImageContainer>
-        <HStack alignItems={'center'} gap={2}>
+        <HStack alignItems={'center'} gap={3}>
           <Image srcSet={logoPath} width={65} />
-          <Text fontSize={'xl'}>GraphitSQL</Text>
         </HStack>
-        <Heading size={'4xl'}> Let's build something amazing today!</Heading>
-        <Text>Join our community and start your journey with us.</Text>
+        <Heading size={'xl'}> Ваши идеи, наши сервис — идеальное сочетание!</Heading>
+        <Text>Присоединяйтесь к нашему сообществу и начните свое путешествие вместе с нами</Text>
       </ImageContainer>
 
       <FormContainer>
@@ -34,17 +28,13 @@ export const SignUpPage: React.FC = () => {
           step={step}
           count={2}
           width={'90%'}
-          margin={'15px auto'}
+          margin={'20px auto'}
           size={'sm'}
         >
           <StepsList>
-            <StepsItem
-              index={0}
-              title="Fill the form"
-              disableTrigger={true}
-            />
-            <StepsItem index={1} title="Verify email" disableTrigger={true} />
-            <StepsItem index={2} title="Finish" disableTrigger={true} />
+            <StepsItem index={0} title="Заполни форму" disableTrigger={true} />
+            <StepsItem index={1} title="Подтверди email" disableTrigger={true} />
+            <StepsItem index={2} title="Готово" disableTrigger={true} />
           </StepsList>
           <StepsContent index={0}>
             <BaseInfoStepContent handleChangeStep={handleChangeStep} />

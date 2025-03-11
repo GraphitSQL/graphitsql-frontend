@@ -4,7 +4,8 @@ import { SignInPage } from '../../pages/sign-in-page';
 import { SignUpPage } from '../../pages/sign-up-page';
 import { AuthLayout } from '../components/layouts';
 import { PofilePage } from '../../pages/profile-page';
-import { ProjectPage } from '../../pages/project-page';
+// import { ProjectPage } from '../../pages/project-page';
+import { ProjectPageWrapper } from '@/pages/project-page/wrapper';
 
 const APP_BASE_URL = import.meta.env.VITE_APP_BASENAME;
 
@@ -59,7 +60,7 @@ export const routers = createBrowserRouter(
         },
         {
           path: Routing.projects.route(':id'),
-          element: <ProjectPage />,
+          element: <ProjectPageWrapper />,
         },
         {
           path: '',

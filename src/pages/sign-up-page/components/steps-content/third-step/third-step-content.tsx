@@ -7,22 +7,20 @@ import { LocalStorageItem } from '@/common/constants';
 export const ResultStep: React.FC = () => {
   const navigate = useNavigate();
   const handleGoToApp = () => {
-    localStorage.removeItem(LocalStorageItem.TOKEN_FOR_REGISTRATION)
-    navigate(Routing.home.route())
-  }
+    localStorage.removeItem(LocalStorageItem.TOKEN_FOR_REGISTRATION);
+    navigate(Routing.home.route());
+  };
 
   return (
     <StepsCompletedContent>
       <VStack gap={30} height={'30vh'} justifyContent={'center'}>
         <Box textAlign={'center'}>
           <Heading size={'5xl'} color="teal.500">
-            Congratulations!
+            Поздравляем!
           </Heading>
-          <Text>You have successfully registered.</Text>
+          <Text>Вы успешно зарегестрированы</Text>
         </Box>
-        <Button onClick={handleGoToApp}>
-          Go to App
-        </Button>
+        <Button onClick={handleGoToApp}>Перейти в приложение</Button>
       </VStack>
     </StepsCompletedContent>
   );

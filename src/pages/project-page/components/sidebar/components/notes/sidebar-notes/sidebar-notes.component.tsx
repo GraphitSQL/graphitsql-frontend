@@ -14,7 +14,7 @@ export const SidebarNotes: React.FC<SidebarNotes> = ({ notes, setNotes }) => {
   const addNote = () => {
     if (!inputText.trim()) {
       toaster.error({
-        title: 'Empty notes are not allowed',
+        title: 'Заметка не может быть пустой',
       });
       return;
     }
@@ -53,10 +53,7 @@ export const SidebarNotes: React.FC<SidebarNotes> = ({ notes, setNotes }) => {
     }
   };
 
-  const updateNote = (
-    noteId: string,
-    data: Partial<Omit<ProjectNote, 'id' | 'createdBy'>>
-  ) => {
+  const updateNote = (noteId: string, data: Partial<Omit<ProjectNote, 'id' | 'createdBy'>>) => {
     setNotes((prevItems) =>
       prevItems.map((item) =>
         item.id === noteId
@@ -70,31 +67,15 @@ export const SidebarNotes: React.FC<SidebarNotes> = ({ notes, setNotes }) => {
   };
 
   return (
-    <Box
-      maxHeight={'60vh'}
-      minHeight="50vh"
-      overflow={'auto'}
-      padding={'0 8px'}
-    >
+    <Box maxHeight={'60vh'} minHeight="50vh" overflow={'auto'} padding={'0 8px'}>
       <HStack gap={1} marginBottom={'10px'}>
-        <Input
-          placeholder="Enter note text"
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-        />
+        <Input placeholder="Введите текст заметки" value={inputText} onChange={(e) => setInputText(e.target.value)} />
         <Button onClick={addNote} size={'sm'}>
-          Add note
+          Добавить заметку
         </Button>
       </HStack>
       <For each={notes}>
-        {(note) => (
-          <Note
-            note={note}
-            key={note.id}
-            deleteNote={deleteNote}
-            updateNote={updateNote}
-          />
-        )}
+        {(note) => <Note note={note} key={note.id} deleteNote={deleteNote} updateNote={updateNote} />}
       </For>
     </Box>
   );

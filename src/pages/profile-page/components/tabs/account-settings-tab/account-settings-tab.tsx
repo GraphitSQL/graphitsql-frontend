@@ -1,12 +1,4 @@
-import {
-  Button,
-  Grid,
-  HStack,
-  Input,
-  parseColor,
-  Spinner,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, Grid, HStack, Input, parseColor, Spinner, VStack } from '@chakra-ui/react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   ColorPickerArea,
@@ -18,57 +10,54 @@ import {
   ColorPickerSliders,
   ColorPickerTrigger,
   Field,
-} from '../../../../../common/components';
-import { useEffect, useMemo, useState } from 'react';
-
-type ProfileFields = {
-  email: string;
-  username: string;
-  avatarColor: string;
-  about: string;
-};
+} from '@/common/components';
+import { useMemo } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import { OutletContextProps, TUser } from '@/common/types';
+import { toaster } from '@/common/components/ui/toaster';
+import { updateProfileRequest } from '@/api/users';
 
 export const AccountSettings: React.FC = () => {
-  const [userData, setUserData] = useState<ProfileFields | null>(null);
+  const { currentUser, fetchUser } = useOutletContext<OutletContextProps>();
+
   const {
     register,
     control,
     handleSubmit,
     reset,
-    formState: { errors, touchedFields },
-  } = useForm<ProfileFields>({
+    formState: { errors, touchedFields, isSubmitting },
+  } = useForm<TUser>({
     defaultValues: useMemo(() => {
-      return userData ?? {};
-    }, [userData]),
+      return currentUser ?? {};
+    }, [currentUser]),
   });
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-    reset();
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      if (!Object.keys(touchedFields).length) {
+        throw new Error('Изменения не найдены');
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, ...payload } = data;
+      await updateProfileRequest(payload);
+      await fetchUser();
+      reset();
+      toaster.success({
+        title: 'Изменения сохранены',
+      });
+    } catch (e: any) {
+      toaster.error({
+        title: 'Ошибка при обновлении данных',
+        description: e?.message || 'Unexpected error',
+      });
+    }
   });
-
-  const fetchUserData = async () => {
-    const data = await new Promise<ProfileFields>((resolve) => {
-      setTimeout(() => {
-        resolve({
-          username: 'John Fafafa',
-          about: 'I am cooool',
-          avatarColor: 'rgba(176, 62, 138, 1)',
-          email: 'qwe@qwe.com',
-        });
-      }, 1000);
-    });
-    setUserData(data);
-  };
-
-  useEffect(() => {
-    fetchUserData();
-  }, []);
 
   return (
     <>
       <VStack padding={'10px'}>
-        {userData ? (
+        {currentUser ? (
           <>
             <Grid
               templateColumns={{
@@ -80,47 +69,37 @@ export const AccountSettings: React.FC = () => {
               width={'80%'}
               marginBottom={'5%'}
             >
-              <Field
-                label="Email"
-                invalid={!!errors.email}
-                errorText={errors.email?.message}
-              >
+              <Field label="Адрес электронной почты" invalid={!!errors.email} errorText={errors.email?.message}>
                 <Input
-                  defaultValue={userData.email}
+                  key={currentUser.email}
+                  defaultValue={currentUser.email}
                   size={'lg'}
-                  placeholder="Enter your email"
+                  placeholder="Введите адрес электронной почты"
                   {...register('email', {
-                    required: 'Email cannot be empty',
+                    required: 'Поле email не может быть пустым',
                     pattern: {
                       value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: 'Invalid email format',
+                      message: 'Неверный формат email',
                     },
                   })}
                 />
               </Field>
-              <Field
-                label="Username"
-                invalid={!!errors.username}
-                errorText={errors.username?.message}
-              >
+              <Field label="Имя пользователя" invalid={!!errors.displayName} errorText={errors.displayName?.message}>
                 <Input
-                  defaultValue={userData.username}
+                  key={currentUser.displayName}
+                  defaultValue={currentUser.displayName}
                   size={'lg'}
-                  placeholder="Enter your username"
-                  {...register('username', {
-                    required: 'Username cannot be empty',
+                  placeholder="Введите имя пользователя"
+                  {...register('displayName', {
+                    required: 'Поле username не может быть пустым',
                     maxLength: {
-                      value: 30,
-                      message: 'Max length for username is 30 symbols',
+                      value: 250,
+                      message: 'Максимальная длина поля - 250 символов',
                     },
                   })}
                 />
               </Field>
-              <Field
-                label="Avatar Color"
-                invalid={!!errors.avatarColor}
-                errorText={errors.avatarColor?.message}
-              >
+              <Field label="Цвет аватара" invalid={!!errors.avatarColor} errorText={errors.avatarColor?.message}>
                 <Controller
                   name="avatarColor"
                   control={control}
@@ -131,7 +110,7 @@ export const AccountSettings: React.FC = () => {
                         name={field.name}
                         format="rgba"
                         minW={'100%'}
-                        defaultValue={parseColor(userData.avatarColor)}
+                        defaultValue={parseColor(currentUser.avatarColor)}
                         onValueChange={(e) => {
                           field.onChange(e.valueAsString);
                           field.onBlur();
@@ -153,19 +132,16 @@ export const AccountSettings: React.FC = () => {
                   }}
                 />
               </Field>
-              <Field
-                label="About"
-                invalid={!!errors.about}
-                errorText={errors.about?.message}
-              >
+              <Field label="О себе" invalid={!!errors.about} errorText={errors.about?.message}>
                 <Input
-                  defaultValue={userData.about}
-                  placeholder="Tell us about yourself :)"
+                  key={currentUser.about}
+                  defaultValue={currentUser.about}
+                  placeholder="Расскажите нам немного о себе :)"
                   size={'lg'}
                   {...register('about', {
                     maxLength: {
-                      value: 120,
-                      message: 'Max length for about section is 120 symbols',
+                      value: 300,
+                      message: 'Максимальная длина поля - 300 символов',
                     },
                   })}
                 />
@@ -173,11 +149,11 @@ export const AccountSettings: React.FC = () => {
             </Grid>
             <Button
               onClick={onSubmit}
-              disabled={!Object.keys(touchedFields).length}
+              disabled={!Object.keys(touchedFields).length || isSubmitting}
               size={'lg'}
               margin={'auto'}
             >
-              Update profile
+              Сохранить изменения
             </Button>
           </>
         ) : (

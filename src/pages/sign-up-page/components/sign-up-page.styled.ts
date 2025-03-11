@@ -30,7 +30,7 @@ export const ImageContainer = styled.div`
     p {
       color: ${COLORS.teal[50]};
     }
-    margin-bottom: 30%;
+    margin-bottom: 25%;
   }
 
   p {
@@ -46,6 +46,9 @@ export const ImageContainer = styled.div`
 export const FormContainer = styled.div`
   flex: 2;
   @media (max-width: 768px) {
+    .chakra-steps__title {
+      display: none;
+    }
     width: 100%;
     padding: 10%;
   }

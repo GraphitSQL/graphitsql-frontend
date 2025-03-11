@@ -12,10 +12,7 @@ type VerificationProps = {
   handleChangeStep: (step: number) => void;
   step: number;
 };
-export const VerificationStep: React.FC<VerificationProps> = ({
-  handleChangeStep,
-  step,
-}) => {
+export const VerificationStep: React.FC<VerificationProps> = ({ handleChangeStep, step }) => {
   const {
     register,
     handleSubmit,
@@ -26,27 +23,27 @@ export const VerificationStep: React.FC<VerificationProps> = ({
 
   const onSubmit = handleSubmit(async (data: RegisterRequest) => {
     try {
-      const {accessToken, refreshToken} = await verifyEmailAddress(data)
-      window.localStorage.setItem(LocalStorageItem.ACCESS_TOKEN, accessToken)
-      window.localStorage.setItem(LocalStorageItem.REFRESH_TOKEN, refreshToken)
+      const { accessToken, refreshToken } = await verifyEmailAddress(data);
+      window.localStorage.setItem(LocalStorageItem.ACCESS_TOKEN, accessToken);
+      window.localStorage.setItem(LocalStorageItem.REFRESH_TOKEN, refreshToken);
       handleChangeStep(2);
     } catch (e: any) {
       toaster.error({
-        title: e.message || 'Something went wrong'
-      })
+        title: e.message || 'Что-то пошло не так',
+      });
     }
   });
 
   const resendVerificationCode = async () => {
     try {
       setTimer(30);
-      const newToken = await resendVerificationCodeRequest()
-      window.localStorage.setItem(LocalStorageItem.TOKEN_FOR_REGISTRATION, newToken)
+      const newToken = await resendVerificationCodeRequest();
+      window.localStorage.setItem(LocalStorageItem.TOKEN_FOR_REGISTRATION, newToken);
     } catch (e: any) {
-      console.error(e)
+      console.error(e);
       toaster.error({
-        title: e.message || 'Unable to resend verification code'
-      })
+        title: e.message || 'Ошибка при отправке кода',
+      });
     }
   };
 
@@ -60,26 +57,22 @@ export const VerificationStep: React.FC<VerificationProps> = ({
   return (
     <>
       <VerificationForm name="verification-form" onSubmit={onSubmit}>
-        <Heading size={'3xl'}>Verify your email address</Heading>
+        <Heading size={'3xl'}>Подтвердите адрес электронной почты</Heading>
         <Text color={COLORS.teal[200]} fontSize={'sm'}>
-          We emailed you a 6-digit code to your email. Enter the code below to
-          confirm email address.
+          Мы отправили вам 4-значный код на ваш адрес электронной почты. Введите код ниже, чтобы подтвердить адрес
+          электронной почты.
         </Text>
-        <Field
-          label="Verification Code"
-          invalid={!!errors.code}
-          errorText={errors.code?.message}
-        >
+        <Field label="Код подтверждения" invalid={!!errors.code} errorText={errors.code?.message}>
           <Input
-            placeholder="Enter the verification code"
+            placeholder="Введите код подтверждения"
             {...register('code', {
-              required: 'Verification code is required',
+              required: 'Код подтверждения обязателен',
             })}
           />
         </Field>
 
         <VerifyButton type="submit" disabled={isSubmitting}>
-          {!isSubmitting ? 'Verify' : <Loader />}
+          {!isSubmitting ? 'Подтвердить' : <Loader />}
         </VerifyButton>
 
         <Button
@@ -89,7 +82,7 @@ export const VerificationStep: React.FC<VerificationProps> = ({
           disabled={timer !== 0 || isSubmitting}
           variant={'plain'}
         >
-          Resend verify code {timer > 0 ? `in ${timer}` : ''}
+          Запросить снова {timer > 0 ? `через ${timer}` : ''}
         </Button>
       </VerificationForm>
     </>

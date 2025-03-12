@@ -9,6 +9,7 @@ import { GetTokenForRegistrationRequest } from '@/api/auth/contracts';
 import { randomColor } from '@chakra-ui/theme-tools';
 import { getTokenForRegistration } from '@/api/auth';
 import { LocalStorageItem } from '@/common/constants';
+import { toaster } from '@/common/components/ui/toaster';
 
 type FirstStepContentProps = {
   handleChangeStep: (step: number) => void;
@@ -29,15 +30,22 @@ export const BaseInfoStepContent: React.FC<FirstStepContentProps> = ({ handleCha
   }>();
 
   const onSubmit = handleSubmit(async (data) => {
-    const payload: GetTokenForRegistrationRequest = {
-      email: data.email,
-      password: data.password,
-      userName: data.username,
-      avatarColor: randomColor({ colors: ['#0F6B6B', '#8A5B0A', '#5D2BC2'] }),
-    };
-    const registrationToken = await getTokenForRegistration(payload);
-    localStorage.setItem(LocalStorageItem.TOKEN_FOR_REGISTRATION, registrationToken);
-    handleChangeStep(1);
+    try {
+      const payload: GetTokenForRegistrationRequest = {
+        email: data.email,
+        password: data.password,
+        userName: data.username,
+        avatarColor: randomColor({ colors: ['#0F6B6B', '#8A5B0A', '#5D2BC2'] }),
+      };
+      const registrationToken = await getTokenForRegistration(payload);
+      localStorage.setItem(LocalStorageItem.TOKEN_FOR_REGISTRATION, registrationToken);
+      handleChangeStep(1);
+    } catch (e: any) {
+      toaster.error({
+        title: 'Ошибка данных',
+        description: e?.message,
+      });
+    }
   });
 
   return (

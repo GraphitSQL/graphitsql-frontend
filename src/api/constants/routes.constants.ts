@@ -14,4 +14,9 @@ export const API_ROUTES = {
     updateCurrentUser: () => '/users/update',
     deleteAccount: () => '/users/delete-account',
   },
+  projects: {
+    list: () => `/projects/list`,
+    create: () => 'projects/create',
+    delete: (id: string) => `/projects/delete?id=${id}`,
+  },
 };

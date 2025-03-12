@@ -14,6 +14,7 @@ import {
   Panel,
   Edge,
 } from '@xyflow/react';
+import ReactDOM from 'react-dom';
 
 import '@xyflow/react/dist/style.css';
 import { COLORS } from '@/common/constants';
@@ -41,21 +42,18 @@ export const ProjectPage = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
-  const onConnect = useCallback((params: Connection) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
+  const onConnect = useCallback((params: Connection) => setEdges((eds) => addEdge(params, eds)), []);
 
-  const onNodesChange = useCallback(
-    (changes: NodeChange<PreResolutionNode>[]) => {
-      setNodes((nds) => applyNodeChanges(changes, nds));
-      setHasUnsavedChanges(true);
-    },
-    [setNodes]
-  );
+  const onNodesChange = useCallback((changes: NodeChange<PreResolutionNode>[]) => {
+    setNodes((nds) => applyNodeChanges(changes, nds));
+    setHasUnsavedChanges(true);
+  }, []);
 
-  const handleAddNode = (newNodes: PreResolutionNode[]) => {
+  const handleAddNode = useCallback((newNodes: PreResolutionNode[]) => {
     setNodes((nodes) => [...nodes, ...newNodes]);
-  };
+  }, []);
 
-  const updateNodeById = (id: string, data: Partial<TTableNodeData> | Partial<TTableRowNodeData>) => {
+  const updateNodeById = useCallback((id: string, data: Partial<TTableNodeData> | Partial<TTableRowNodeData>) => {
     //@ts-expect-error fix later
     setNodes((prevItems) =>
       prevItems.map((item) =>
@@ -70,9 +68,9 @@ export const ProjectPage = () => {
           : item
       )
     );
-  };
+  }, []);
 
-  const clearWorkSpace = () => {
+  const clearWorkSpace = useCallback(() => {
     setNodes([]);
     setEdges([]);
     toaster.success({
@@ -80,12 +78,12 @@ export const ProjectPage = () => {
       description: 'Данные удалены',
     });
     setHasUnsavedChanges(true);
-  };
+  }, []);
 
-  const removeNode = (nodeId: string) => {
+  const removeNode = useCallback((nodeId: string) => {
     setNodes((els) => els.filter((el) => el.id !== nodeId));
     setHasUnsavedChanges(true);
-  };
+  }, []);
 
   const onSave = useCallback(() => {
     if (rfInstance) {
@@ -100,7 +98,7 @@ export const ProjectPage = () => {
       const savedFlow = await new Promise<string | null>((resolve) => {
         setTimeout(() => {
           resolve(localStorage.getItem(`${projectId}`));
-        }, 3000);
+        }, 1000);
       });
 
       if (!savedFlow) return;
@@ -127,15 +125,18 @@ export const ProjectPage = () => {
         <Loader />
       ) : (
         <>
-          <Box>
+          {ReactDOM.createPortal(
             <SidebarPanel
               handleAddNode={handleAddNode}
               nodes={nodes}
               updateNodeById={updateNodeById}
               clearWorkSpace={clearWorkSpace}
               removeNode={removeNode}
-            />
-          </Box>
+            />,
+            //@ts-expect-error fix later
+            document.getElementById('sidebar-root')
+          )}
+
           <Box style={{ width: '100vw', height: '87vh' }}>
             <ReactFlow
               nodes={nodes}
@@ -150,6 +151,7 @@ export const ProjectPage = () => {
               connectionMode={ConnectionMode.Loose}
               fitView
               fitViewOptions={{ padding: 2 }}
+              onlyRenderVisibleElements
             >
               <Controls style={{ color: COLORS.teal[600] }} orientation="horizontal" position="bottom-right" />
               <Background variant={BackgroundVariant.Cross} gap={12} size={1} />

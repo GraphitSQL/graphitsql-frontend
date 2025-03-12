@@ -12,12 +12,10 @@ export const Sidebar = styled.div<{ isOpen: boolean }>`
   border-left: none;
   box-shadow: 2px 0 5px rgba(38, 38, 38, 0.3);
   position: absolute;
-  top: -15px;
-  left: -20px;
+  bottom: 0;
   z-index: 1000;
   transform: translateX(${(props) => (props.isOpen ? '0' : '-99%')});
   transition: transform 0.3s ease;
-  /* overflow: hidden; */
 `;
 
 export const ToggleButton = styled(Button)`

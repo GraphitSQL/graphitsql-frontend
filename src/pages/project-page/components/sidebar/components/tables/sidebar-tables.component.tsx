@@ -4,6 +4,7 @@ import { AccordionItem, AccordionItemContent, AccordionRoot, AccordionItemTrigge
 import { COLORS } from '@/common/constants';
 import { Icons } from '@/common/assets/icons';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/common/components/ui/menu';
+import { memo, useCallback, useMemo } from 'react';
 
 type TableAccordionProps = {
   addTableField: (arg: TTableNode) => void;
@@ -11,29 +12,46 @@ type TableAccordionProps = {
   nodes: PreResolutionNode[];
   deleteTableField: (parent: TTableNode, fieldId: string) => void;
 };
-export const SidebarTables: React.FC<TableAccordionProps> = ({
-  nodes,
-  updateNodeById,
-  addTableField,
-  deleteTableField,
-}) => {
-  return (
-    <AccordionRoot collapsible>
-      {nodes
-        .filter((el): el is TTableNode => el.type === 'table')
-        .map((item, index) => (
-          <AccordionItem key={index} value={item.id} borderLeft={`3px solid ${item.data.color}`}>
+export const SidebarTables: React.FC<TableAccordionProps> = memo(
+  ({ nodes, updateNodeById, addTableField, deleteTableField }) => {
+    const tableNodes = useMemo(() => {
+      return nodes.filter((el): el is TTableNode => el.type === 'table');
+    }, [nodes]);
+
+    const handleLabelChange = useCallback(
+      (id: string, e: any) => {
+        e.preventDefault();
+        e.stopPropagation();
+        updateNodeById(id, { label: e.target.value });
+      },
+      [updateNodeById]
+    );
+
+    const handleDataTypeChange = useCallback(
+      (id: string, e: any) => {
+        updateNodeById(id, { dataType: e.target.value });
+      },
+      [updateNodeById]
+    );
+
+    const handleFieldChange = useCallback(
+      (id: string, key: string, value: any) => {
+        updateNodeById(id, { [key]: value });
+      },
+      [updateNodeById]
+    );
+
+    return (
+      <AccordionRoot collapsible>
+        {tableNodes.map((item) => (
+          <AccordionItem key={item.id} value={item.id} borderLeft={`3px solid ${item.data.color}`}>
             <HStack padding={'10px 5px'}>
               <Input
                 flex={2}
                 variant="subtle"
                 cursor="pointer"
                 defaultValue={item.data.label}
-                onChange={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  updateNodeById(item.id, { label: e.target.value });
-                }}
+                onChange={(e) => handleLabelChange(item.id, e)}
               />
               <AccordionItemTrigger flex={1} />
             </HStack>
@@ -46,27 +64,19 @@ export const SidebarTables: React.FC<TableAccordionProps> = ({
                         defaultValue={row.data.label as string}
                         placeholder="Название поля"
                         marginBottom={2}
-                        onChange={(e) => updateNodeById(row.id, { label: e.target.value })}
+                        onChange={(e) => handleLabelChange(row.id, e)}
                       />
                       <Input
                         defaultValue={row.data.dataType as string}
                         placeholder="Тип данных"
                         marginBottom={2}
-                        onChange={(e) =>
-                          updateNodeById(row.id, {
-                            dataType: e.target.value,
-                          })
-                        }
+                        onChange={(e) => handleDataTypeChange(row.id, e)}
                       />
                       <Button
                         size={'xs'}
                         fontFamily={'monospace'}
                         variant={'ghost'}
-                        onClick={() =>
-                          updateNodeById(row.id, {
-                            isNull: !row.data.isNull,
-                          })
-                        }
+                        onClick={() => handleFieldChange(row.id, 'isNull', !row.data.isNull)}
                       >
                         <Text color={row.data.isNull ? COLORS.teal[400] : 'white'}>N</Text>
                       </Button>
@@ -74,11 +84,7 @@ export const SidebarTables: React.FC<TableAccordionProps> = ({
                         size={'xs'}
                         fontFamily={'monospace'}
                         variant={'ghost'}
-                        onClick={() =>
-                          updateNodeById(row.id, {
-                            isPK: !row.data.isPK,
-                          })
-                        }
+                        onClick={() => handleFieldChange(row.id, 'isPK', !row.data.isPK)}
                       >
                         <Icons.PrimaryKey color={row.data.isPK ? COLORS.teal[300] : 'white'} />
                       </Button>
@@ -106,6 +112,7 @@ export const SidebarTables: React.FC<TableAccordionProps> = ({
             </AccordionItemContent>
           </AccordionItem>
         ))}
-    </AccordionRoot>
-  );
-};
+      </AccordionRoot>
+    );
+  }
+);

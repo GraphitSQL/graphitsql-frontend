@@ -18,5 +18,7 @@ export const API_ROUTES = {
     list: () => `/projects/list`,
     create: () => 'projects/create',
     delete: (id: string) => `/projects/delete?id=${id}`,
+    generateInvitationLink: () => '/projects/invitation-link',
+    joinToProject: () => '/projects/join-to-project',
   },
 };

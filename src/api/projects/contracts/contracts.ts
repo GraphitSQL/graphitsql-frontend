@@ -4,9 +4,10 @@ export type PreResolutionListProject = {
   id: string;
   title: string;
   isPublic: boolean;
-  createdBy: {
+  createdBy?: {
     id: string;
     displayName: string;
+    avatarColor: string;
   };
   createdAt: Date;
   updatedAt: Date;
@@ -27,6 +28,7 @@ export type CreateProjectResponse = {
   isPublic: boolean;
   createdBy: {
     id: string;
+    avatarColor: string;
     displayName: string;
   };
   createdAt: Date;

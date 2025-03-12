@@ -1,14 +1,14 @@
 import { getContrastColor } from '@/common/helpers';
-import { Avatar } from '@chakra-ui/react';
+import { Avatar, AvatarRootProps } from '@chakra-ui/react';
 
 type UserAvatarProps = {
   bgColor: string;
   fallback: string;
 };
 
-export const UserAvatar: React.FC<UserAvatarProps> = ({ bgColor, fallback }) => {
+export const UserAvatar: React.FC<UserAvatarProps & AvatarRootProps> = ({ bgColor, fallback, size }) => {
   return (
-    <Avatar.Root bgColor={bgColor} color={getContrastColor(bgColor)}>
+    <Avatar.Root bgColor={bgColor} color={getContrastColor(bgColor)} size={size || 'md'}>
       <Avatar.Fallback name={fallback} />
     </Avatar.Root>
   );

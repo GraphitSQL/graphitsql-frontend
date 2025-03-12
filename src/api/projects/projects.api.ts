@@ -47,3 +47,29 @@ export const deleteProjectRequest = async (id: string): Promise<DeleteProjectRes
     throw e;
   }
 };
+
+export const generateInvitationLinkRequest = async (projectId: string): Promise<string> => {
+  try {
+    const { data } = await axiosInstance.get<any, AxiosResponse<string>>(API_ROUTES.projects.generateInvitationLink(), {
+      params: { projectId },
+    });
+    return data;
+  } catch (e) {
+    console.error('error on generate link request', e);
+    throw e;
+  }
+};
+
+export const joinToProjectRequest = async (token: string): Promise<string> => {
+  try {
+    const { data } = await axiosInstance.post<any, AxiosResponse<string>>(API_ROUTES.projects.joinToProject(), null, {
+      headers: {
+        'invitation-token': token,
+      },
+    });
+    return data;
+  } catch (e) {
+    console.error('error on join to project request', e);
+    throw e;
+  }
+};

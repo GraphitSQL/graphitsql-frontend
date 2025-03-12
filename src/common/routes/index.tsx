@@ -1,15 +1,15 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { HomePage } from '../../pages/home-page';
-import { SignInPage } from '../../pages/sign-in-page';
-import { SignUpPage } from '../../pages/sign-up-page';
+import HomePage from '../../pages/home-page';
+import SignInPage from '../../pages/sign-in-page';
+import SignUpPage from '../../pages/sign-up-page';
 import { AuthLayout } from '../components/layouts';
 import { PofilePage } from '../../pages/profile-page';
-// import { ProjectPage } from '../../pages/project-page';
 import { ProjectPageWrapper } from '@/pages/project-page/wrapper';
+import JoinProjectPage from '@/pages/join-project-page';
 
 const APP_BASE_URL = import.meta.env.VITE_APP_BASENAME;
 
-export const Routing: Record<string, { route: (arg?: any) => string, isAuth: boolean }> = {
+export const Routing: Record<string, { route: (arg?: any) => string; isAuth: boolean }> = {
   home: {
     route: () => '/home',
     isAuth: true,
@@ -34,6 +34,10 @@ export const Routing: Record<string, { route: (arg?: any) => string, isAuth: boo
     route: () => '/terms/terms.pdf',
     isAuth: false,
   },
+  join: {
+    route: (token: string) => `/join/${token}`,
+    isAuth: false,
+  },
 };
 
 export const routers = createBrowserRouter(
@@ -45,6 +49,10 @@ export const routers = createBrowserRouter(
     {
       path: Routing.signUp.route(),
       element: <SignUpPage />,
+    },
+    {
+      path: Routing.join.route(':token'),
+      element: <JoinProjectPage />,
     },
     {
       path: '/',
@@ -75,5 +83,5 @@ export const routers = createBrowserRouter(
 );
 
 export const windowOpen = (routerPath: string, target?: string, features?: string) => {
-  window.open(`${window.location.origin}/${APP_BASE_URL}${routerPath}`, target, features)
-}
+  window.open(`${window.location.origin}/${APP_BASE_URL}${routerPath}`, target, features);
+};

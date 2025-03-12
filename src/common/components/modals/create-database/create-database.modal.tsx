@@ -11,16 +11,17 @@ import { useForm } from 'react-hook-form';
 import { FormContainer } from './create-database.styled';
 import { Field, SelectContent, SelectItem, SelectRoot, SelectTrigger, SelectValueText } from '../../ui';
 import { useRef } from 'react';
+import { CreateProjectRequest } from '@/api/projects/contracts';
 
 type CreateDatabaseModelProps = {
-  onCreate: (data: Record<string, string>) => Promise<void>;
+  onCreate: (data: CreateProjectRequest) => Promise<void>;
   handleCreateDatabaseModalVisibility: (arg: boolean) => void;
 };
 
 const databaseTypes = createListCollection({
   items: [
-    { label: 'Public', value: 'public' },
-    { label: 'Private', value: 'private' },
+    { label: 'Открытый', value: 'public' },
+    { label: 'Приватный', value: 'private' },
   ],
 });
 
@@ -32,13 +33,19 @@ export const CreateDatabaseModel: React.FC<CreateDatabaseModelProps> = ({
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
-  } = useForm<{ databaseName: string; status?: string }>();
+    formState: { errors, isSubmitting, defaultValues },
+  } = useForm<{ databaseName: string; type: string }>();
   const contentRef = useRef<HTMLDivElement>(null);
 
   const onSubmit = handleSubmit(async (data) => {
-    await onCreate(data);
-    reset();
+    await onCreate({
+      title: data.databaseName,
+      isPublic: data.type === 'public',
+    });
+    reset({
+      ...defaultValues,
+      databaseName: '',
+    });
     handleCreateDatabaseModalVisibility(false);
   });
 
@@ -51,6 +58,7 @@ export const CreateDatabaseModel: React.FC<CreateDatabaseModelProps> = ({
         <FormContainer name="create-database" onSubmit={onSubmit}>
           <Field label="Название базы данных" invalid={!!errors.databaseName} errorText={errors.databaseName?.message}>
             <Input
+              autoComplete="off"
               placeholder="Введите название вашей базы данных"
               {...register('databaseName', {
                 required: 'Поле не может быть пустым',
@@ -60,13 +68,13 @@ export const CreateDatabaseModel: React.FC<CreateDatabaseModelProps> = ({
           </Field>
           <Field
             label="Тип видимости"
-            invalid={!!errors.status}
-            errorText={errors.status?.message}
+            invalid={!!errors.type}
+            errorText={errors.type?.message}
             helperText="Обратите внимание: после установки изменить его будет невозможно."
           >
             <SelectRoot
               collection={databaseTypes}
-              {...register('status', {
+              {...register('type', {
                 required: 'Тип обязателен',
               })}
             >
@@ -74,9 +82,9 @@ export const CreateDatabaseModel: React.FC<CreateDatabaseModelProps> = ({
                 <SelectValueText placeholder="Установите тип видимости для проекта" />
               </SelectTrigger>
               <SelectContent portalRef={contentRef}>
-                {databaseTypes.items.map((movie) => (
-                  <SelectItem item={movie} key={movie.value}>
-                    {movie.label}
+                {databaseTypes.items.map((type) => (
+                  <SelectItem item={type} key={type.label}>
+                    {type.label}
                   </SelectItem>
                 ))}
               </SelectContent>

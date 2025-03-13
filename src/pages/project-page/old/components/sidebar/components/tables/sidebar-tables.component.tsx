@@ -1,4 +1,4 @@
-import { PreResolutionNode, TTableNode, TTableRowNode } from '@/pages/project-page/types';
+import { PreResolutionNode, TTableNode, TTableRowNode } from '@/pages/project-page/old/types';
 import { Box, Button, For, HStack, Input, VStack, Text } from '@chakra-ui/react';
 import { AccordionItem, AccordionItemContent, AccordionRoot, AccordionItemTrigger } from '@/common/components';
 import { COLORS } from '@/common/constants';

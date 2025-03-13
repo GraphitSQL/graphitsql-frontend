@@ -1,4 +1,4 @@
-import { Nodes } from '@/pages/project-page/types';
+import { Nodes } from '@/pages/project-page/old/types';
 
 export const MOCK_INIT_NODES: Nodes = [
   {

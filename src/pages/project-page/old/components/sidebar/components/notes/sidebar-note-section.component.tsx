@@ -2,8 +2,8 @@ import { AccordionItemContent } from '@/common/components';
 import { NoteSectionHeader } from './section-header.component';
 import { SidebarNotes } from './sidebar-notes/sidebar-notes.component';
 import { useEffect, useState } from 'react';
-import { ProjectNote } from '@/pages/project-page/types';
 import { MOCK_NOTES } from '@/tmp/mocks/mock-notes.mock';
+import { ProjectNote } from '@/pages/project-page/old/types';
 
 export const SidebarNoteSection: React.FC = () => {
   const [notes, setNotes] = useState<ProjectNote[]>([]);

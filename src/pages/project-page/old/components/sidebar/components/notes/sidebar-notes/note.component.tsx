@@ -4,7 +4,7 @@ import { COLORS } from '@/common/constants';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/common/components/ui/menu';
 import { Icons } from '@/common/assets/icons';
 import { Checkbox, UserAvatar } from '@/common/components';
-import { ProjectNote } from '@/pages/project-page/types';
+import { ProjectNote } from '@/pages/project-page/old/types';
 import { useState } from 'react';
 import { toaster } from '@/common/components/ui/toaster';
 

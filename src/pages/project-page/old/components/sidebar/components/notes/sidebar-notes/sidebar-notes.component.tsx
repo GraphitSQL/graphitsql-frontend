@@ -1,4 +1,4 @@
-import { ProjectNote } from '@/pages/project-page/types';
+import { ProjectNote } from '@/pages/project-page/old/types';
 import { Box, Button, For, HStack, Input } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Note } from './note.component';

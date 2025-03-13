@@ -1,0 +1,26 @@
+.react-flow__node-custom {
+  border: 1px solid #555;
+  padding: 10px;
+  width: 300px;
+  border-radius: 5px;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #2dd4bf !important;
+}
+
+.react-flow__node {
+  max-width: 288px;
+  background-color: #f5f7fa;
+}
+
+.react-flow__attribution a {
+  background: none;
+}
+
+.react-flow__handle {
+  width: 8px;
+  height: 8px;
+  background-color: #2dd4bf;
+  border-color: #555;
+}

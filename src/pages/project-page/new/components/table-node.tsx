@@ -1,4 +1,4 @@
-import { useState, FC, memo } from 'react';
+import { useState, FC, memo, useCallback } from 'react';
 import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
 import { COLORS } from '@/common/constants';
 import { LuKey } from 'react-icons/lu';
@@ -18,25 +18,35 @@ export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
     return classes.join(' ');
   };
 
-  const onValueCommit = (details: EditableValueChangeDetails, colId: string) => {
-    const node = reactFlow.getNode(id);
-    console.log('nodee', node, colId);
+  const onValueCommit = useCallback((details: EditableValueChangeDetails, colId: string, key: string) => {
     reactFlow.updateNodeData(id, {
       ...data,
       columns: data.columns.map((column: any) => {
         if (column.id === colId) {
-          return { ...column, name: details.value };
+          return { ...column, [key]: details.value };
         }
         return column;
       }),
     });
-  };
+  }, []);
+
+  const handleChangeDbLabel = useCallback((details: EditableValueChangeDetails) => {
+    reactFlow.updateNodeData(id, { ...data, name: details.value });
+  }, []);
 
   return (
     <div className={'table'}>
-      <div className="table__name" style={{ backgroundColor: data.schemaColor }}>
-        {data.name}
-      </div>
+      <Editable.Root
+        className="table__name"
+        style={{ backgroundColor: data.schemaColor, justifyContent: 'center' }}
+        defaultValue={data.name}
+        activationMode="dblclick"
+        selectOnFocus={false}
+        onValueCommit={handleChangeDbLabel}
+      >
+        <Editable.Preview />
+        <Editable.Input />
+      </Editable.Root>
 
       <div className="table__columns">
         {data.columns.map((column: any, index: any) => (
@@ -59,13 +69,23 @@ export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
                   defaultValue={column.name}
                   activationMode="dblclick"
                   selectOnFocus={false}
-                  onValueCommit={(details) => onValueCommit(details, column.id)}
+                  onValueCommit={(details) => onValueCommit(details, column.id, 'name')}
                 >
                   <Editable.Preview />
                   <Editable.Input />
                 </Editable.Root>
               </div>
-              <div className="column-name__type">{column.type}</div>
+              <div className="column-name__type">
+                <Editable.Root
+                  defaultValue={column.type}
+                  activationMode="dblclick"
+                  selectOnFocus={false}
+                  onValueCommit={(details) => onValueCommit(details, column.id, 'type')}
+                >
+                  <Editable.Preview />
+                  <Editable.Input />
+                </Editable.Root>
+              </div>
             </div>
           </div>
         ))}

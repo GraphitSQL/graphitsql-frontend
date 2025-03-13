@@ -57,6 +57,7 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   }, [rfInstance]);
 
   const onNodesChange = useCallback((changes: NodeChange<any>[]) => {
+    console.log(changes);
     setNodes((nds) => applyNodeChanges(changes, nds));
     setHasUnsavedChanges(true);
   }, []);
@@ -87,7 +88,6 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   }, []);
 
   useEffect(() => {
-    console.log('ghhheeh');
     setNodes(currentDatabase.nodes);
     setEdges(currentDatabase.edges);
   }, [currentDatabase.edges, currentDatabase.nodes]);

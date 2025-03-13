@@ -1,5 +1,6 @@
 .table {
   background-color: #27272a;
+  width: 360px;
 }
 
 .table__name {
@@ -9,6 +10,11 @@
   border-radius: 4px 4px 0 0;
   font-weight: bold;
   text-align: center;
+}
+
+.chakra-editable__preview {
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .table__columns {

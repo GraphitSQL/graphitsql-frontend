@@ -1,6 +1,6 @@
 import { Container, FormContainer, ImageContainer, SignInForm, SubmitButton } from './components';
 import { useLottie } from 'lottie-react';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useNavigate, Link as RouterLink, useLocation } from 'react-router-dom';
 import { LOTTIES } from '../../common/assets/lotties';
 import { Heading, Input, Text, Link } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
@@ -10,6 +10,7 @@ import { logIn } from '@/api/auth';
 import { LoginRequest } from '@/api/auth/contracts';
 import { toaster } from '@/common/components/ui/toaster';
 import { LocalStorageItem } from '@/common/constants';
+import { useMemo } from 'react';
 
 export const SignInPage: React.FC = () => {
   const signInBackground = useLottie({
@@ -26,13 +27,20 @@ export const SignInPage: React.FC = () => {
     formState: { errors },
   } = useForm<LoginRequest>();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = useMemo(() => {
+    return location.state?.prevPath;
+  }, [location.state]);
 
   const onSubmit = handleSubmit(async (data: LoginRequest) => {
     try {
       const { accessToken, refreshToken } = await logIn(data);
       window.localStorage.setItem(LocalStorageItem.ACCESS_TOKEN, accessToken);
       window.localStorage.setItem(LocalStorageItem.REFRESH_TOKEN, refreshToken);
-      navigate(Routing.home.route());
+      const path = from ?? Routing.home.route();
+
+      navigate(path);
     } catch (error: any) {
       toaster.error({
         title: error?.message || 'Unexpected error',

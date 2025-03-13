@@ -3,62 +3,109 @@ import { COLORS } from '../../common/constants';
 import { DatabaseTable } from './components/table/databases-table';
 import { InputGroup } from '../../common/components/ui/input-group';
 import { Icons } from '../../common/assets/icons';
-import { MOCK_ITEMS } from '../../tmp/mocks/mock-databases-items.mock';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import { DialogRoot, DialogTrigger } from '../../common/components/ui/dialog';
 import { CreateDatabaseModel } from '../../common/components/modals';
 import { toaster } from '../../common/components/ui/toaster';
 import { StyledTitleContainer } from './components/home-page.styled';
+import { createProjectRequest, deleteProjectRequest, getProjectListRequest } from '@/api/projects';
+import { CreateProjectRequest, PreResolutionListProject } from '@/api/projects/contracts';
+import useDebounce from '@/common/hooks/useDebounce';
 
 export const HomePage: React.FC = () => {
-  const [databases, setDatabases] = useState<Array<Record<string, string | number>> | undefined>(undefined);
+  const [databases, setDatabases] = useState<PreResolutionListProject[] | undefined>(undefined);
+  const [dbCount, setDbCount] = useState(0);
   const [openCreateDatabaseModal, setOpenCreateDatabaseModal] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
 
-  const mockFetchData = async () => {
-    const res = await new Promise<Array<Record<string, string | number>>>((resolve) => {
-      setTimeout(() => {
-        resolve(MOCK_ITEMS);
-      }, 3000);
-    });
-    setDatabases(res);
-  };
+  const [debouncedSearchValues, setDebouncedValue] = useDebounce(searchValue, 1000);
 
-  const handleAddDatabase = async (data: Record<string, string | number>) => {
-    if (databases) {
-      const newItem = {
-        id: Math.floor(Math.random() * 1000000),
-        createdAt: new Date('2025-01-01').toISOString(),
-        updatedAt: new Date('2025-02-01').toISOString(),
-        ...data,
-      };
-      const updatedDatabases = await new Promise<Array<Record<string, string | number>>>((resolve) => {
-        setTimeout(() => {
-          resolve([newItem, ...databases]);
-        }, 3000);
+  const mockFetchData = async (skip?: number, take?: number, search?: string) => {
+    try {
+      const res = await getProjectListRequest({
+        skip: skip ?? 0,
+        take: take ?? 50,
+        search: search ?? debouncedSearchValues,
       });
-      setDatabases(updatedDatabases);
+      const { count, projects } = res;
+      setDbCount(count);
+      setDatabases(projects);
+    } catch (e: any) {
+      toaster.create({
+        title: 'Ошибка при получении данных',
+        description: e?.message,
+        type: 'error',
+      });
     }
   };
 
-  const handleDeleteDatabase = async (databaseId: number) => {
+  const handleFetchMore = async () => {
+    try {
+      const prevDbs = databases ?? [];
+      const res = await getProjectListRequest({
+        skip: prevDbs.length,
+        take: 10,
+        ...(debouncedSearchValues && { search: debouncedSearchValues }),
+      });
+      const { count, projects } = res;
+      setDbCount(count);
+      setDatabases([...prevDbs, ...projects]);
+    } catch (e: any) {
+      toaster.create({
+        title: 'Ошибка при получении данных',
+        description: e?.message,
+        type: 'error',
+      });
+    }
+  };
+
+  const handleAddDatabase = async (data: CreateProjectRequest) => {
+    try {
+      const databasesData = databases ? [...databases] : [];
+      const newProject = await createProjectRequest(data);
+      if (debouncedSearchValues) {
+        setSearchValue('');
+        setDebouncedValue('');
+        return;
+      }
+      databasesData.unshift(newProject);
+      setDatabases(databasesData);
+      setDbCount((prev) => prev + 1);
+    } catch (e: any) {
+      toaster.create({
+        title: 'Ошибка при создании базы данных',
+        description: e?.message,
+        type: 'error',
+      });
+    }
+  };
+
+  const handleDeleteDatabase = async (databaseId: string) => {
     try {
       if (databases) {
-        const updatedDatabases = await new Promise<Array<Record<string, string | number>>>((resolve) => {
-          setTimeout(() => {
-            resolve([...databases.filter((el) => el.id !== databaseId)]);
-          }, 0);
-        });
-        setDatabases(updatedDatabases);
+        const visibleDbCount = databases.length;
+        setDatabases((els) => els?.filter((el) => el.id !== databaseId));
+        setDbCount((prev) => prev - 1);
+        const res = await deleteProjectRequest(databaseId);
+
+        if (res !== 'OK') {
+          mockFetchData(visibleDbCount, visibleDbCount);
+          throw new Error('База данных не была удалена');
+        }
+
         toaster.create({
           title: 'База данных удалена',
           type: 'info',
         });
+        const { projects } = await getProjectListRequest({ skip: visibleDbCount - 1, take: 1 });
+        setDatabases((prev: any) => [...prev, ...projects]);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
       toaster.create({
         title: 'Ошибка при удалении базы данных',
+        description: e?.message,
         type: 'error',
       });
     }
@@ -70,22 +117,34 @@ export const HomePage: React.FC = () => {
 
   useEffect(() => {
     mockFetchData();
-  }, []);
+  }, [debouncedSearchValues]);
 
   return (
     <>
       <HStack justifyContent={'space-between'} alignItems={'center'} marginBottom={'30px'}>
         <StyledTitleContainer>
           <Heading size={'3xl'}>Список баз даных</Heading>
-          {databases && <Text color={COLORS.gray[600]}>Всего баз: {databases.length}</Text>}
+          {databases && (
+            <Text color={COLORS.gray[600]}>
+              Всего {debouncedSearchValues && 'найдено'} баз: {dbCount}
+            </Text>
+          )}
         </StyledTitleContainer>
         <HStack>
           <InputGroup flex="3" endElement={<Icons.Search color={COLORS.teal[400]} />}>
-            <Input placeholder="Поиск..." borderRadius={30} bg={COLORS.navy[900]} disabled={!databases?.length} />
+            <Input
+              value={searchValue}
+              placeholder="Поиск..."
+              borderRadius={30}
+              bg={COLORS.navy[900]}
+              disabled={!databases?.length && !searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
           </InputGroup>
           <DialogRoot
             lazyMount
             unmountOnExit
+            restoreFocus={false}
             open={openCreateDatabaseModal}
             onOpenChange={(e) => handleCreateDatabaseModalVisibility(e.open)}
           >
@@ -101,7 +160,17 @@ export const HomePage: React.FC = () => {
           </DialogRoot>
         </HStack>
       </HStack>
-      {databases ? <DatabaseTable items={databases} handleDeleteDatabase={handleDeleteDatabase} /> : <Loader />}
+      {databases ? (
+        <DatabaseTable
+          items={databases}
+          handleDeleteDatabase={handleDeleteDatabase}
+          fetchData={handleFetchMore}
+          dbCount={dbCount}
+          searchValue={debouncedSearchValues}
+        />
+      ) : (
+        <Loader />
+      )}
     </>
   );
 };

@@ -114,10 +114,14 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
           type: 'smoothstep',
         }}
       >
-        <Controls style={{ color: COLORS.teal[600] }} orientation="horizontal" position="bottom-right" />
+        <Controls
+          style={{ color: COLORS.teal[600], padding: '20px' }}
+          orientation="horizontal"
+          position="bottom-right"
+        />
         <Background variant={BackgroundVariant.Cross} gap={12} size={1} />
         <Panel position="top-right" style={{ padding: '20px', display: 'flex', gap: 5 }}>
-          <Button onClick={onSave} disabled={!hasUnsavedChanges}>
+          <Button onClick={onSave} disabled={!hasUnsavedChanges} variant={'surface'}>
             Сохранить
           </Button>
           <Button onClick={handleAddNode}>Добавить таблицу</Button>

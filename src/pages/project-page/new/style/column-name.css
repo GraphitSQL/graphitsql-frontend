@@ -65,8 +65,3 @@
   background-color: #3c3c3c;
   opacity: 1;
 }
-
-.column-name--selected .column-name__description {
-  display: block;
-  opacity: 1;
-}

@@ -1,22 +1,11 @@
-import { useState, FC, memo, useCallback } from 'react';
+import { FC, memo, useCallback } from 'react';
 import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
 import { COLORS } from '@/common/constants';
 import { LuKey } from 'react-icons/lu';
 import { Editable, EditableValueChangeDetails } from '@chakra-ui/react';
 
 export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
-  const [selectedColumn, setSelectedColumn] = useState('');
   const reactFlow = useReactFlow();
-
-  const columnClass = ({ selectedColumn, columnName }: { selectedColumn: string; columnName: string }) => {
-    const classes = ['column-name'];
-
-    if (selectedColumn === columnName) {
-      classes.push('column-name--selected');
-    }
-
-    return classes.join(' ');
-  };
 
   const onValueCommit = useCallback((details: EditableValueChangeDetails, colId: string, key: string) => {
     reactFlow.updateNodeData(id, {
@@ -49,15 +38,8 @@ export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
       </Editable.Root>
 
       <div className="table__columns">
-        {data.columns.map((column: any, index: any) => (
-          <div
-            key={index}
-            className={columnClass({ selectedColumn, columnName: column.name })}
-            onMouseEnter={() => {
-              setSelectedColumn(column.name);
-            }}
-            onMouseLeave={() => setSelectedColumn('')}
-          >
+        {data.columns.map((column: any) => (
+          <div key={column.id} className={'column-name'}>
             <Handle type={column.handleType} position={Position.Right} id={`${column.id}-right`} />
 
             {<Handle type={column.handleType} position={Position.Left} id={`${column.id}-left`} />}

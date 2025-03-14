@@ -13,7 +13,6 @@ import {
   applyNodeChanges,
   ConnectionLineType,
   useReactFlow,
-  // type Node,
   type Edge,
   OnEdgesChange,
   applyEdgeChanges,
@@ -21,7 +20,7 @@ import {
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Markers } from './components';
-import { Button } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import '@xyflow/react/dist/style.css';
 import { nodeTypes } from './config';
 import { COLORS } from '@/common/constants';
@@ -49,20 +48,37 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
 
   const [menu, setMenu] = useState<any>(null);
 
+  useEffect(() => {
+    const handleContextMenu = (event: any) => {
+      event.preventDefault();
+    };
+
+    // Attach the contextmenu event listener to disable it globally
+    document.addEventListener('contextmenu', handleContextMenu);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+    };
+  }, []);
+
   const onEdgeContextMenu = useCallback(
     (event: any, edge: Edge) => {
       // Prevent native context menu from showing
       event.preventDefault();
-      console.log(edge);
 
       const pane = ref?.current?.getBoundingClientRect();
+
+      let newTop = event.clientY - pane.top;
+      let newLeft = event.clientX - pane.left;
+
+      if (newTop > pane.height) newTop = pane.height;
+      if (newLeft > pane.width) newLeft = pane.width;
       setMenu({
         id: edge.id,
         markerEnd: edge.markerEnd,
-        top: event.clientY < pane.height - 200 && event.clientY - 100,
-        left: event.clientX < pane.width - 200 && event.clientX,
-        right: event.clientX >= pane.width - 200 && pane.width - event.clientX,
-        bottom: event.clientY >= pane.height - 200 && pane.height - event.clientY,
+        top: newTop,
+        left: newLeft,
       });
     },
     [setMenu]
@@ -109,7 +125,7 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   }, [currentDatabase.edges, currentDatabase.nodes]);
 
   return (
-    <>
+    <Box height={'80dvh'}>
       <Markers />
       <ReactFlow
         ref={ref}
@@ -141,14 +157,16 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
         />
         <Background variant={BackgroundVariant.Cross} gap={12} size={1} />
         {menu && <ContextMenu {...menu} />}
-        <Panel position="top-right" style={{ padding: '20px', display: 'flex', gap: 5 }}>
-          <Button onClick={onSave} disabled={!hasUnsavedChanges} variant={'surface'}>
+        <Panel position="top-right" style={{ paddingRight: '20px', display: 'flex', gap: 5 }}>
+          <Button onClick={onSave} disabled={!hasUnsavedChanges} variant={'surface'} size={'xs'}>
             Сохранить
           </Button>
-          <Button onClick={handleAddNode}>Добавить таблицу</Button>
+          <Button onClick={handleAddNode} size={'xs'}>
+            Добавить таблицу
+          </Button>
         </Panel>
       </ReactFlow>
-    </>
+    </Box>
   );
 };
 

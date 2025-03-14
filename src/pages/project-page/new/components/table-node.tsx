@@ -43,9 +43,10 @@ export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
   );
 
   const onColumnAdd = useCallback(() => {
+    const newColumn = generateColumn();
     reactFlow.updateNodeData(id, {
       ...data,
-      columns: [...data.columns, generateColumn()],
+      columns: [...data.columns, newColumn],
     });
   }, [data.columns]);
 

@@ -1,9 +1,10 @@
 import { FC, memo, useCallback } from 'react';
 import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
 import { COLORS } from '@/common/constants';
-import { LuKey } from 'react-icons/lu';
-import { Editable, EditableValueChangeDetails } from '@chakra-ui/react';
+import { LuKey, LuPlus } from 'react-icons/lu';
+import { Button, Editable, EditableValueChangeDetails } from '@chakra-ui/react';
 import { TableColumnMenu } from './table-column-menu';
+import { generateColumn } from '../utils';
 
 export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
   const reactFlow = useReactFlow();
@@ -40,6 +41,13 @@ export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
     },
     [data.columns]
   );
+
+  const onColumnAdd = useCallback(() => {
+    reactFlow.updateNodeData(id, {
+      ...data,
+      columns: [...data.columns, generateColumn()],
+    });
+  }, [data.columns]);
 
   const handleChangeDbLabel = useCallback(
     (details: EditableValueChangeDetails) => {
@@ -106,6 +114,12 @@ export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="table__footer">
+        <Button size={'xs'} variant={'surface'} onClick={onColumnAdd}>
+          <LuPlus />
+        </Button>
       </div>
     </div>
   );

@@ -5,6 +5,9 @@ const config = defineConfig({
     html: {
       colorPalette: 'teal',
     },
+    body: {
+      '--removed-body-scroll-bar-size': '0px !important',
+    },
   },
 });
 

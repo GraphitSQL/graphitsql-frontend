@@ -3,10 +3,10 @@ import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vite.dev/config/
-export default defineConfig(({mode})=> {
+export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
-  const allowedHostList: string[] = JSON.parse(env.VITE_APP_ALLOWED_HOSTS ?? "[]");
+  const allowedHostList: string[] = JSON.parse(env.VITE_APP_ALLOWED_HOSTS ?? '[]');
 
   const allowedHosts = allowedHostList?.length ? allowedHostList : undefined;
 
@@ -14,7 +14,16 @@ export default defineConfig(({mode})=> {
     base: env.VITE_APP_BASENAME ?? '/',
     plugins: [react(), tsconfigPaths()],
     build: {
+      minify: 'terser',
       commonjsOptions: { transformMixedEsModules: true },
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            react: ['react', 'react-dom'],
+            vendor: ['lodash', 'axios'],
+          },
+        },
+      },
     },
     server: {
       port: Number(env.VITE_APP_PORT) || 5173,
@@ -24,7 +33,7 @@ export default defineConfig(({mode})=> {
       },
       host: true,
       strictPort: true,
-      allowedHosts
+      allowedHosts,
     },
     preview: {
       port: Number(env.VITE_APP_PORT) || 4173,
@@ -34,7 +43,7 @@ export default defineConfig(({mode})=> {
       },
       host: true,
       strictPort: true,
-      allowedHosts
+      allowedHosts,
     },
     publicDir: 'public',
     resolve: {
@@ -42,5 +51,5 @@ export default defineConfig(({mode})=> {
         '@': '/src',
       },
     },
-  }
+  };
 });

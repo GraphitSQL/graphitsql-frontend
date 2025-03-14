@@ -18,7 +18,7 @@ import {
   OnEdgesChange,
   applyEdgeChanges,
 } from '@xyflow/react';
-import { randomColor } from '@chakra-ui/theme-tools';
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Markers } from './components';
 import { Button } from '@chakra-ui/react';
@@ -28,6 +28,7 @@ import { COLORS } from '@/common/constants';
 import { useParams } from 'react-router-dom';
 import './Style';
 import ContextMenu from './components/context-menu';
+import { generateNode } from './utils';
 
 type FlowProps = {
   currentDatabase: {
@@ -98,28 +99,8 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   }, []);
 
   const handleAddNode = useCallback(() => {
-    const mockNode = {
-      id: `${Date.now()}`,
-      data: {
-        name: 'new_table',
-        columns: [
-          {
-            id: `${Date.now()}`,
-            name: 'id',
-            description: 'Unique identifier.',
-            key: true,
-            type: 'integer',
-          },
-        ],
-        schemaColor: randomColor(),
-      },
-      position: {
-        x: (Math.random() - 0.5) * 150,
-        y: (Math.random() - 0.5) * 150,
-      },
-      type: 'table',
-    };
-    reactFlow.addNodes([mockNode]);
+    const table = generateNode();
+    reactFlow.addNodes([table]);
   }, []);
 
   useEffect(() => {

@@ -4,11 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "homepage": ".",
-  "sideEffects": [
-    "*.css",
-    "theme.ts",
-    "*.styles.ts"
-  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

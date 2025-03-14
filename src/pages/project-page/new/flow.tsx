@@ -15,6 +15,8 @@ import {
   useReactFlow,
   // type Node,
   type Edge,
+  OnEdgesChange,
+  applyEdgeChanges,
 } from '@xyflow/react';
 import { randomColor } from '@chakra-ui/theme-tools';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -40,7 +42,7 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   const ref = useRef<any>(null);
 
   const [nodes, setNodes] = useNodesState<any>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
+  const [edges, setEdges] = useEdgesState<any>([]);
   const [rfInstance, setRfInstance] = useState<any>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
@@ -78,6 +80,15 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
       setHasUnsavedChanges(false);
     }
   }, [rfInstance]);
+
+  const onEdgesChange: OnEdgesChange = useCallback(
+    (changes) =>
+      setEdges((eds) => {
+        setHasUnsavedChanges(true);
+        return applyEdgeChanges(changes, eds);
+      }),
+    []
+  );
 
   const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
 

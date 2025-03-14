@@ -17,7 +17,7 @@ import {
 import { randomColor } from '@chakra-ui/theme-tools';
 import { useCallback, useEffect, useState } from 'react';
 import { Markers } from './components';
-import { Box, Button } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import '@xyflow/react/dist/style.css';
 import { nodeTypes } from './config';
 import { COLORS } from '@/common/constants';
@@ -43,7 +43,6 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   const onConnect = useCallback(
     (params: Connection) =>
       setEdges((eds) => {
-        console.log(params);
         return addEdge(params, eds);
       }),
     []
@@ -57,7 +56,6 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   }, [rfInstance]);
 
   const onNodesChange = useCallback((changes: NodeChange<any>[]) => {
-    console.log(changes);
     setNodes((nds) => applyNodeChanges(changes, nds));
     setHasUnsavedChanges(true);
   }, []);
@@ -93,7 +91,7 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   }, [currentDatabase.edges, currentDatabase.nodes]);
 
   return (
-    <Box style={{ width: '100vw', height: '87dvh' }}>
+    <>
       <Markers />
       <ReactFlow
         nodes={nodes}
@@ -101,6 +99,7 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
         onInit={setRfInstance}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        // onEd
         onConnect={onConnect}
         snapToGrid={true}
         snapGrid={[16, 16]}
@@ -109,6 +108,7 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
         fitView
         fitViewOptions={{ padding: 2 }}
         onlyRenderVisibleElements
+        edgesReconnectable={false}
         connectionLineType={ConnectionLineType.SmoothStep}
         defaultEdgeOptions={{
           type: 'smoothstep',
@@ -127,7 +127,7 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
           <Button onClick={handleAddNode}>Добавить таблицу</Button>
         </Panel>
       </ReactFlow>
-    </Box>
+    </>
   );
 };
 

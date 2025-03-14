@@ -3,25 +3,50 @@ import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
 import { COLORS } from '@/common/constants';
 import { LuKey } from 'react-icons/lu';
 import { Editable, EditableValueChangeDetails } from '@chakra-ui/react';
+import { TableColumnMenu } from './table-column-menu';
 
 export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
   const reactFlow = useReactFlow();
 
-  const onValueCommit = useCallback((details: EditableValueChangeDetails, colId: string, key: string) => {
-    reactFlow.updateNodeData(id, {
-      ...data,
-      columns: data.columns.map((column: any) => {
-        if (column.id === colId) {
-          return { ...column, [key]: details.value };
-        }
-        return column;
-      }),
-    });
-  }, []);
+  const onValueCommit = useCallback(
+    (value: string | boolean, colId: string, key: string) => {
+      reactFlow.updateNodeData(
+        id,
+        {
+          ...data,
+          columns: data.columns.map((column: any) => {
+            if (column.id === colId) {
+              return { ...column, [key]: value };
+            }
+            return column;
+          }),
+        },
+        { replace: true }
+      );
+    },
+    [data.columns]
+  );
 
-  const handleChangeDbLabel = useCallback((details: EditableValueChangeDetails) => {
-    reactFlow.updateNodeData(id, { ...data, name: details.value });
-  }, []);
+  const onColumnDelete = useCallback(
+    (colId: string) => {
+      reactFlow.updateNodeData(
+        id,
+        {
+          ...data,
+          columns: [...data.columns].filter((column: any) => column.id !== colId),
+        },
+        { replace: true }
+      );
+    },
+    [data.columns]
+  );
+
+  const handleChangeDbLabel = useCallback(
+    (details: EditableValueChangeDetails) => {
+      reactFlow.updateNodeData(id, { ...data, name: details.value }, { replace: true });
+    },
+    [data.columns]
+  );
 
   return (
     <div className={'table'}>
@@ -51,22 +76,32 @@ export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
                   defaultValue={column.name}
                   activationMode="dblclick"
                   selectOnFocus={false}
-                  onValueCommit={(details) => onValueCommit(details, column.id, 'name')}
+                  onValueCommit={(details) => onValueCommit(details.value, column.id, 'name')}
                 >
                   <Editable.Preview />
                   <Editable.Input />
                 </Editable.Root>
               </div>
               <div className="column-name__type">
-                <Editable.Root
-                  defaultValue={column.type}
-                  activationMode="dblclick"
-                  selectOnFocus={false}
-                  onValueCommit={(details) => onValueCommit(details, column.id, 'type')}
-                >
-                  <Editable.Preview />
-                  <Editable.Input />
-                </Editable.Root>
+                <div className="column-name__type-inner">
+                  <Editable.Root
+                    className="column-name__type"
+                    defaultValue={column.type}
+                    activationMode="dblclick"
+                    selectOnFocus={false}
+                    onValueCommit={(details) => onValueCommit(details.value, column.id, 'type')}
+                  >
+                    <Editable.Preview />
+                    <Editable.Input />
+                  </Editable.Root>
+
+                  <TableColumnMenu
+                    column={column}
+                    onValueCommit={onValueCommit}
+                    onColumnDelete={onColumnDelete}
+                    key={`menu-${column.id}`}
+                  />
+                </div>
               </div>
             </div>
           </div>

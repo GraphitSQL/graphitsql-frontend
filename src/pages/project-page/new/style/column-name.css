@@ -65,3 +65,13 @@
   background-color: #3c3c3c;
   opacity: 1;
 }
+
+.column-name__type-inner {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.menu-button {
+  padding: 0;
+}

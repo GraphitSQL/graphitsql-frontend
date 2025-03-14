@@ -52,9 +52,10 @@ export const AuthLayout = () => {
         alignItems={'center'}
         padding={'15px 20px'}
         borderBottom={`1px solid ${COLORS.gray[800]}`}
+        background={COLORS.navy[700]}
       >
         <HStack cursor="pointer" alignItems={'center'} gap={2} onClick={() => navigate(Routing.home.route())}>
-          <Image srcSet={logoPath} width={50} />
+          <Image srcSet={logoPath} width={50} alt="logo" />
           <Text fontSize={'xl'} fontWeight={'bold'}>
             Graphit
             <span

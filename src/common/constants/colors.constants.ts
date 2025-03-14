@@ -22,6 +22,7 @@ export const COLORS = {
   },
   navy: {
     600: '#2a2d36',
+    700: 'rgb(33 33 42)',
     900: '#1B1E27',
   },
 };

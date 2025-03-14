@@ -13,9 +13,11 @@ import {
   applyNodeChanges,
   ConnectionLineType,
   useReactFlow,
+  // type Node,
+  type Edge,
 } from '@xyflow/react';
 import { randomColor } from '@chakra-ui/theme-tools';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Markers } from './components';
 import { Button } from '@chakra-ui/react';
 import '@xyflow/react/dist/style.css';
@@ -23,6 +25,7 @@ import { nodeTypes } from './config';
 import { COLORS } from '@/common/constants';
 import { useParams } from 'react-router-dom';
 import './Style';
+import ContextMenu from './components/context-menu';
 
 type FlowProps = {
   currentDatabase: {
@@ -34,12 +37,33 @@ type FlowProps = {
 const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   const { id: projectId } = useParams();
   const reactFlow = useReactFlow();
+  const ref = useRef<any>(null);
 
   const [nodes, setNodes] = useNodesState<any>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
   const [rfInstance, setRfInstance] = useState<any>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
+  const [menu, setMenu] = useState<any>(null);
+
+  const onEdgeContextMenu = useCallback(
+    (event: any, edge: Edge) => {
+      // Prevent native context menu from showing
+      event.preventDefault();
+      console.log(edge);
+
+      const pane = ref?.current?.getBoundingClientRect();
+      setMenu({
+        id: edge.id,
+        markerEnd: edge.markerEnd,
+        top: event.clientY < pane.height - 200 && event.clientY - 100,
+        left: event.clientX < pane.width - 200 && event.clientX,
+        right: event.clientX >= pane.width - 200 && pane.width - event.clientX,
+        bottom: event.clientY >= pane.height - 200 && pane.height - event.clientY,
+      });
+    },
+    [setMenu]
+  );
   const onConnect = useCallback(
     (params: Connection) =>
       setEdges((eds) => {
@@ -54,6 +78,8 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
       setHasUnsavedChanges(false);
     }
   }, [rfInstance]);
+
+  const onPaneClick = useCallback(() => setMenu(null), [setMenu]);
 
   const onNodesChange = useCallback((changes: NodeChange<any>[]) => {
     setNodes((nds) => applyNodeChanges(changes, nds));
@@ -94,13 +120,15 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
     <>
       <Markers />
       <ReactFlow
+        ref={ref}
         nodes={nodes}
         edges={edges}
         onInit={setRfInstance}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        // onEd
+        onEdgeContextMenu={onEdgeContextMenu}
         onConnect={onConnect}
+        onPaneClick={onPaneClick}
         snapToGrid={true}
         snapGrid={[16, 16]}
         nodeTypes={nodeTypes}
@@ -120,6 +148,7 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
           position="bottom-right"
         />
         <Background variant={BackgroundVariant.Cross} gap={12} size={1} />
+        {menu && <ContextMenu {...menu} />}
         <Panel position="top-right" style={{ padding: '20px', display: 'flex', gap: 5 }}>
           <Button onClick={onSave} disabled={!hasUnsavedChanges} variant={'surface'}>
             Сохранить

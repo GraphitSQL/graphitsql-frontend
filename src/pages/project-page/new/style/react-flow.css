@@ -23,4 +23,10 @@
   height: 8px;
   background-color: #2dd4bf;
   border-color: #555;
+  margin: 0 1px;
+}
+
+.react-flow__edge.selected path[marker-end*='hasManyReversed'].react-flow__edge-path {
+  marker-end: url(#hasManyReversedSelected);
+  stroke: #2dd4bf !important;
 }

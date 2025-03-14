@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { randomColor } from '@chakra-ui/theme-tools';
 
-export function generateNode() {
+export function generateNode({ x, y }: { x?: number; y?: number }) {
   return {
     id: uuidv4(),
     data: {
@@ -18,8 +18,8 @@ export function generateNode() {
       schemaColor: randomColor(),
     },
     position: {
-      x: (Math.random() - 0.5) * 150,
-      y: (Math.random() - 0.5) * 150,
+      x: x ?? (Math.random() - 0.5) * 150,
+      y: y ?? (Math.random() - 0.5) * 150,
     },
     type: 'table',
   };

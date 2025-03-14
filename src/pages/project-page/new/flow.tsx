@@ -16,6 +16,7 @@ import {
   type Edge,
   OnEdgesChange,
   applyEdgeChanges,
+  useStoreApi,
 } from '@xyflow/react';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -39,6 +40,7 @@ type FlowProps = {
 const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   const { id: projectId } = useParams();
   const reactFlow = useReactFlow();
+  const store = useStoreApi();
   const ref = useRef<any>(null);
 
   const [nodes, setNodes] = useNodesState<any>([]);
@@ -115,8 +117,17 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   }, []);
 
   const handleAddNode = useCallback(() => {
-    const table = generateNode();
-    reactFlow.addNodes([table]);
+    const { domNode } = store.getState();
+    const boundingRect = domNode?.getBoundingClientRect();
+
+    if (boundingRect) {
+      const cneter = reactFlow.screenToFlowPosition({
+        x: boundingRect.x + boundingRect.width / 2,
+        y: boundingRect.y + boundingRect.height / 2,
+      });
+      const table = generateNode({ x: cneter.x - 200, y: cneter.y - 200 });
+      reactFlow.addNodes([table]);
+    }
   }, []);
 
   useEffect(() => {

@@ -10,8 +10,11 @@ import {
 } from '@/common/components/ui/dialog';
 import { Button, Text } from '@chakra-ui/react';
 import Visualizer from './components/visualizer';
+import { Routing } from '@/common/routes';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectPageWrapper: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <>
       {isMobile ? (
@@ -30,7 +33,7 @@ const ProjectPageWrapper: React.FC = () => {
                 </Text>
               </DialogBody>
               <DialogFooter margin={'0 auto'}>
-                <Button onClick={() => window.location.replace('/home')}>На главную</Button>
+                <Button onClick={() => navigate(Routing.home.route())}>На главную</Button>
               </DialogFooter>
             </DialogContent>
           </DialogRoot>

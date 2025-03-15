@@ -39,7 +39,7 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: {
             react: ['react', 'react-dom'],
-            vendor: ['lodash', 'axios'],
+            vendor: ['axios', 'uuid', 'polished', 'lottie-react'],
           },
         },
       },

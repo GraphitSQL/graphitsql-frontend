@@ -20,7 +20,7 @@ import {
 } from '@xyflow/react';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Markers } from './components';
+import { Markers } from './config';
 import { Box, Button } from '@chakra-ui/react';
 import '@xyflow/react/dist/style.css';
 import { nodeTypes } from './config';
@@ -55,10 +55,8 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
       event.preventDefault();
     };
 
-    // Attach the contextmenu event listener to disable it globally
     document.addEventListener('contextmenu', handleContextMenu);
 
-    // Clean up the event listener on component unmount
     return () => {
       document.removeEventListener('contextmenu', handleContextMenu);
     };

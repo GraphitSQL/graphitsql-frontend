@@ -1,7 +1,15 @@
 import { AxiosResponse } from 'axios';
 import axiosInstance from '../axios-setup';
 import { API_ROUTES } from '../constants';
-import { CreateProjectRequest, CreateProjectResponse, DeleteProjectResponse, ListProjectsResponse } from './contracts';
+import {
+  CreateProjectRequest,
+  CreateProjectResponse,
+  DeleteProjectResponse,
+  GetProjectDataResponse,
+  ListProjectsResponse,
+  UpdateProjectDataRequest,
+  UpdateProjectDataResponse,
+} from './contracts';
 
 export const getProjectListRequest = async ({
   skip,
@@ -70,6 +78,39 @@ export const joinToProjectRequest = async (token: string): Promise<string> => {
     return data;
   } catch (e) {
     console.error('error on join to project request', e);
+    throw e;
+  }
+};
+
+export const updateProjectDataRequest = async (
+  payload: UpdateProjectDataRequest
+): Promise<UpdateProjectDataResponse> => {
+  try {
+    const { data } = await axiosInstance.post<any, AxiosResponse<UpdateProjectDataResponse>>(
+      API_ROUTES.projects.saveChanges(),
+      payload.payloadData,
+      {
+        params: { id: payload.projectId },
+      }
+    );
+    return data;
+  } catch (e) {
+    console.error('error on saving project data changes request', e);
+    throw e;
+  }
+};
+
+export const getProjectDataRequest = async (id: string): Promise<GetProjectDataResponse> => {
+  try {
+    const { data } = await axiosInstance.get<any, AxiosResponse<GetProjectDataResponse>>(
+      API_ROUTES.projects.getProjectData(),
+      {
+        params: { id },
+      }
+    );
+    return data;
+  } catch (e) {
+    console.error('error on list projects request', e);
     throw e;
   }
 };

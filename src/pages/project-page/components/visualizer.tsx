@@ -1,10 +1,11 @@
-import { mockEdges, mockNodes } from '@/tmp/mocks/schemas';
 import { ReactFlowProvider } from '@xyflow/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Flow from './flow';
 import { Tabs } from '@chakra-ui/react';
 import { LuStickyNote, LuWorkflow } from 'react-icons/lu';
+import { getProjectDataRequest } from '@/api/projects';
+import { toaster } from '@/common/components/ui/toaster';
 
 const Visualizer: React.FC = () => {
   const [currentDatabase, setCurrentDatabase] = useState<any>({
@@ -14,39 +15,41 @@ const Visualizer: React.FC = () => {
   const [databasesLoaded, setDatabasesLoaded] = useState(false);
   const { id: projectId } = useParams();
 
-  const handleFetchData = useCallback(() => {
+  const handleFetchData = useCallback(async () => {
     const restoreFlow = async () => {
-      const savedFlow = await new Promise<string | null>((resolve) => {
-        setTimeout(() => {
-          resolve(localStorage.getItem(`${projectId}`));
-        }, 1000);
-      });
-
-      if (!savedFlow) {
+      try {
+        const savedFlow = await getProjectDataRequest(projectId!);
+        if (!savedFlow) {
+          throw new Error('Данные не найдены');
+        }
         setCurrentDatabase({
-          nodes: mockNodes,
-          edges: mockEdges,
+          nodes: savedFlow?.data?.nodes ?? [],
+          edges: savedFlow?.data?.edges ?? [],
         });
-        return;
-      }
-
-      const flow = JSON.parse(savedFlow);
-
-      if (flow) {
-        setCurrentDatabase({
-          nodes: flow.nodes,
-          edges: flow.edges,
+        if (savedFlow.isScratch) {
+          toaster.create({
+            type: 'info',
+            title: 'Проeкт пуст',
+            description: 'Давайте добавим первую таблицу. Для этого нажмите на кнопку Добавить на рабочей области',
+          });
+        }
+      } catch (e: any) {
+        toaster.error({
+          title: 'Не удалось загрузить данные',
+          description: e?.message || 'Непредвиденная ошибка',
         });
+        throw new Error('доступ запрещен');
       }
     };
 
-    restoreFlow();
-    setDatabasesLoaded(false);
-  }, []);
+    if (projectId) {
+      await restoreFlow();
+      setDatabasesLoaded(true);
+    }
+  }, [projectId]);
 
   useEffect(() => {
     handleFetchData();
-    setDatabasesLoaded(true);
   }, []);
 
   return (

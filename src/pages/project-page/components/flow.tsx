@@ -29,6 +29,8 @@ import { useParams } from 'react-router-dom';
 import './Style';
 import ContextMenu from './components/context-menu';
 import { generateNode } from './utils';
+import { updateProjectDataRequest } from '@/api/projects';
+import { toaster } from '@/common/components/ui/toaster';
 
 type FlowProps = {
   currentDatabase: {
@@ -91,10 +93,30 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
     []
   );
   const onSave = useCallback(() => {
-    if (rfInstance) {
+    if (rfInstance && projectId) {
       const flow = rfInstance.toObject();
-      localStorage.setItem(`${projectId}`, JSON.stringify(flow));
-      setHasUnsavedChanges(false);
+      updateProjectDataRequest({
+        projectId,
+        payloadData: {
+          nodes: flow.nodes.map((el: any) => ({ ...el, projectId })),
+          edges: flow.edges.map((el: any) => ({ ...el, projectId })),
+        },
+      })
+        .then((data) => {
+          if (data) {
+            toaster.success({
+              title: 'Изменения сохранены',
+            });
+            setHasUnsavedChanges(false);
+          }
+        })
+        .catch((e) => {
+          toaster.error({
+            title: 'Ошибка при сохранении данных',
+            description: e?.message ?? 'Непредвиденная ошибка',
+          });
+          setHasUnsavedChanges(true);
+        });
     }
   }, [rfInstance]);
 

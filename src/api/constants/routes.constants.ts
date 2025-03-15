@@ -20,5 +20,7 @@ export const API_ROUTES = {
     delete: (id: string) => `/projects/delete?id=${id}`,
     generateInvitationLink: () => '/projects/invitation-link',
     joinToProject: () => '/projects/join-to-project',
+    saveChanges: () => '/projects/update-project-data',
+    getProjectData: () => '/projects/project-data',
   },
 };

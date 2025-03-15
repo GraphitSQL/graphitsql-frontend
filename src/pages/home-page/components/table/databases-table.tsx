@@ -111,6 +111,7 @@ export const DatabaseTable: React.FC<DatabaseTableProps> = ({
                               disabled={!item.isPublic}
                               title={item.isPublic ? undefined : 'Нельзя поделиться приватным проектом'}
                               onClick={() => {
+                                if (!item.isPublic) return;
                                 setCurrentProject({
                                   ...item.createdBy,
                                   projectId: item.id,

@@ -1,7 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import { randomColor } from '@chakra-ui/theme-tools';
+import { getContrastingTextColor } from './text';
 
 export function generateNode({ x, y }: { x?: number; y?: number }) {
+  const tableSchemaColor = randomColor();
+  const tableColor = getContrastingTextColor(tableSchemaColor);
   return {
     id: uuidv4(),
     data: {
@@ -15,7 +18,10 @@ export function generateNode({ x, y }: { x?: number; y?: number }) {
           type: 'integer',
         },
       ],
-      schemaColor: randomColor(),
+      appearance: {
+        schemaColor: tableSchemaColor,
+        color: tableColor,
+      },
     },
     position: {
       x: x ?? (Math.random() - 0.5) * 150,

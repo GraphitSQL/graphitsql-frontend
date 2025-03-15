@@ -61,7 +61,11 @@ export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
     <div className={'table'}>
       <Editable.Root
         className="table__name"
-        style={{ backgroundColor: data.schemaColor, justifyContent: 'center' }}
+        style={{
+          backgroundColor: data.appearance?.schemaColor,
+          justifyContent: 'center',
+          color: data.appearance?.color,
+        }}
         defaultValue={data.name}
         activationMode="dblclick"
         selectOnFocus={false}

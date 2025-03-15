@@ -1,0 +1,15 @@
+.column-properties__content-container {
+  font-size: xx-small;
+}
+
+.column-properties__properties-container {
+  margin: 5px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 3px;
+}
+
+.column-properties__title {
+  font-size: x-small;
+}

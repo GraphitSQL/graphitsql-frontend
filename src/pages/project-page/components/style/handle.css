@@ -1,0 +1,19 @@
+.left-handle {
+  width: 9px;
+  height: 9px;
+  min-width: 2px;
+  left: 0;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: #0d9488;
+}
+
+.right-handle {
+  width: 9px;
+  height: 9px;
+  min-width: 2px;
+  right: 0;
+  top: 50%;
+  transform: translateX(50%) translateY(-50%);
+  background-color: #0d9488;
+}

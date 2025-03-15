@@ -1,6 +1,5 @@
 import React from 'react';
 import { isMobile } from 'react-device-detect';
-import { ProjectPage } from './project-page';
 import {
   DialogBody,
   DialogContent,
@@ -10,11 +9,12 @@ import {
   DialogTitle,
 } from '@/common/components/ui/dialog';
 import { Button, Text } from '@chakra-ui/react';
+import Visualizer from './components/visualizer';
 
-export class ProjectPageWrapper extends React.Component {
-  renderContent = () => {
-    if (isMobile) {
-      return (
+const ProjectPageWrapper: React.FC = () => {
+  return (
+    <>
+      {isMobile ? (
         <>
           <DialogRoot placement="center" motionPreset="slide-in-bottom" open={true} present>
             <DialogContent>
@@ -35,11 +35,11 @@ export class ProjectPageWrapper extends React.Component {
             </DialogContent>
           </DialogRoot>
         </>
-      );
-    }
-    return <ProjectPage />;
-  };
-  render() {
-    return this.renderContent();
-  }
-}
+      ) : (
+        <Visualizer />
+      )}
+    </>
+  );
+};
+
+export default ProjectPageWrapper;

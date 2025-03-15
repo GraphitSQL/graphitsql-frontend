@@ -36,3 +36,21 @@ export type CreateProjectResponse = {
 };
 
 export type DeleteProjectResponse = TBaseResponse;
+
+export type UpdateProjectDataRequest = {
+  payloadData: {
+    nodes: any[];
+    edges: any[];
+  };
+  projectId: string;
+};
+
+export type UpdateProjectDataResponse = TBaseResponse;
+
+export type GetProjectDataResponse = {
+  data: {
+    nodes: any[];
+    edges: any[];
+  };
+  isScratch: boolean;
+};

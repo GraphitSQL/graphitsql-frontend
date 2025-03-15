@@ -17,6 +17,11 @@ export default defineConfig(({ mode }) => {
       react({
         babel: {
           minified: true,
+          generatorOpts: {
+            jsescOption: {
+              minimal: true,
+            },
+          },
         },
       }),
       tsconfigPaths(),

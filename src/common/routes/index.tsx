@@ -4,7 +4,7 @@ import SignInPage from '../../pages/sign-in-page';
 import SignUpPage from '../../pages/sign-up-page';
 import { AuthLayout } from '../components/layouts';
 import { PofilePage } from '../../pages/profile-page';
-import { ProjectPageWrapper } from '@/pages/project-page/wrapper';
+import ProjectPageWrapper from '@/pages/project-page/wrapper';
 import JoinProjectPage from '@/pages/join-project-page';
 
 const APP_BASE_URL = import.meta.env.VITE_APP_BASENAME;

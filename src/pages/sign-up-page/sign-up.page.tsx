@@ -15,7 +15,7 @@ export const SignUpPage: React.FC = () => {
     <Container>
       <ImageContainer>
         <HStack alignItems={'center'} gap={3}>
-          <Image srcSet={logoPath} width={65} />
+          <Image srcSet={logoPath} width={65} alt="logo" />
         </HStack>
         <Heading size={'xl'}> Ваши идеи, наш сервис — идеальное сочетание!</Heading>
         <Text>Присоединяйтесь к нашему сообществу и начните свое путешествие вместе с нами</Text>

@@ -9,7 +9,7 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Open Sans', sans-serif;
     margin: 0;
     padding: 0;
-    height: 100vh;
+    height: 100dvh;
   }
 
   #root {

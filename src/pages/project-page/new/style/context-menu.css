@@ -1,20 +1,22 @@
 .context-menu {
-  background: white;
-  border-style: solid;
+  border: 1px solid #99f6e4;
   /* box-shadow: 10px 19px 20px rgba(0, 0, 0, 10%); */
   position: absolute;
   z-index: 10;
-  color: black;
+  color: #99f6e4;
+  display: flex;
+  padding: 2px;
+  border-radius: 4px;
+  background-color: #032726;
 }
 
 .context-menu button {
   border: none;
-  display: block;
   padding: 0.5em;
   text-align: left;
   width: 100%;
 }
 
 .context-menu button:hover {
-  background: rgb(191, 240, 235);
+  background: #114240;
 }

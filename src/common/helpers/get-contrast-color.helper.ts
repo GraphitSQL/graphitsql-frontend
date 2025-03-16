@@ -1,7 +1,7 @@
 export const getContrastColor = (bgColor: string): string => {
   // Извлекаем значения RGBA
   const rgba = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
-  if (!rgba) return '#000'; // Возвращаем черный цвет по умолчанию
+  if (!rgba) return '#fff'; // Возвращаем черный цвет по умолчанию
 
   const r = parseInt(rgba[1]);
   const g = parseInt(rgba[2]);

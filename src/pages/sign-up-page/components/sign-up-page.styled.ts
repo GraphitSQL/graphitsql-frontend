@@ -8,10 +8,6 @@ export const Container = styled.div`
   height: 100vh;
   justify-content: space-between;
   gap: 30px;
-
-  @media (max-width: 768px) {
-    display: block;
-  }
 `;
 
 export const ImageContainer = styled.div`
@@ -22,7 +18,7 @@ export const ImageContainer = styled.div`
   h2 {
     color: ${COLORS.teal[50]};
     font-weight: 900;
-    font-size: 4.3em;
+    font-size: 3.3em;
     line-height: 1.5;
   }
 
@@ -45,12 +41,20 @@ export const ImageContainer = styled.div`
 
 export const FormContainer = styled.div`
   flex: 2;
+  height: 100%;
+  padding: 30px 10px;
   @media (max-width: 768px) {
     .chakra-steps__title {
       display: none;
     }
     width: 100%;
-    padding: 10%;
+    padding: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    h2 {
+      font-size: 18px;
+    }
   }
 `;
 

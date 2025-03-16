@@ -1,0 +1,29 @@
+.infinite-scroll-component__outerdiv {
+  width: 100%;
+  height: 100% !important;
+}
+
+.notes__scroll-area {
+  width: 100%;
+  padding-right: 15px;
+  max-height: 50dvh;
+  overflow: auto;
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+}
+
+.card-root__custom {
+  background-color: #18181b;
+  border: 1px solid #08635c;
+  margin-bottom: 10px;
+}
+
+.card-root__custom-resolved {
+  border: 1px solid #2e2e2e;
+}
+
+.card-root__custom-resolved .chakra-card__description {
+  color: #2e2e2e;
+  text-decoration: line-through;
+}

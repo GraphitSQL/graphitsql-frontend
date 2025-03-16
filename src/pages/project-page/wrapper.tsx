@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from '@/common/components/ui/dialog';
 import { Button, Text } from '@chakra-ui/react';
-import Visualizer from './components/visualizer';
+import Workspace from './components/workspace';
 import { Routing } from '@/common/routes';
 import { useNavigate } from 'react-router-dom';
 
@@ -39,7 +39,7 @@ const ProjectPageWrapper: React.FC = () => {
           </DialogRoot>
         </>
       ) : (
-        <Visualizer />
+        <Workspace />
       )}
     </>
   );

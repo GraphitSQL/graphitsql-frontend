@@ -48,7 +48,7 @@ export const TableColumnMenu: FC<TableRowMenuProps> = ({ column, onValueCommit, 
         </div>
         <Separator />
         <MenuItem
-          value="profile"
+          value="delete field"
           onClick={() => onColumnDelete(column.id)}
           color="fg.error"
           _hover={{ bg: 'bg.error', color: 'fg.error' }}

@@ -69,7 +69,7 @@ export const Notes: React.FC = () => {
 
   return (
     <>
-      <Field label="Текст заметки" required width={'100%'} paddingRight={'15px'}>
+      <Field label="Текст заметки" required width={'100%'} paddingRight={'15px'} flexGrow={1}>
         <Textarea
           autoresize
           placeholder="Начните печатать ... "
@@ -77,7 +77,7 @@ export const Notes: React.FC = () => {
           variant="subtle"
           border={`1px solid ${COLORS.gray[700]}`}
           onChange={nandleNoteText}
-          maxH={'15dvh'}
+          maxH={'10dvh'}
         />
 
         <Button marginLeft={'auto'} size={'sm'} marginTop={'10px'} onClick={handleAddNote}>

@@ -28,7 +28,10 @@ const JoinProjectPage = () => {
 
   useEffect(() => {
     if (token) {
-      const isAuth = pathname && !!localStorage.getItem(LocalStorageItem.ACCESS_TOKEN);
+      const isAuth =
+        pathname &&
+        (!!localStorage.getItem(LocalStorageItem.ACCESS_TOKEN) ||
+          !!localStorage.getItem(LocalStorageItem.REFRESH_TOKEN));
       if (!isAuth) {
         navigate(Routing.signIn.route(), { state: { prevPath: pathname } });
         return;

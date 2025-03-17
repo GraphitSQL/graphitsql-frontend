@@ -1,10 +1,10 @@
 import { Box, HStack, Image, Text } from '@chakra-ui/react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { COLORS, LocalStorageItem } from '../../../constants';
 import { UserProfile } from './components/user-profile';
 import { Routing } from '../../../routes';
 import logoPath from '../../../assets/LOGO.svg';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toaster } from '../../ui/toaster';
 import { getMe } from '@/api/users';
 import { OutletContextProps, TUser } from '@/common/types/types';
@@ -14,32 +14,35 @@ export const AuthLayout = () => {
   const { pathname } = useLocation();
   const [currentUser, setCurrentUser] = useState<TUser | null>(null);
 
-  const isAuth = useMemo(() => {
-    return pathname && !!localStorage.getItem(LocalStorageItem.ACCESS_TOKEN);
-  }, [pathname]);
-
   const fetchUser = async () => {
-    if (isAuth) {
-      try {
-        const user = await getMe();
-        setCurrentUser(user);
-      } catch {
-        localStorage.clear();
-        navigate(Routing.home.route());
-      }
-    }
+    const user = await getMe();
+    setCurrentUser(user);
   };
 
   useEffect(() => {
-    if (!isAuth) {
-      toaster.error({
-        title: 'Unauthorized',
-      });
-      navigate(Routing.signIn.route());
-      return;
-    }
+    const handleStorageChange = () => {
+      if (
+        !localStorage.getItem(LocalStorageItem.ACCESS_TOKEN) &&
+        !localStorage.getItem(LocalStorageItem.REFRESH_TOKEN)
+      ) {
+        toaster.error({
+          title: 'Сессия истекла',
+          description: 'Пожалуйста, войдите снова',
+        });
+        navigate(Routing.signIn.route());
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  useEffect(() => {
     fetchUser();
-  }, [isAuth, navigate]);
+  }, [pathname]);
 
   return (
     <>

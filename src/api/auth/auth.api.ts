@@ -15,6 +15,7 @@ import {
 } from './contracts';
 import { LocalStorageItem } from '@/common/constants';
 import axios from 'axios';
+import { Routing, windowOpen } from '@/common/routes';
 
 export const logIn = async ({ email, password }: LoginRequest): Promise<LoginResponse> => {
   try {
@@ -105,7 +106,7 @@ export const refreshAccessToken = async (baseUrl: string): Promise<RefreshRespon
     console.error('error on refreshAccessToken request', e);
     window.localStorage.removeItem(LocalStorageItem.ACCESS_TOKEN);
     window.localStorage.removeItem(LocalStorageItem.REFRESH_TOKEN);
-    window.location.replace('/sign-in');
+    windowOpen(Routing.signIn.route());
     return null;
   }
 };

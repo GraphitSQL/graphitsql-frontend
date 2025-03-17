@@ -98,15 +98,10 @@ export const refreshAccessToken = async (baseUrl: string): Promise<RefreshRespon
         },
       }
     );
-    window.localStorage.setItem(LocalStorageItem.ACCESS_TOKEN, data.accessToken);
-    window.localStorage.setItem(LocalStorageItem.REFRESH_TOKEN, data.refreshToken);
     return data;
   } catch (e) {
     console.error('error on refreshAccessToken request', e);
-    window.localStorage.removeItem(LocalStorageItem.ACCESS_TOKEN);
-    window.localStorage.removeItem(LocalStorageItem.REFRESH_TOKEN);
-    window.location.replace('/sign-in');
-    return null;
+    throw e;
   }
 };
 

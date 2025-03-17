@@ -156,7 +156,7 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   }, [currentDatabase.edges, currentDatabase.nodes]);
 
   return (
-    <Box height={'80dvh'}>
+    <Box height={'80dvh'} width={'100%'}>
       <Markers />
       <ReactFlow
         ref={ref}

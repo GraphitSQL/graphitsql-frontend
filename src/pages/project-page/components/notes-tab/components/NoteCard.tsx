@@ -3,11 +3,12 @@ import { Icons } from '@/common/assets/icons';
 import { Checkbox, UserAvatar } from '@/common/components';
 import { COLORS } from '@/common/constants';
 import { Button, Text, Card, HStack, Stack, CheckboxCheckedChangeDetails } from '@chakra-ui/react';
+import { UpdateNoteOptions } from '@/api/notes/contracts';
 
 type NoteCardProps = {
   note: any;
-  handleUpdateNote: (args: { noteId: string; value: boolean | string; key: string }) => void;
-  handleDeleteNote: (id: string) => void;
+  handleUpdateNote: (args: { noteId: string; value: boolean | string; key: keyof UpdateNoteOptions }) => Promise<void>;
+  handleDeleteNote: (id: string) => Promise<void>;
 };
 
 export const NoteCard: React.FC<NoteCardProps> = ({ note, handleUpdateNote, handleDeleteNote }) => {
@@ -60,7 +61,9 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, handleUpdateNote, hand
             </MenuContent>
           </MenuRoot>
         </HStack>
-        <Card.Description color={'fg'}>{note.text}</Card.Description>
+        <pre>
+          <Card.Description color={'fg'}>{note.noteText}</Card.Description>
+        </pre>
       </Card.Body>
     </Card.Root>
   );

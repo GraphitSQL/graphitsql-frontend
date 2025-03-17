@@ -22,4 +22,8 @@ export const GlobalStyle = createGlobalStyle`
   [data-message*="React Flow Pro"] {
     display: none;
   }
+
+  pre {
+    font-family: 'Open Sans', sans-serif;
+  }
 `;

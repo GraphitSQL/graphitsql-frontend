@@ -1,6 +1,6 @@
 .infinite-scroll-component__outerdiv {
   width: 100%;
-  height: 100% !important;
+  height: 100%;
 }
 
 .notes__scroll-area {
@@ -21,9 +21,10 @@
 
 .card-root__custom-resolved {
   border: 1px solid #2e2e2e;
+  background-color: #242424;
 }
 
 .card-root__custom-resolved .chakra-card__description {
-  color: #2e2e2e;
+  color: #636363;
   text-decoration: line-through;
 }

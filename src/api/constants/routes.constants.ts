@@ -23,4 +23,10 @@ export const API_ROUTES = {
     saveChanges: () => '/projects/update-project-data',
     getProjectData: () => '/projects/project-data',
   },
+  notes: {
+    list: () => `/notes/list`,
+    create: () => 'notes/create',
+    delete: (id: string) => `/notes/delete/${id}`,
+    update: (id: string) => `/notes/update/${id}`,
+  },
 };

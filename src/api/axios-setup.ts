@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { Routing, windowOpen } from '@/common/routes';
+
 import { LocalStorageItem } from '../common/constants';
 import { refreshAccessToken } from './auth';
 
@@ -29,7 +31,7 @@ axiosInstance.interceptors.response.use(
     if (originalRequest._retry) {
       window.localStorage.removeItem(LocalStorageItem.ACCESS_TOKEN);
       window.localStorage.removeItem(LocalStorageItem.REFRESH_TOKEN);
-      window.location.replace('/sign-in');
+      windowOpen(Routing.signIn.route());
       return Promise.reject('Access denied');
     }
     if (error.response.status === 401 && !originalRequest._retry) {

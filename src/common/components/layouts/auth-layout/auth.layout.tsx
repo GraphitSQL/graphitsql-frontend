@@ -8,7 +8,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { toaster } from '../../ui/toaster';
 import { getMe } from '@/api/users';
 import { OutletContextProps, TUser } from '@/common/types/types';
-import { refreshAccessToken } from '@/api/auth';
 
 export const AuthLayout = () => {
   const navigate = useNavigate();
@@ -17,7 +16,7 @@ export const AuthLayout = () => {
 
   const isAuth = useMemo(() => {
     return pathname && !!localStorage.getItem(LocalStorageItem.ACCESS_TOKEN);
-  }, [pathname, refreshAccessToken]);
+  }, [pathname]);
 
   const fetchUser = async () => {
     if (isAuth) {

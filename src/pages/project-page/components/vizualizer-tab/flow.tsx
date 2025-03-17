@@ -162,6 +162,8 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
         ref={ref}
         nodes={nodes}
         edges={edges}
+        // // minZoom={1.5}
+        // maxZoom={0.5}
         onInit={setRfInstance}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
@@ -186,7 +188,7 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
           orientation="horizontal"
           position="bottom-right"
         />
-        <Background variant={BackgroundVariant.Cross} gap={12} size={1} />
+        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
         {menu && <ContextMenu {...menu} />}
         <Panel position="top-right" style={{ paddingRight: '20px', display: 'flex', gap: 5 }}>
           <Button onClick={onSave} disabled={!hasUnsavedChanges} variant={'surface'} size={'xs'}>

@@ -6,7 +6,7 @@ import { Button, Editable, EditableValueChangeDetails } from '@chakra-ui/react';
 import { TableColumnMenu } from './table-column-menu';
 import { generateColumn } from '../utils';
 
-export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
+export const TableNode: FC<NodeProps> = memo(({ data, id, dragging }: any) => {
   const reactFlow = useReactFlow();
 
   const onValueCommit = useCallback(
@@ -42,13 +42,18 @@ export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
     [data.columns]
   );
 
-  const onColumnAdd = useCallback(() => {
-    const newColumn = generateColumn();
-    reactFlow.updateNodeData(id, {
-      ...data,
-      columns: [...data.columns, newColumn],
-    });
-  }, [data.columns]);
+  const onColumnAdd = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const newColumn = generateColumn();
+      reactFlow.updateNodeData(id, {
+        ...data,
+        columns: [...data.columns, newColumn],
+      });
+    },
+    [data.columns]
+  );
 
   const handleChangeDbLabel = useCallback(
     (details: EditableValueChangeDetails) => {
@@ -75,53 +80,55 @@ export const TableNode: FC<NodeProps> = memo(({ data, id }: any) => {
         <Editable.Input />
       </Editable.Root>
 
-      <div className="table__columns">
+      <div className="table__columns nodrag">
         {data.columns.map((column: any) => (
           <div key={column.id} className={'column-name'}>
             <Handle type={column.handleType} position={Position.Right} id={`${column.id}-right`} />
 
             {<Handle type={column.handleType} position={Position.Left} id={`${column.id}-left`} />}
 
-            <div className="column-name__inner">
-              <div className="column-name__name">
-                {column.key && <LuKey color={COLORS.teal[600]} className="key-icon" />}
-                <Editable.Root
-                  defaultValue={column.name}
-                  activationMode="dblclick"
-                  selectOnFocus={false}
-                  onValueCommit={(details) => onValueCommit(details.value, column.id, 'name')}
-                >
-                  <Editable.Preview />
-                  <Editable.Input />
-                </Editable.Root>
-              </div>
-              <div className="column-name__type">
-                <div className="column-name__type-inner">
+            {!dragging && (
+              <div className={'column-name__inner'}>
+                <div className="column-name__name">
+                  {column.key && <LuKey color={COLORS.teal[600]} className="key-icon" />}
                   <Editable.Root
-                    className="column-name__type"
-                    defaultValue={column.type}
+                    defaultValue={column.name}
                     activationMode="dblclick"
                     selectOnFocus={false}
-                    onValueCommit={(details) => onValueCommit(details.value, column.id, 'type')}
+                    onValueCommit={(details) => onValueCommit(details.value, column.id, 'name')}
                   >
                     <Editable.Preview />
                     <Editable.Input />
                   </Editable.Root>
+                </div>
+                <div className="column-name__type">
+                  <div className="column-name__type-inner">
+                    <Editable.Root
+                      className="column-name__type"
+                      defaultValue={column.type}
+                      activationMode="dblclick"
+                      selectOnFocus={false}
+                      onValueCommit={(details) => onValueCommit(details.value, column.id, 'type')}
+                    >
+                      <Editable.Preview />
+                      <Editable.Input />
+                    </Editable.Root>
 
-                  <TableColumnMenu
-                    column={column}
-                    onValueCommit={onValueCommit}
-                    onColumnDelete={onColumnDelete}
-                    key={`menu-${column.id}`}
-                  />
+                    <TableColumnMenu
+                      column={column}
+                      onValueCommit={onValueCommit}
+                      onColumnDelete={onColumnDelete}
+                      key={`menu-${column.id}`}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         ))}
       </div>
 
-      <div className="table__footer">
+      <div className="table__footer nodrag">
         <Button size={'xs'} variant={'surface'} onClick={onColumnAdd}>
           <LuPlus />
         </Button>

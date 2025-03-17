@@ -24,7 +24,7 @@ const Workspace: React.FC = () => {
           throw new Error('Данные не найдены');
         }
         setCurrentDatabase({
-          nodes: savedFlow?.data?.nodes ?? [],
+          nodes: savedFlow?.data?.nodes.map((el) => ({ ...el, dragHandle: '.table__name' })) ?? [],
           edges: savedFlow?.data?.edges ?? [],
         });
         if (savedFlow.isScratch) {

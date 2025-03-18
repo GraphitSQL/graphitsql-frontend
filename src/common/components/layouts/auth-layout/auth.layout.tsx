@@ -72,11 +72,12 @@ export const AuthLayout = () => {
         {!!currentUser && <UserProfile currentUser={currentUser} />}
       </HStack>
       <Box
-        padding={'1.5% 1.5% 0.5% 1.5%'}
+        padding={'1.5%'}
         flexGrow={1}
         display="flex"
         flexDirection="column"
-        height="90vh"
+        height={'100%'}
+        minHeight={0}
         overflow={'hidden'}
       >
         <Outlet context={{ currentUser, fetchUser } satisfies OutletContextProps} />

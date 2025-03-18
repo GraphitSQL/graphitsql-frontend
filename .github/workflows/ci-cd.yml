@@ -2,7 +2,7 @@ name: Build and Deploy to VPS
 
 on:
   push:
-    branches: [ staging ] # Trigger on push to the main branch
+    branches: [staging] # Trigger on push to the main branch
 
 jobs:
   build-and-deploy:
@@ -15,12 +15,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20  # Use the Node.js version your app requires
+          node-version: 20 # Use the Node.js version your app requires
 
       - name: Install dependencies and build
         env:
           VITE_APP_BASENAME: ${{ secrets.VITE_APP_BASENAME }}
           VITE_APP_BASE_API_URL: ${{ secrets.VITE_APP_BASE_API_URL }}
+          VITE_APP_SCRIPT: ${{ secrets.VITE_APP_SCRIPT }}
         run: |
           npm install
           npm run build
@@ -35,7 +36,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: "dist.tar.gz"
+          source: 'dist.tar.gz'
           target: ${{ secrets.TARGET_PATH }}
           rm: true
 

@@ -17,6 +17,7 @@ import {
   OnEdgesChange,
   applyEdgeChanges,
   useStoreApi,
+  MiniMap,
 } from '@xyflow/react';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -156,7 +157,7 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
   }, [currentDatabase.edges, currentDatabase.nodes]);
 
   return (
-    <Box height={'80dvh'}>
+    <Box height={'80dvh'} width={'100%'}>
       <Markers />
       <ReactFlow
         ref={ref}
@@ -173,9 +174,11 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
         nodeTypes={nodeTypes}
         connectionMode={ConnectionMode.Loose}
         fitView
+        selectNodesOnDrag={false}
+        nodeDragThreshold={5}
+        edgesReconnectable={false}
         fitViewOptions={{ padding: 2 }}
         onlyRenderVisibleElements
-        edgesReconnectable={false}
         connectionLineType={ConnectionLineType.SmoothStep}
         defaultEdgeOptions={{
           type: 'smoothstep',
@@ -186,7 +189,8 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
           orientation="horizontal"
           position="bottom-right"
         />
-        <Background variant={BackgroundVariant.Cross} gap={12} size={1} />
+        <MiniMap bgColor="teal" offsetScale={5} style={{ width: 100, height: 100 }} position="bottom-left" />
+        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
         {menu && <ContextMenu {...menu} />}
         <Panel position="top-right" style={{ paddingRight: '20px', display: 'flex', gap: 5 }}>
           <Button onClick={onSave} disabled={!hasUnsavedChanges} variant={'surface'} size={'xs'}>

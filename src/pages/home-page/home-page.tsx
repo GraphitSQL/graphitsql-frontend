@@ -21,7 +21,7 @@ export const HomePage: React.FC = () => {
 
   const [debouncedSearchValues, setDebouncedValue] = useDebounce(searchValue, 1000);
 
-  const mockFetchData = async (skip?: number, take?: number, search?: string) => {
+  const fetchData = async (skip?: number, take?: number, search?: string) => {
     try {
       const res = await getProjectListRequest({
         skip: skip ?? 0,
@@ -90,7 +90,7 @@ export const HomePage: React.FC = () => {
         const res = await deleteProjectRequest(databaseId);
 
         if (res !== 'OK') {
-          mockFetchData(visibleDbCount, visibleDbCount);
+          fetchData(visibleDbCount, visibleDbCount);
           throw new Error('База данных не была удалена');
         }
 
@@ -116,7 +116,7 @@ export const HomePage: React.FC = () => {
   };
 
   useEffect(() => {
-    mockFetchData();
+    fetchData();
   }, [debouncedSearchValues]);
 
   return (

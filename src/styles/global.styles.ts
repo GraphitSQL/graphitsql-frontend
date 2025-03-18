@@ -9,11 +9,11 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Open Sans', sans-serif;
     margin: 0;
     padding: 0;
-    height: 100dvh;
+    height: 100%;
   }
 
   #root {
-    height: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -21,5 +21,9 @@ export const GlobalStyle = createGlobalStyle`
   
   [data-message*="React Flow Pro"] {
     display: none;
+  }
+
+  pre {
+    font-family: 'Open Sans', sans-serif;
   }
 `;

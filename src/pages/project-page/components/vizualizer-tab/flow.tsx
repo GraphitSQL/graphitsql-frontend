@@ -162,8 +162,6 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
         ref={ref}
         nodes={nodes}
         edges={edges}
-        // // minZoom={1.5}
-        // maxZoom={0.5}
         onInit={setRfInstance}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
@@ -175,9 +173,11 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
         nodeTypes={nodeTypes}
         connectionMode={ConnectionMode.Loose}
         fitView
+        selectNodesOnDrag={false}
+        nodeDragThreshold={5}
+        edgesReconnectable={false}
         fitViewOptions={{ padding: 2 }}
         onlyRenderVisibleElements
-        edgesReconnectable={false}
         connectionLineType={ConnectionLineType.SmoothStep}
         defaultEdgeOptions={{
           type: 'smoothstep',

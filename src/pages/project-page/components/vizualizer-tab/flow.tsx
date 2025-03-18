@@ -17,6 +17,7 @@ import {
   OnEdgesChange,
   applyEdgeChanges,
   useStoreApi,
+  MiniMap,
 } from '@xyflow/react';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -188,6 +189,7 @@ const Flow: React.FC<FlowProps> = ({ currentDatabase }) => {
           orientation="horizontal"
           position="bottom-right"
         />
+        <MiniMap bgColor="teal" offsetScale={5} style={{ width: 100, height: 100 }} position="bottom-left" />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
         {menu && <ContextMenu {...menu} />}
         <Panel position="top-right" style={{ paddingRight: '20px', display: 'flex', gap: 5 }}>

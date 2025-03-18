@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { VerificationForm, VerifyButton } from './second-step.styled';
-import { Button, Heading, Input, Loader, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Input, Loader, Text } from '@chakra-ui/react';
 import { Field } from '../../../../../common/components';
 import { useEffect, useState } from 'react';
 import { toaster } from '../../../../../common/components/ui/toaster';
@@ -49,13 +49,16 @@ export const VerificationStep: React.FC<VerificationProps> = ({ handleChangeStep
 
   useEffect(() => {
     if (step === 1 && timer > 0) {
-      const resendCodeTimer = setInterval(() => setTimer(timer - 1), 1000);
+      const resendCodeTimer = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+
       return () => clearInterval(resendCodeTimer);
     }
-  }, [timer, step]);
+  }, [step, timer]);
 
   return (
-    <>
+    <Box>
       <VerificationForm name="verification-form" onSubmit={onSubmit}>
         <Heading size={'3xl'}>Подтвердите адрес электронной почты</Heading>
         <Text color={COLORS.teal[200]} fontSize={'sm'}>
@@ -85,6 +88,6 @@ export const VerificationStep: React.FC<VerificationProps> = ({ handleChangeStep
           Запросить снова {timer > 0 ? `через ${timer}` : ''}
         </Button>
       </VerificationForm>
-    </>
+    </Box>
   );
 };

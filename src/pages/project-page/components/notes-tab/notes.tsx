@@ -1,8 +1,6 @@
-import { Field } from '@/common/components';
-import { COLORS } from '@/common/constants';
-import { Button, FieldHelperText, Heading, HStack, Loader, Textarea, VStack } from '@chakra-ui/react';
+import { Button, Heading, HStack, Loader, VStack } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
-import { LuChevronDown, LuChevronUp, LuPlus } from 'react-icons/lu';
+import { LuChevronDown, LuChevronUp } from 'react-icons/lu';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import './style.css';
@@ -11,11 +9,8 @@ import { toaster } from '@/common/components/ui/toaster';
 import { createNoteRequest, deleteNoteRequest, getNoteListRequest, updateNoteRequest } from '@/api/notes';
 import { useParams } from 'react-router-dom';
 import { UpdateNoteOptions } from '@/api/notes/contracts';
+import { NoteInput } from './components/NoteInput';
 export const Notes: React.FC = () => {
-  const [noteText, setNoteText] = useState('');
-  const nandleNoteText = useCallback((e: any) => {
-    setNoteText(e.target.value);
-  }, []);
   const [notes, setNotes] = useState<any[] | null>(null);
   const [notesCount, setNotesCount] = useState(0);
   const [sortASC, setSortASC] = useState(false);
@@ -120,21 +115,14 @@ export const Notes: React.FC = () => {
     }
   };
 
-  const handleAddNote = async () => {
+  const handleAddNote = async (text: string) => {
     if (!notes) return;
-    if (!noteText.trim()) {
-      toaster.error({
-        title: 'Заметка не может быть пустой',
-      });
-      return;
-    }
     try {
       await createNoteRequest({
-        noteText,
+        noteText: text,
         projectId: projectId ?? '',
         isResolved: false,
       });
-      setNoteText('');
 
       await fetchData(0, notes.length + 1);
     } catch (e: any) {
@@ -161,32 +149,7 @@ export const Notes: React.FC = () => {
     <>
       {notes ? (
         <>
-          <Field
-            label="Текст заметки"
-            required
-            width={'100%'}
-            paddingRight={'15px'}
-            flexGrow={1}
-            invalid={noteText.length > 600}
-          >
-            <Textarea
-              autoresize
-              placeholder="Начните печатать ... "
-              value={noteText}
-              variant="subtle"
-              border={`1px solid ${COLORS.gray[700]}`}
-              onChange={nandleNoteText}
-              maxH={'10dvh'}
-            />
-            <FieldHelperText>
-              доступно {600 - noteText.length}/{600} символов
-            </FieldHelperText>
-            <Button marginLeft={'auto'} size={'sm'} marginTop={'10px'} onClick={handleAddNote}>
-              <LuPlus />
-              Создать
-            </Button>
-          </Field>
-
+          <NoteInput onNoteAdd={handleAddNote} />
           <VStack flexGrow={1} align={'start'} width={'100%'} gap={5} marginTop={'20px'} height={'100%'} minHeight={0}>
             <HStack
               gap={'5px'}

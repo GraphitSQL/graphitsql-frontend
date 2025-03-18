@@ -3,10 +3,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Flow from './vizualizer-tab/flow';
 import { Tabs } from '@chakra-ui/react';
-import { LuStickyNote, LuWorkflow } from 'react-icons/lu';
+import { LuSettings2, LuStickyNote, LuWorkflow } from 'react-icons/lu';
 import { getProjectDataRequest } from '@/api/projects';
 import { toaster } from '@/common/components/ui/toaster';
 import { Notes } from './notes-tab/notes';
+import { SettingsContent } from './settings-tab/Settings';
 
 const Workspace: React.FC = () => {
   const [currentDatabase, setCurrentDatabase] = useState<any>({
@@ -54,7 +55,7 @@ const Workspace: React.FC = () => {
   }, []);
 
   return (
-    <Tabs.Root lazyMount defaultValue="tab-erd" variant={'outline'}>
+    <Tabs.Root lazyMount defaultValue="tab-settings" variant={'outline'}>
       <Tabs.List>
         <Tabs.Trigger value="tab-erd">
           <LuWorkflow />
@@ -64,12 +65,19 @@ const Workspace: React.FC = () => {
           <LuStickyNote />
           Заметки
         </Tabs.Trigger>
+        <Tabs.Trigger value="tab-settings">
+          <LuSettings2 />
+          Настройки
+        </Tabs.Trigger>
       </Tabs.List>
       <Tabs.Content value="tab-erd">
         <ReactFlowProvider>{databasesLoaded && <Flow currentDatabase={currentDatabase} />}</ReactFlowProvider>
       </Tabs.Content>
       <Tabs.Content value="tab-notes">
         <Notes />
+      </Tabs.Content>
+      <Tabs.Content value="tab-settings">
+        <SettingsContent />
       </Tabs.Content>
     </Tabs.Root>
   );

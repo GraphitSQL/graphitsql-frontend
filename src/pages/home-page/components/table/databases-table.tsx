@@ -6,13 +6,13 @@ import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../../../../common
 import { useNavigate } from 'react-router-dom';
 import { Routing } from '../../../../common/routes';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { PreResolutionListProject } from '@/api/projects/contracts';
+import { PreResolutionProject } from '@/api/projects/contracts';
 import { InviteToProjectModal } from '@/common/components/modals';
 import { useState } from 'react';
 import { DialogRoot } from '@/common/components/ui/dialog';
 
 type DatabaseTableProps = {
-  items: Array<PreResolutionListProject>;
+  items: Array<PreResolutionProject>;
   handleDeleteDatabase: (id: string) => void;
   fetchData: () => void;
   dbCount: number;

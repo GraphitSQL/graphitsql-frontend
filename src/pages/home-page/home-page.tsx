@@ -10,11 +10,11 @@ import { CreateDatabaseModel } from '../../common/components/modals';
 import { toaster } from '../../common/components/ui/toaster';
 import { StyledTitleContainer } from './components/home-page.styled';
 import { createProjectRequest, deleteProjectRequest, getProjectListRequest } from '@/api/projects';
-import { CreateProjectRequest, PreResolutionListProject } from '@/api/projects/contracts';
+import { CreateProjectRequest, PreResolutionProject } from '@/api/projects/contracts';
 import useDebounce from '@/common/hooks/useDebounce';
 
 export const HomePage: React.FC = () => {
-  const [databases, setDatabases] = useState<PreResolutionListProject[] | undefined>(undefined);
+  const [databases, setDatabases] = useState<PreResolutionProject[] | undefined>(undefined);
   const [dbCount, setDbCount] = useState(0);
   const [openCreateDatabaseModal, setOpenCreateDatabaseModal] = useState(false);
   const [searchValue, setSearchValue] = useState('');

@@ -6,9 +6,12 @@ import {
   CreateProjectResponse,
   DeleteProjectResponse,
   GetProjectDataResponse,
+  GetProjectResponse,
   ListProjectsResponse,
   UpdateProjectDataRequest,
   UpdateProjectDataResponse,
+  UpdateProjectRequest,
+  UpdateProjectResponse,
 } from './contracts';
 
 export const getProjectListRequest = async ({
@@ -40,6 +43,32 @@ export const createProjectRequest = async (payload: CreateProjectRequest): Promi
     return data;
   } catch (e) {
     console.error('error on create project request', e);
+    throw e;
+  }
+};
+
+export const updateProjectRequest = async ({
+  payload,
+  params,
+}: UpdateProjectRequest): Promise<UpdateProjectResponse> => {
+  try {
+    const { data } = await axiosInstance.post<any, AxiosResponse<UpdateProjectResponse>>(
+      API_ROUTES.projects.update(params.id),
+      payload
+    );
+    return data;
+  } catch (e) {
+    console.error('error on update project request', e);
+    throw e;
+  }
+};
+
+export const getProjectRequest = async (id: string): Promise<GetProjectResponse> => {
+  try {
+    const { data } = await axiosInstance.get<any, AxiosResponse<GetProjectResponse>>(API_ROUTES.projects.get(id));
+    return data;
+  } catch (e) {
+    console.error('error on get project request', e);
     throw e;
   }
 };

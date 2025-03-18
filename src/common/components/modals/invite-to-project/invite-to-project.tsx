@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../../ui/dialog';
-import { PreResolutionListProject } from '@/api/projects/contracts';
+import { PreResolutionProject } from '@/api/projects/contracts';
 import { Box, Heading, HStack, Portal, Separator, Text, Clipboard, IconButton, VStack, Input } from '@chakra-ui/react';
 import { Field, UserAvatar } from '../../ui';
 import { UserName } from './invite-to-project.styled';
@@ -18,7 +18,7 @@ import { generateInvitationLinkRequest } from '@/api/projects';
 import { toaster } from '../../ui/toaster';
 
 type InviteToProjectModalProps = {
-  projectOwnerData: PreResolutionListProject['createdBy'] & {
+  projectOwnerData: PreResolutionProject['createdBy'] & {
     projectId: string;
   };
   handleModalVisibility: () => void;

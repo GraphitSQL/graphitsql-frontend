@@ -16,12 +16,16 @@ export const API_ROUTES = {
   },
   projects: {
     list: () => `/projects/list`,
+    get: (id: string) => `/projects/get/${id}`,
     create: () => 'projects/create',
+    update: (id: string) => `/projects/update/${id}`,
     delete: (id: string) => `/projects/delete?id=${id}`,
     generateInvitationLink: () => '/projects/invitation-link',
     joinToProject: () => '/projects/join-to-project',
     saveChanges: () => '/projects/update-project-data',
     getProjectData: () => '/projects/project-data',
+    getMembers: (id: string) => `/projects/${id}/members`,
+    deleteMember: (id: string, memberId: string) => `/projects/${id}/members/delete/${memberId}`,
   },
   notes: {
     list: () => `/notes/list`,

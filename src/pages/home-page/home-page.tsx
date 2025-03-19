@@ -10,11 +10,11 @@ import { CreateDatabaseModel } from '../../common/components/modals';
 import { toaster } from '../../common/components/ui/toaster';
 import { StyledTitleContainer } from './components/home-page.styled';
 import { createProjectRequest, deleteProjectRequest, getProjectListRequest } from '@/api/projects';
-import { CreateProjectRequest, PreResolutionListProject } from '@/api/projects/contracts';
+import { CreateProjectRequest, PreResolutionProject } from '@/api/projects/contracts';
 import useDebounce from '@/common/hooks/useDebounce';
 
 export const HomePage: React.FC = () => {
-  const [databases, setDatabases] = useState<PreResolutionListProject[] | undefined>(undefined);
+  const [databases, setDatabases] = useState<PreResolutionProject[] | undefined>(undefined);
   const [dbCount, setDbCount] = useState(0);
   const [openCreateDatabaseModal, setOpenCreateDatabaseModal] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -84,13 +84,9 @@ export const HomePage: React.FC = () => {
   const handleDeleteDatabase = async (databaseId: string) => {
     try {
       if (databases) {
-        const visibleDbCount = databases.length;
-        setDatabases((els) => els?.filter((el) => el.id !== databaseId));
-        setDbCount((prev) => prev - 1);
         const res = await deleteProjectRequest(databaseId);
 
         if (res !== 'OK') {
-          fetchData(visibleDbCount, visibleDbCount);
           throw new Error('База данных не была удалена');
         }
 
@@ -98,8 +94,7 @@ export const HomePage: React.FC = () => {
           title: 'База данных удалена',
           type: 'info',
         });
-        const { projects } = await getProjectListRequest({ skip: visibleDbCount - 1, take: 1 });
-        setDatabases((prev: any) => [...prev, ...projects]);
+        await fetchData();
       }
     } catch (e: any) {
       console.error(e);

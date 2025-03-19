@@ -1,6 +1,6 @@
 import { TBaseResponse } from '@/api/types';
 
-export type PreResolutionListProject = {
+export type PreResolutionProject = {
   id: string;
   title: string;
   isPublic: boolean;
@@ -14,7 +14,7 @@ export type PreResolutionListProject = {
 };
 export type ListProjectsResponse = {
   count: number;
-  projects: Array<PreResolutionListProject>;
+  projects: Array<PreResolutionProject>;
 };
 
 export type CreateProjectRequest = {
@@ -35,6 +35,17 @@ export type CreateProjectResponse = {
   updatedAt: Date;
 };
 
+export type UpdateProjectRequest = {
+  params: {
+    id: string;
+  };
+  payload: {
+    title?: string;
+  };
+};
+
+export type UpdateProjectResponse = TBaseResponse;
+
 export type DeleteProjectResponse = TBaseResponse;
 
 export type UpdateProjectDataRequest = {
@@ -54,3 +65,21 @@ export type GetProjectDataResponse = {
   };
   isScratch: boolean;
 };
+
+export type GetProjectResponse = PreResolutionProject;
+
+export type ProjectMember = {
+  id: string;
+  displayName: string;
+  avatarColor: string;
+  isOwner: boolean;
+  userId: string;
+};
+
+export type ProjectMembersListResponse = {
+  count: number;
+  isPublicProject: boolean;
+  members: Array<ProjectMember>;
+};
+
+export type DeleteProjectMemberResponse = TBaseResponse;

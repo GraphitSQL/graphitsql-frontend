@@ -55,7 +55,7 @@ const Workspace: React.FC = () => {
   }, []);
 
   return (
-    <Tabs.Root lazyMount defaultValue="tab-settings" variant={'outline'}>
+    <Tabs.Root lazyMount defaultValue="tab-erd" variant={'outline'} unmountOnExit>
       <Tabs.List>
         <Tabs.Trigger value="tab-erd">
           <LuWorkflow />

@@ -1,6 +1,7 @@
 import { Tabs } from '@chakra-ui/react';
 import { ProjectSettingsMainSettingTab } from './main-tab/MainSettings';
 import { useParams } from 'react-router-dom';
+import { ProjectSettingsMembersTab } from './members-tab/Members';
 
 export const SettingsContent: React.FC = () => {
   const { id: projectId } = useParams();
@@ -14,8 +15,8 @@ export const SettingsContent: React.FC = () => {
       <Tabs.Content value="project-settings-tab-main-settings" width={'100%'}>
         {projectId && <ProjectSettingsMainSettingTab projectId={projectId} />}
       </Tabs.Content>
-      <Tabs.Content value="project-settings-tab-team-members">
-        <>Team</>
+      <Tabs.Content value="project-settings-tab-team-members" width={'100%'}>
+        {projectId && <ProjectSettingsMembersTab projectId={projectId} />}
       </Tabs.Content>
     </Tabs.Root>
   );

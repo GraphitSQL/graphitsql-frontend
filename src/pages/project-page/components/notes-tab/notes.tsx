@@ -20,7 +20,7 @@ export const Notes: React.FC = () => {
     try {
       const res = await getNoteListRequest({
         skip: skip ?? 0,
-        take: take ?? 5,
+        take: take ?? 50,
         direction: sortASC ? 'ASC' : 'DESC',
         projectId: projectId ?? '',
       });

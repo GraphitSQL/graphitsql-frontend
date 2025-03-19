@@ -67,3 +67,19 @@ export type GetProjectDataResponse = {
 };
 
 export type GetProjectResponse = PreResolutionProject;
+
+export type ProjectMember = {
+  id: string;
+  displayName: string;
+  avatarColor: string;
+  isOwner: boolean;
+  userId: string;
+};
+
+export type ProjectMembersListResponse = {
+  count: number;
+  isPublicProject: boolean;
+  members: Array<ProjectMember>;
+};
+
+export type DeleteProjectMemberResponse = TBaseResponse;

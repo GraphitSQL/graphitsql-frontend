@@ -24,6 +24,8 @@ export const API_ROUTES = {
     joinToProject: () => '/projects/join-to-project',
     saveChanges: () => '/projects/update-project-data',
     getProjectData: () => '/projects/project-data',
+    getMembers: (id: string) => `/projects/${id}/members`,
+    deleteMember: (id: string, memberId: string) => `/projects/${id}/members/delete/${memberId}`,
   },
   notes: {
     list: () => `/notes/list`,

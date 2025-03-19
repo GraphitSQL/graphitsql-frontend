@@ -116,7 +116,7 @@ export const ProjectSettingsMainSettingTab: React.FC<ProjectSettingsMainSettingT
                     onValueChange={handleSetProjectTitle}
                   >
                     <Editable.Preview />
-                    <Editable.Input />
+                    <Editable.Input maxLength={100} />
                     <Editable.Control>
                       <Editable.EditTrigger asChild>
                         <IconButton variant="ghost" size="xs">

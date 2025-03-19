@@ -4,10 +4,12 @@ import { API_ROUTES } from '../constants';
 import {
   CreateProjectRequest,
   CreateProjectResponse,
+  DeleteProjectMemberResponse,
   DeleteProjectResponse,
   GetProjectDataResponse,
   GetProjectResponse,
   ListProjectsResponse,
+  ProjectMembersListResponse,
   UpdateProjectDataRequest,
   UpdateProjectDataResponse,
   UpdateProjectRequest,
@@ -140,6 +142,44 @@ export const getProjectDataRequest = async (id: string): Promise<GetProjectDataR
     return data;
   } catch (e) {
     console.error('error on list projects request', e);
+    throw e;
+  }
+};
+
+export const getProjectMembersListRequest = async ({
+  skip,
+  take,
+  projectId,
+}: {
+  skip: number;
+  take: number;
+  projectId: string;
+}): Promise<ProjectMembersListResponse> => {
+  try {
+    const { data } = await axiosInstance.get<any, AxiosResponse<ProjectMembersListResponse>>(
+      API_ROUTES.projects.getMembers(projectId),
+      {
+        params: { skip, take },
+      }
+    );
+    return data;
+  } catch (e) {
+    console.error('error on list project members request', e);
+    throw e;
+  }
+};
+
+export const deleteProjectMemberRequest = async (
+  id: string,
+  memberId: string
+): Promise<DeleteProjectMemberResponse> => {
+  try {
+    const { data } = await axiosInstance.delete<any, AxiosResponse<DeleteProjectMemberResponse>>(
+      API_ROUTES.projects.deleteMember(id, memberId)
+    );
+    return data;
+  } catch (e) {
+    console.error('error on delete project member request', e);
     throw e;
   }
 };

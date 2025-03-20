@@ -6,6 +6,7 @@ import { AuthLayout } from '../components/layouts';
 import { PofilePage } from '../../pages/profile-page';
 import ProjectPageWrapper from '@/pages/project-page/wrapper';
 import JoinProjectPage from '@/pages/join-project-page';
+import { ForgotPasswordPage } from '@/pages/forgot-password';
 
 const APP_BASE_URL = import.meta.env.VITE_APP_BASENAME;
 
@@ -20,6 +21,10 @@ export const Routing: Record<string, { route: (arg?: any) => string; isAuth: boo
   },
   signUp: {
     route: () => '/sign-up',
+    isAuth: false,
+  },
+  forgotPassword: {
+    route: () => '/forgot-password',
     isAuth: false,
   },
   projects: {
@@ -53,6 +58,10 @@ export const routers = createBrowserRouter(
     {
       path: Routing.join.route(':token'),
       element: <JoinProjectPage />,
+    },
+    {
+      path: Routing.forgotPassword.route(),
+      element: <ForgotPasswordPage />,
     },
     {
       path: '/',

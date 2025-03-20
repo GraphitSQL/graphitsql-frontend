@@ -2,7 +2,7 @@ import { Container, FormContainer, ImageContainer, SignInForm, SubmitButton } fr
 import { useLottie } from 'lottie-react';
 import { useNavigate, Link as RouterLink, useLocation } from 'react-router-dom';
 import { LOTTIES } from '../../common/assets/lotties';
-import { Heading, Input, Text, Link } from '@chakra-ui/react';
+import { Heading, Input, Text, Link, VStack } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { Field, PasswordInput } from '../../common/components/ui';
 import { Routing } from '../../common/routes';
@@ -76,7 +76,21 @@ export const SignInPage: React.FC = () => {
             />
           </Field>
 
-          <SubmitButton type="submit">Войти</SubmitButton>
+          <VStack width="100%" alignItems={'flex-end'}>
+            <Link
+              as={RouterLink}
+              variant="underline"
+              // @ts-expect-error chakra typings
+              to={Routing.forgotPassword.route()}
+              color={'fg.muted'}
+              fontSize={'13px'}
+            >
+              Забыл пароль
+            </Link>
+            <SubmitButton type="submit" width={'100%'}>
+              Войти
+            </SubmitButton>
+          </VStack>
         </SignInForm>
         <Text>
           Еще нет аккаунта? {/* @ts-expect-error chakra typings */}

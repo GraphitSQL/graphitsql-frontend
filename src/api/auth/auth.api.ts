@@ -1,9 +1,10 @@
-import { AxiosResponse } from './../../../node_modules/axios/index.d';
 import axiosInstance from '../axios-setup';
 import { API_ROUTES } from '../constants';
 import {
   ChangePasswordRequest,
   ChangePassworResponse,
+  GetResetPasswordTokenRequest,
+  GetResetPasswordTokenResponse,
   GetTokenForRegistrationRequest,
   GetTokenForRegistrationResponse,
   LoginRequest,
@@ -12,9 +13,11 @@ import {
   RegisterRequest,
   RegisterResponse,
   ResendVerificationCodeResponse,
+  VerifyResetPasswordTokenRequest,
+  VerifyResetPasswordTokenResponse,
 } from './contracts';
 import { LocalStorageItem } from '@/common/constants';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 export const logIn = async ({ email, password }: LoginRequest): Promise<LoginResponse> => {
   try {
@@ -114,6 +117,76 @@ export const changePasswordRequest = async (payload: ChangePasswordRequest): Pro
     return data;
   } catch (e) {
     console.error('[Change Password Request] error:', e);
+    throw e;
+  }
+};
+
+export const getResetPasswordTokenRequest = async (
+  payload: GetResetPasswordTokenRequest
+): Promise<GetResetPasswordTokenResponse> => {
+  try {
+    const { data } = await axiosInstance.post<any, AxiosResponse<GetResetPasswordTokenResponse>>(
+      API_ROUTES.auth.getResetPasswordToken(),
+      payload
+    );
+    return data;
+  } catch (e) {
+    console.error('error on getResetPasswordToken request', e);
+    throw e;
+  }
+};
+
+export const resendResetPasswordCodeRequest = async (): Promise<ResendVerificationCodeResponse> => {
+  try {
+    const { data } = await axiosInstance.get<string, AxiosResponse<ResendVerificationCodeResponse>>(
+      API_ROUTES.auth.resendResetPasswordCode(),
+      {
+        headers: {
+          'reset-password-token': window.localStorage.getItem(LocalStorageItem.FORGOT_PASSWORD_TOKEN),
+        },
+      }
+    );
+    return data;
+  } catch (e) {
+    console.error('error on resendResetPasswordCode request', e);
+    throw e;
+  }
+};
+
+export const verifyResetPasswordTokenRequest = async (
+  payload: VerifyResetPasswordTokenRequest
+): Promise<VerifyResetPasswordTokenResponse> => {
+  try {
+    const { data } = await axiosInstance.post<any, AxiosResponse<VerifyResetPasswordTokenResponse>>(
+      API_ROUTES.auth.verifyResetPasswordCode(),
+      payload,
+      {
+        headers: {
+          'reset-password-token': window.localStorage.getItem(LocalStorageItem.FORGOT_PASSWORD_TOKEN),
+        },
+      }
+    );
+    return data;
+  } catch (e) {
+    console.error('error on verifyResetPasswordToken request', e);
+    throw e;
+  }
+};
+
+export const setNewPasswordRequest = async (payload: ChangePasswordRequest): Promise<ChangePassworResponse> => {
+  try {
+    const { data } = await axiosInstance.patch<any, AxiosResponse<ChangePassworResponse>>(
+      API_ROUTES.auth.setNewPassword(),
+      payload,
+      {
+        headers: {
+          'reset-password-token': window.localStorage.getItem(LocalStorageItem.FORGOT_PASSWORD_TOKEN),
+        },
+      }
+    );
+    return data;
+  } catch (e) {
+    console.error('error on setNewPasswordRequest request', e);
     throw e;
   }
 };

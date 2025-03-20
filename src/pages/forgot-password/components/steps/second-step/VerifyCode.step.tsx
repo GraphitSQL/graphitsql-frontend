@@ -1,7 +1,8 @@
+import { resendResetPasswordCodeRequest, verifyResetPasswordTokenRequest } from '@/api/auth';
 import { Field } from '@/common/components/ui';
 import { toaster } from '@/common/components/ui/toaster';
 import { COLORS } from '@/common/constants';
-// import { LocalStorageItem } from '@/common/constants';
+import { LocalStorageItem } from '@/common/constants';
 import { ForgotPasswordBaseForm } from '@/pages/forgot-password/forgot-password.styled';
 import { Button, Heading, Input, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -25,10 +26,11 @@ export const VerifyCodeStep: React.FC<VerifyCodeProps> = ({ handleChangeStep, st
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log(data);
-      // const { accessToken, refreshToken } = await verifyEmailAddress(data);
-      // window.localStorage.setItem(LocalStorageItem.ACCESS_TOKEN, accessToken);
-      // window.localStorage.setItem(LocalStorageItem.REFRESH_TOKEN, refreshToken);
+      const res = await verifyResetPasswordTokenRequest(data);
+
+      if (!res) {
+        throw new Error('Что-то пошло не так');
+      }
       handleChangeStep(2);
     } catch (e: any) {
       toaster.error({
@@ -40,8 +42,8 @@ export const VerifyCodeStep: React.FC<VerifyCodeProps> = ({ handleChangeStep, st
   const resendVerificationCode = async () => {
     try {
       setTimer(30);
-      // const newToken = await resendVerificationCodeRequest();
-      // window.localStorage.setItem(LocalStorageItem.FORGOT_PASSWORD_TOKEN, newToken);
+      const newToken = await resendResetPasswordCodeRequest();
+      window.localStorage.setItem(LocalStorageItem.FORGOT_PASSWORD_TOKEN, newToken);
     } catch (e: any) {
       console.error(e);
       toaster.error({

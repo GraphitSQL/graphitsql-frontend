@@ -32,3 +32,13 @@ export type ChangePasswordRequest = {
   newPassword: string;
 };
 export type ChangePassworResponse = TBaseResponse;
+
+export type GetResetPasswordTokenRequest = {
+  email: string;
+};
+export type GetResetPasswordTokenResponse = string;
+
+export type VerifyResetPasswordTokenRequest = {
+  code: string;
+};
+export type VerifyResetPasswordTokenResponse = TBaseResponse;

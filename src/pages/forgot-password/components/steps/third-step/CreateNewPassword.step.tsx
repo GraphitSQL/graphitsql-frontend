@@ -1,6 +1,7 @@
+import { setNewPasswordRequest } from '@/api/auth';
 import { Field, PasswordInput } from '@/common/components';
 import { toaster } from '@/common/components/ui/toaster';
-// import { LocalStorageItem } from '@/common/constants';
+import { LocalStorageItem } from '@/common/constants';
 import { ForgotPasswordBaseForm } from '@/pages/forgot-password/forgot-password.styled';
 import { Button, Heading } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
@@ -23,12 +24,15 @@ export const CreateNewPasswordStep: React.FC<CreateNewPasswordProps> = ({ handle
   const onSubmit = handleSubmit(async (data) => {
     try {
       const payload = {
-        password: data.password,
+        newPassword: data.password,
       };
 
-      console.log(payload);
-      // const registrationToken = await getTokenForRegistration(payload);
-      // localStorage.setItem(LocalStorageItem.FORGOT_PASSWORD_TOKEN, registrationToken);
+      const res = await setNewPasswordRequest(payload);
+
+      if (!res) {
+        throw new Error('Что-то пошло не так');
+      }
+      localStorage.removeItem(LocalStorageItem.FORGOT_PASSWORD_TOKEN);
       handleChangeStep(3);
     } catch (e: any) {
       toaster.error({

@@ -2,11 +2,12 @@ import { Field } from '@/common/components';
 import { toaster } from '@/common/components/ui/toaster';
 import { COLORS } from '@/common/constants';
 import { Link as RouterLink } from 'react-router-dom';
-// import { LocalStorageItem } from '@/common/constants';
+import { LocalStorageItem } from '@/common/constants';
 import { ForgotPasswordBaseForm } from '@/pages/forgot-password/forgot-password.styled';
 import { Button, Heading, Input, Link, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { Routing } from '@/common/routes';
+import { getResetPasswordTokenRequest } from '@/api/auth';
 
 type EnterEmailProps = {
   handleChangeStep: (step: number) => void;
@@ -23,9 +24,8 @@ export const EnterEmailStep: React.FC<EnterEmailProps> = ({ handleChangeStep }) 
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data', data);
-      // const forgotPasswordToken = await getTokenForRegistration(data);
-      // localStorage.setItem(LocalStorageItem.FORGOT_PASSWORD_TOKEN, forgotPasswordToken);
+      const forgotPasswordToken = await getResetPasswordTokenRequest(data);
+      localStorage.setItem(LocalStorageItem.FORGOT_PASSWORD_TOKEN, forgotPasswordToken);
       handleChangeStep(1);
     } catch (e: any) {
       toaster.error({

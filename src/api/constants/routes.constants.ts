@@ -8,6 +8,10 @@ export const API_ROUTES = {
     logout: () => '/auth/logout',
     refreshTokens: () => '/auth/refresh',
     changePassword: () => '/auth/change-password',
+    getResetPasswordToken: () => '/auth/get-reset-password-token',
+    resendResetPasswordCode: () => '/auth/resend-reset-password-verification-code',
+    verifyResetPasswordCode: () => '/auth/verify-reset-password-code',
+    setNewPassword: () => '/auth/set-new-password',
   },
   users: {
     me: () => '/users/me',

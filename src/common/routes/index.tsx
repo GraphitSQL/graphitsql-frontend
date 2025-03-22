@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import HomePage from '../../pages/home-page';
+import HomePageNew from '../../pages/home-page-new';
 import SignInPage from '../../pages/sign-in-page';
 import SignUpPage from '../../pages/sign-up-page';
 import { AuthLayout } from '../components/layouts';
@@ -13,6 +14,10 @@ const APP_BASE_URL = import.meta.env.VITE_APP_BASENAME;
 export const Routing: Record<string, { route: (arg?: any) => string; isAuth: boolean }> = {
   home: {
     route: () => '/home',
+    isAuth: true,
+  },
+  homenew: {
+    route: () => '/home-new',
     isAuth: true,
   },
   signIn: {
@@ -70,6 +75,10 @@ export const routers = createBrowserRouter(
         {
           path: Routing.home.route(),
           element: <HomePage />,
+        },
+        {
+          path: Routing.homenew.route(),
+          element: <HomePageNew />,
         },
         {
           path: Routing.profile.route(),

@@ -6,7 +6,7 @@ import { Icons } from '../../common/assets/icons';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import { DialogRoot, DialogTrigger } from '../../common/components/ui/dialog';
-import { CreateDatabaseModel } from '../../common/components/modals';
+import { CreateDatabaseModal } from '../../common/components/modals';
 import { toaster } from '../../common/components/ui/toaster';
 import { StyledTitleContainer } from './components/home-page.styled';
 import { createProjectRequest, deleteProjectRequest, getProjectListRequest } from '@/api/projects';
@@ -148,7 +148,7 @@ export const HomePage: React.FC = () => {
                 Создать
               </Button>
             </DialogTrigger>
-            <CreateDatabaseModel
+            <CreateDatabaseModal
               onCreate={handleAddDatabase}
               handleCreateDatabaseModalVisibility={handleCreateDatabaseModalVisibility}
             />

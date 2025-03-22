@@ -1,45 +1,73 @@
 import { FC, memo, useCallback } from 'react';
-import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
+import { Handle, Position, NodeProps, useReactFlow, Node } from '@xyflow/react';
 import { COLORS } from '@/common/constants';
 import { LuKey, LuPlus } from 'react-icons/lu';
 import { Button, Editable, EditableValueChangeDetails } from '@chakra-ui/react';
 import { TableColumnMenu } from './table-column-menu';
 import { generateColumn } from '../utils';
+import { useYjs } from '@/common/providers/YjsProvider';
 
 export const TableNode: FC<NodeProps> = memo(({ data, id, dragging }: any) => {
   const reactFlow = useReactFlow();
+  const { doc } = useYjs();
+
+  const updateNodeWithYjs = useCallback(
+    (newData: any) => {
+      if (!doc) {
+        // Fallback to direct update if Yjs is not available
+        reactFlow.updateNodeData(id, newData, { replace: true });
+        return;
+      }
+
+      const sharedNodes = doc.getArray<Node>('nodes');
+      const nodes = sharedNodes.toArray();
+      const nodeIndex = nodes.findIndex((node: Node) => node.id === id);
+
+      if (nodeIndex >= 0) {
+        doc.transact(() => {
+          const currentNode = nodes[nodeIndex] as any;
+          const updatedNode = {
+            ...currentNode,
+            data: {
+              ...currentNode.data,
+              ...newData,
+            },
+          };
+          sharedNodes.delete(nodeIndex, 1);
+          sharedNodes.insert(nodeIndex, [updatedNode as Node]);
+        });
+      }
+    },
+    [doc, id, reactFlow]
+  );
 
   const onValueCommit = useCallback(
     (value: string | boolean, colId: string, key: string) => {
-      reactFlow.updateNodeData(
-        id,
-        {
-          ...data,
-          columns: data.columns.map((column: any) => {
-            if (column.id === colId) {
-              return { ...column, [key]: value };
-            }
-            return column;
-          }),
-        },
-        { replace: true }
-      );
+      const updatedData = {
+        ...data,
+        columns: data.columns.map((column: any) => {
+          if (column.id === colId) {
+            return { ...column, [key]: value };
+          }
+          return column;
+        }),
+      };
+
+      updateNodeWithYjs(updatedData);
     },
-    [data.columns]
+    [data, updateNodeWithYjs]
   );
 
   const onColumnDelete = useCallback(
     (colId: string) => {
-      reactFlow.updateNodeData(
-        id,
-        {
-          ...data,
-          columns: [...data.columns].filter((column: any) => column.id !== colId),
-        },
-        { replace: true }
-      );
+      const updatedData = {
+        ...data,
+        columns: [...data.columns].filter((column: any) => column.id !== colId),
+      };
+
+      updateNodeWithYjs(updatedData);
     },
-    [data.columns]
+    [data, updateNodeWithYjs]
   );
 
   const onColumnAdd = useCallback(
@@ -47,19 +75,22 @@ export const TableNode: FC<NodeProps> = memo(({ data, id, dragging }: any) => {
       e.preventDefault();
       e.stopPropagation();
       const newColumn = generateColumn();
-      reactFlow.updateNodeData(id, {
+
+      const updatedData = {
         ...data,
         columns: [...data.columns, newColumn],
-      });
+      };
+
+      updateNodeWithYjs(updatedData);
     },
-    [data.columns]
+    [data, updateNodeWithYjs]
   );
 
   const handleChangeDbLabel = useCallback(
     (details: EditableValueChangeDetails) => {
-      reactFlow.updateNodeData(id, { ...data, name: details.value }, { replace: true });
+      updateNodeWithYjs({ ...data, name: details.value });
     },
-    [data.columns]
+    [data, updateNodeWithYjs]
   );
 
   return (

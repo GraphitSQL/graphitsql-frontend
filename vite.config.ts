@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
 
   const allowedHostList: string[] = JSON.parse(env.VITE_APP_ALLOWED_HOSTS ?? '[]');
 
-  const allowedHosts = allowedHostList?.length ? allowedHostList : undefined;
+  const allowedHosts = allowedHostList?.length ? allowedHostList : true;
 
   return {
     base: env.VITE_APP_BASENAME ?? '/',
@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => {
         origin: true,
         preflightContinue: true,
       },
-      host: true,
+      host: '0.0.0.0',
       strictPort: true,
       allowedHosts,
     },

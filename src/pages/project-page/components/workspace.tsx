@@ -1,13 +1,14 @@
 import { ReactFlowProvider } from '@xyflow/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Flow from './vizualizer-tab/flow';
 import { Tabs } from '@chakra-ui/react';
 import { LuSettings2, LuStickyNote, LuWorkflow } from 'react-icons/lu';
 import { getProjectDataRequest } from '@/api/projects';
 import { toaster } from '@/common/components/ui/toaster';
 import { Notes } from './notes-tab/notes';
 import { SettingsContent } from './settings-tab/Settings';
+import { YjsProvider } from '@/common/providers/YjsProvider';
+import CollaborativeFlow from './vizualizer-tab/collaborative-flow';
 
 const Workspace: React.FC = () => {
   const [currentDatabase, setCurrentDatabase] = useState<any>({
@@ -71,7 +72,11 @@ const Workspace: React.FC = () => {
         </Tabs.Trigger>
       </Tabs.List>
       <Tabs.Content value="tab-erd">
-        <ReactFlowProvider>{databasesLoaded && <Flow currentDatabase={currentDatabase} />}</ReactFlowProvider>
+        <YjsProvider>
+          <ReactFlowProvider>
+            {databasesLoaded && <CollaborativeFlow currentDatabase={currentDatabase} />}
+          </ReactFlowProvider>
+        </YjsProvider>
       </Tabs.Content>
       <Tabs.Content value="tab-notes">
         <Notes />

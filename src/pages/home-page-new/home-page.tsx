@@ -3,7 +3,7 @@ import { DatabaseTable } from './components/table/databases-table';
 import { useCallback, useState } from 'react';
 import React from 'react';
 import { toaster } from '../../common/components/ui/toaster';
-import { deleteProjectRequest, getProjectListRequest } from '@/api/projects';
+import { getProjectListRequest } from '@/api/projects';
 import { CreateProjectResponse, PreResolutionProject } from '@/api/projects/contracts';
 import Header from './components/header';
 
@@ -12,25 +12,28 @@ export const HomePage: React.FC = () => {
   const [dbCount, setDbCount] = useState(0);
   const [searchValue, setSearchValue] = useState('');
 
-  const fetchData = async (props?: { skip?: number; take?: number; search?: string }) => {
-    const { search, skip, take } = props ?? {};
-    try {
-      const res = await getProjectListRequest({
-        skip: skip ?? 0,
-        take: take ?? 50,
-        search: search,
-      });
-      const { count, projects } = res;
-      setDbCount(count);
-      setDatabases(projects);
-    } catch (e: any) {
-      toaster.create({
-        title: 'Ошибка при получении данных',
-        description: e?.message,
-        type: 'error',
-      });
-    }
-  };
+  const fetchData = useCallback(
+    async (props?: { skip?: number; take?: number; search?: string }) => {
+      const { search, skip, take } = props ?? {};
+      try {
+        const res = await getProjectListRequest({
+          skip: skip ?? 0,
+          take: take ?? 50,
+          search: search ?? searchValue,
+        });
+        const { count, projects } = res;
+        setDbCount(count);
+        setDatabases(projects);
+      } catch (e: any) {
+        toaster.create({
+          title: 'Ошибка при получении данных',
+          description: e?.message,
+          type: 'error',
+        });
+      }
+    },
+    [searchValue]
+  );
 
   const handleFetchMore = useCallback(async () => {
     try {
@@ -68,39 +71,13 @@ export const HomePage: React.FC = () => {
     }
   };
 
-  const handleDeleteDatabase = async (databaseId: string) => {
-    try {
-      if (databases) {
-        const res = await deleteProjectRequest(databaseId);
-
-        if (res !== 'OK') {
-          throw new Error('База данных не была удалена');
-        }
-
-        toaster.create({
-          title: 'База данных удалена',
-          type: 'info',
-        });
-        await fetchData();
-      }
-    } catch (e: any) {
-      console.error(e);
-      toaster.create({
-        title: 'Ошибка при удалении базы данных',
-        description: e?.message,
-        type: 'error',
-      });
-    }
-  };
-
-  // const onDebouncedSearchChange = useCallback((searchString: string) => {
-  //   fetchData({ search: searchString });
-  //   setSearchValue(searchString);
-  // }, []);
-  const onDebouncedSearchChange = (searchString: string) => {
-    fetchData({ search: searchString });
-    setSearchValue(searchString);
-  };
+  const onDebouncedSearchChange = useCallback(
+    (searchString: string) => {
+      fetchData({ search: searchString });
+      setSearchValue(searchString);
+    },
+    [fetchData]
+  );
 
   return (
     <>
@@ -113,8 +90,8 @@ export const HomePage: React.FC = () => {
       {databases ? (
         <DatabaseTable
           items={databases}
-          handleDeleteDatabase={handleDeleteDatabase}
-          fetchData={handleFetchMore}
+          fetchMore={handleFetchMore}
+          fetchData={fetchData}
           dbCount={dbCount}
           searchValue={searchValue}
         />

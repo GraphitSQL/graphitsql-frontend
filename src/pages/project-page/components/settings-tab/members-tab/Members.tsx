@@ -112,7 +112,7 @@ export const ProjectSettingsMembersTab: React.FC<ProjectSettingsMembersTabProps>
 
     return {
       id: owner?.id || '',
-      displayName: owner?.displayName ?? 'Undefined',
+      displayName: owner?.displayName ?? 'DELETED USER',
       avatarColor: owner?.avatarColor || '',
       projectId,
     };

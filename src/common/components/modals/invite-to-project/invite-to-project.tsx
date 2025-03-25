@@ -61,12 +61,12 @@ export const InviteToProjectModal: React.FC<InviteToProjectModalProps> = ({
         <DialogBody pb="8">
           <HStack gap={3} marginBottom={5}>
             <UserAvatar
-              bgColor={projectOwnerData?.avatarColor ?? 'gray'}
-              fallback={projectOwnerData?.displayName ?? 'Undefined'}
+              bgColor={projectOwnerData?.avatarColor || 'gray'}
+              fallback={projectOwnerData?.displayName || 'DELETED USER'}
               size={'xl'}
             />
             <VStack align={'flex-start'} gap={0}>
-              <UserName>{projectOwnerData?.displayName ?? 'DELETED USER'}</UserName>
+              <UserName>{projectOwnerData?.displayName || 'DELETED USER'}</UserName>
               <Text fontSize={'10px'}>Создатель</Text>
             </VStack>
           </HStack>

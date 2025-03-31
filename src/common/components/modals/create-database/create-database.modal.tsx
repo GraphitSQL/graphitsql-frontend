@@ -13,7 +13,7 @@ import { Field, SelectContent, SelectItem, SelectRoot, SelectTrigger, SelectValu
 import { useRef } from 'react';
 import { CreateProjectRequest } from '@/api/projects/contracts';
 
-type CreateDatabaseModelProps = {
+type CreateDatabaseModalProps = {
   onCreate: (data: CreateProjectRequest) => Promise<void>;
   handleCreateDatabaseModalVisibility: (arg: boolean) => void;
 };
@@ -25,7 +25,7 @@ const databaseTypes = createListCollection({
   ],
 });
 
-export const CreateDatabaseModel: React.FC<CreateDatabaseModelProps> = ({
+export const CreateDatabaseModal: React.FC<CreateDatabaseModalProps> = ({
   onCreate,
   handleCreateDatabaseModalVisibility,
 }) => {
@@ -101,3 +101,5 @@ export const CreateDatabaseModel: React.FC<CreateDatabaseModelProps> = ({
     </DialogContent>
   );
 };
+
+export default CreateDatabaseModal;

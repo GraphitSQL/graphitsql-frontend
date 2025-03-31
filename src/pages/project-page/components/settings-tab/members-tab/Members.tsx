@@ -112,7 +112,7 @@ export const ProjectSettingsMembersTab: React.FC<ProjectSettingsMembersTabProps>
 
     return {
       id: owner?.id || '',
-      displayName: owner?.displayName ?? 'Undefined',
+      displayName: owner?.displayName ?? 'DELETED USER',
       avatarColor: owner?.avatarColor || '',
       projectId,
     };
@@ -161,7 +161,9 @@ export const ProjectSettingsMembersTab: React.FC<ProjectSettingsMembersTabProps>
           closeOnEscape={false}
           preventScroll={true}
         >
-          {projectOwner && <InviteToProjectModal projectOwnerData={projectOwner} handleModalVisibility={onClose} />}
+          {projectOwner && (
+            <InviteToProjectModal projectOwnerData={projectOwner} handleModalVisibility={onClose} isOpen={open} />
+          )}
         </DialogRoot>
       )}
     </>

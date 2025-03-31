@@ -13,7 +13,7 @@ import { UserName } from './invite-to-project.styled';
 import { LuCheck, LuEarth, LuLink } from 'react-icons/lu';
 import { IconView } from '@/common/assets';
 import { COLORS } from '@/common/constants';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { generateInvitationLinkRequest } from '@/api/projects';
 import { toaster } from '../../ui/toaster';
 
@@ -22,15 +22,17 @@ type InviteToProjectModalProps = {
     projectId: string;
   };
   handleModalVisibility: () => void;
+  isOpen: boolean;
 };
 
 export const InviteToProjectModal: React.FC<InviteToProjectModalProps> = ({
   projectOwnerData,
   handleModalVisibility,
+  isOpen,
 }) => {
   const [invitationLink, setInvitationLink] = useState<string>('');
 
-  const handleGetInvitationLink = async () => {
+  const handleGetInvitationLink = useCallback(async () => {
     try {
       const link = await generateInvitationLinkRequest(projectOwnerData.projectId);
       setInvitationLink(link);
@@ -40,11 +42,14 @@ export const InviteToProjectModal: React.FC<InviteToProjectModalProps> = ({
         description: e?.message,
       });
     }
-  };
+  }, [projectOwnerData.projectId]);
 
   useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
     handleGetInvitationLink();
-  }, [projectOwnerData.projectId]);
+  }, [isOpen]);
 
   return (
     <Portal>
@@ -56,12 +61,12 @@ export const InviteToProjectModal: React.FC<InviteToProjectModalProps> = ({
         <DialogBody pb="8">
           <HStack gap={3} marginBottom={5}>
             <UserAvatar
-              bgColor={projectOwnerData?.avatarColor ?? 'gray'}
-              fallback={projectOwnerData?.displayName ?? 'Undefined'}
+              bgColor={projectOwnerData?.avatarColor || 'gray'}
+              fallback={projectOwnerData?.displayName || 'DELETED USER'}
               size={'xl'}
             />
             <VStack align={'flex-start'} gap={0}>
-              <UserName>{projectOwnerData?.displayName ?? 'DELETED USER'}</UserName>
+              <UserName>{projectOwnerData?.displayName || 'DELETED USER'}</UserName>
               <Text fontSize={'10px'}>Создатель</Text>
             </VStack>
           </HStack>

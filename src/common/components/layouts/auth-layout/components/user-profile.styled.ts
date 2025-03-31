@@ -7,4 +7,8 @@ export const UserName = styled(Text)`
   white-space: nowrap;
   text-overflow: ellipsis;
   max-width: 10vw;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;

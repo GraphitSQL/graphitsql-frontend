@@ -1,56 +1,51 @@
-import { Heading, HStack, Text, Button, Input, Loader } from '@chakra-ui/react';
-import { COLORS } from '../../common/constants';
+import { Loader } from '@chakra-ui/react';
 import { DatabaseTable } from './components/table/databases-table';
-import { InputGroup } from '../../common/components/ui/input-group';
-import { Icons } from '../../common/assets/icons';
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import React from 'react';
-import { DialogRoot, DialogTrigger } from '../../common/components/ui/dialog';
-import { CreateDatabaseModel } from '../../common/components/modals';
 import { toaster } from '../../common/components/ui/toaster';
-import { StyledTitleContainer } from './components/home-page.styled';
-import { createProjectRequest, deleteProjectRequest, getProjectListRequest } from '@/api/projects';
-import { CreateProjectRequest, PreResolutionProject } from '@/api/projects/contracts';
-import useDebounce from '@/common/hooks/useDebounce';
+import { getProjectListRequest } from '@/api/projects';
+import { CreateProjectResponse, PreResolutionProject } from '@/api/projects/contracts';
+import Header from './components/header';
 
 export const HomePage: React.FC = () => {
   const [databases, setDatabases] = useState<PreResolutionProject[] | undefined>(undefined);
   const [dbCount, setDbCount] = useState(0);
-  const [openCreateDatabaseModal, setOpenCreateDatabaseModal] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
-  const [debouncedSearchValues, setDebouncedValue] = useDebounce(searchValue, 1000);
+  const fetchData = useCallback(
+    async (props?: { skip?: number; take?: number; search?: string }) => {
+      const { search, skip, take } = props ?? {};
+      try {
+        const res = await getProjectListRequest({
+          skip: skip ?? 0,
+          take: take ?? 50,
+          search: search ?? searchValue,
+        });
+        const { count, projects } = res;
+        setDbCount(count);
+        setDatabases(projects);
+      } catch (e: any) {
+        toaster.create({
+          title: 'Ошибка при получении данных',
+          description: e?.message,
+          type: 'error',
+        });
+      }
+    },
+    [searchValue]
+  );
 
-  const fetchData = async (skip?: number, take?: number, search?: string) => {
+  const handleFetchMore = useCallback(async () => {
     try {
+      const skip = databases?.length ?? 0;
       const res = await getProjectListRequest({
-        skip: skip ?? 0,
-        take: take ?? 50,
-        search: search ?? debouncedSearchValues,
-      });
-      const { count, projects } = res;
-      setDbCount(count);
-      setDatabases(projects);
-    } catch (e: any) {
-      toaster.create({
-        title: 'Ошибка при получении данных',
-        description: e?.message,
-        type: 'error',
-      });
-    }
-  };
-
-  const handleFetchMore = async () => {
-    try {
-      const prevDbs = databases ?? [];
-      const res = await getProjectListRequest({
-        skip: prevDbs.length,
+        skip,
         take: 10,
-        ...(debouncedSearchValues && { search: debouncedSearchValues }),
+        ...(searchValue && { search: searchValue }),
       });
       const { count, projects } = res;
       setDbCount(count);
-      setDatabases([...prevDbs, ...projects]);
+      setDatabases((prev) => [...(prev ?? []), ...projects]);
     } catch (e: any) {
       toaster.create({
         title: 'Ошибка при получении данных',
@@ -58,18 +53,13 @@ export const HomePage: React.FC = () => {
         type: 'error',
       });
     }
-  };
+  }, [searchValue, databases?.length]);
 
-  const handleAddDatabase = async (data: CreateProjectRequest) => {
+  const handleAddDatabase = async (data: CreateProjectResponse) => {
     try {
       const databasesData = databases ? [...databases] : [];
-      const newProject = await createProjectRequest(data);
-      if (debouncedSearchValues) {
-        setSearchValue('');
-        setDebouncedValue('');
-        return;
-      }
-      databasesData.unshift(newProject);
+
+      databasesData.unshift(data);
       setDatabases(databasesData);
       setDbCount((prev) => prev + 1);
     } catch (e: any) {
@@ -81,87 +71,29 @@ export const HomePage: React.FC = () => {
     }
   };
 
-  const handleDeleteDatabase = async (databaseId: string) => {
-    try {
-      if (databases) {
-        const res = await deleteProjectRequest(databaseId);
-
-        if (res !== 'OK') {
-          throw new Error('База данных не была удалена');
-        }
-
-        toaster.create({
-          title: 'База данных удалена',
-          type: 'info',
-        });
-        await fetchData();
-      }
-    } catch (e: any) {
-      console.error(e);
-      toaster.create({
-        title: 'Ошибка при удалении базы данных',
-        description: e?.message,
-        type: 'error',
-      });
-    }
-  };
-
-  const handleCreateDatabaseModalVisibility = (isOpen: boolean) => {
-    setOpenCreateDatabaseModal(isOpen);
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [debouncedSearchValues]);
+  const onDebouncedSearchChange = useCallback(
+    (searchString: string) => {
+      fetchData({ search: searchString });
+      setSearchValue(searchString);
+    },
+    [fetchData]
+  );
 
   return (
     <>
-      <HStack justifyContent={'space-between'} alignItems={'center'} marginBottom={'30px'}>
-        <StyledTitleContainer>
-          <Heading size={'3xl'}>Список баз даных</Heading>
-          {databases && (
-            <Text color={COLORS.gray[600]}>
-              Всего {debouncedSearchValues && 'найдено'} баз: {dbCount}
-            </Text>
-          )}
-        </StyledTitleContainer>
-        <HStack>
-          <InputGroup flex="3" endElement={<Icons.Search color={COLORS.teal[400]} />}>
-            <Input
-              value={searchValue}
-              placeholder="Поиск..."
-              borderRadius={30}
-              bg={COLORS.navy[900]}
-              disabled={!databases?.length && !searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-          </InputGroup>
-          <DialogRoot
-            lazyMount
-            unmountOnExit
-            restoreFocus={false}
-            open={openCreateDatabaseModal}
-            onOpenChange={(e) => handleCreateDatabaseModalVisibility(e.open)}
-          >
-            <DialogTrigger asChild>
-              <Button variant="surface" borderRadius={30} disabled={!databases}>
-                Создать
-              </Button>
-            </DialogTrigger>
-            <CreateDatabaseModel
-              onCreate={handleAddDatabase}
-              handleCreateDatabaseModalVisibility={handleCreateDatabaseModalVisibility}
-            />
-          </DialogRoot>
-        </HStack>
-      </HStack>
+      <Header
+        dbCount={dbCount}
+        noDatabases={!databases}
+        onAddDatabase={handleAddDatabase}
+        onDebouncedSearchChange={onDebouncedSearchChange}
+      />
       {databases ? (
         <DatabaseTable
           items={databases}
-          handleDeleteDatabase={handleDeleteDatabase}
-          fetchData={handleFetchMore}
+          fetchMore={handleFetchMore}
+          fetchData={fetchData}
           dbCount={dbCount}
-          searchValue={debouncedSearchValues}
+          searchValue={searchValue}
         />
       ) : (
         <Loader />

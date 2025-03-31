@@ -33,6 +33,8 @@ const Workspace: React.FC = () => {
             type: 'info',
             title: 'Проeкт пуст',
             description: 'Давайте добавим первую таблицу. Для этого нажмите на кнопку Добавить на рабочей области',
+            duration: 1500,
+            removeDelay: 0,
           });
         }
       } catch (e: any) {
@@ -55,7 +57,7 @@ const Workspace: React.FC = () => {
   }, []);
 
   return (
-    <Tabs.Root lazyMount defaultValue="tab-erd" variant={'outline'} unmountOnExit>
+    <Tabs.Root lazyMount defaultValue="tab-erd" variant={'outline'}>
       <Tabs.List>
         <Tabs.Trigger value="tab-erd">
           <LuWorkflow />

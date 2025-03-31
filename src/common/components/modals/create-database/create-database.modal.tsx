@@ -46,8 +46,12 @@ export const CreateDatabaseModal: React.FC<CreateDatabaseModalProps> = ({
       ...defaultValues,
       databaseName: '',
     });
-    handleCreateDatabaseModalVisibility(false);
+    handleCloseModal();
   });
+
+  const handleCloseModal = () => {
+    handleCreateDatabaseModalVisibility(false);
+  };
 
   return (
     <DialogContent ref={contentRef}>
@@ -97,7 +101,7 @@ export const CreateDatabaseModal: React.FC<CreateDatabaseModalProps> = ({
           Создать {isSubmitting && <Spinner />}
         </Button>
       </DialogFooter>
-      <DialogCloseTrigger onClick={() => handleCreateDatabaseModalVisibility(false)} />
+      <DialogCloseTrigger onClick={handleCloseModal} />
     </DialogContent>
   );
 };

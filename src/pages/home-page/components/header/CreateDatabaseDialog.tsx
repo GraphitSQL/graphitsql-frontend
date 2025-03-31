@@ -32,12 +32,12 @@ const CreateDatabaseDialog: FC<TCreateDatabaseDialogProps> = ({ onAddDatabase, d
     [onAddDatabase]
   );
 
-  const toggleOpen = useCallback(() => {
-    setIsOpen((prev) => !prev);
-  }, []);
+  const toggleOpen = (arg: boolean) => {
+    setIsOpen(arg);
+  };
 
   return (
-    <DialogRoot lazyMount unmountOnExit restoreFocus={false} open={isOpen} onOpenChange={toggleOpen}>
+    <DialogRoot lazyMount unmountOnExit restoreFocus={false} open={isOpen} onOpenChange={(e) => toggleOpen(e.open)}>
       <DialogTrigger asChild>
         <Button variant="surface" borderRadius={30} disabled={disabled}>
           Создать

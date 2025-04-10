@@ -25,7 +25,7 @@ export const TableNode: FC<NodeProps> = memo(({ data, id, dragging }: any) => {
         { replace: true }
       );
     },
-    [data.columns]
+    [data]
   );
 
   const onColumnDelete = useCallback(
@@ -39,7 +39,7 @@ export const TableNode: FC<NodeProps> = memo(({ data, id, dragging }: any) => {
         { replace: true }
       );
     },
-    [data.columns]
+    [data]
   );
 
   const onColumnAdd = useCallback(
@@ -52,14 +52,14 @@ export const TableNode: FC<NodeProps> = memo(({ data, id, dragging }: any) => {
         columns: [...data.columns, newColumn],
       });
     },
-    [data.columns]
+    [data]
   );
 
   const handleChangeDbLabel = useCallback(
     (details: EditableValueChangeDetails) => {
       reactFlow.updateNodeData(id, { ...data, name: details.value }, { replace: true });
     },
-    [data.columns]
+    [data]
   );
 
   return (
